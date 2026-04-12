@@ -1,0 +1,22 @@
+{
+  "name": "web-thuyet-trinh",
+  "version": "1.0.0",
+  "description": "",
+  "main": "Api.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hahanomi323/hahanomi323.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/hahanomi323/hahanomi323/issues"
+  },
+  "homepage": "https://github.com/hahanomi323/hahanomi323#readme"
+}
