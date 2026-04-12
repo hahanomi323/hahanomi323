@@ -1,0 +1,239 @@
+/* =====================================================
+   CHATBOT.CSS — AI Chat Widget dùng chung mọi trang
+   ===================================================== */
+:root {
+  --cw-accent:      #d4af37;
+  --cw-accent2:     #e8c94a;
+  --cw-bg:          #0f0f14;
+  --cw-surface:     #18181f;
+  --cw-border:      rgba(212,175,55,0.18);
+  --cw-text:        #f0ede6;
+  --cw-muted:       #9898aa;
+  --cw-green:       #2dc88a;
+  --cw-user-bubble: #c5a028;
+  --cw-ai-bubble:   #18181f;
+}
+
+/* ── NÚT BÓNG ── */
+#cw-fab {
+  position: fixed; bottom: 28px; right: 28px;
+  width: 60px; height: 60px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--cw-accent), var(--cw-accent2));
+  border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px;
+  box-shadow: 0 6px 24px rgba(212,175,55,0.5);
+  z-index: 9998;
+  transition: transform 0.2s, box-shadow 0.2s;
+  animation: cw-bounce 3s ease-in-out infinite;
+}
+#cw-fab:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 30px rgba(212,175,55,0.7);
+  animation: none;
+}
+@keyframes cw-bounce {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+
+/* Chấm đỏ */
+#cw-fab .cw-red-dot {
+  position: absolute; top: 3px; right: 3px;
+  width: 14px; height: 14px; background: #e63946;
+  border-radius: 50%; border: 2px solid white;
+  animation: cw-pulse 2s infinite;
+}
+@keyframes cw-pulse {
+  0%,100% { transform: scale(1); opacity: 1; }
+  50%      { transform: scale(1.3); opacity: 0.7; }
+}
+
+/* ── TOOLTIP ── */
+#cw-tooltip {
+  position: fixed; bottom: 38px; right: 100px;
+  background: var(--cw-surface); color: var(--cw-text);
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-size: 13px; font-weight: 500;
+  padding: 8px 14px; border-radius: 20px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+  white-space: nowrap; z-index: 9997;
+  animation: cw-fadeIn 0.5s ease 2s both;
+  pointer-events: none;
+  border: 1px solid var(--cw-border);
+}
+#cw-tooltip::after {
+  content: ''; position: absolute;
+  right: -7px; top: 50%; transform: translateY(-50%);
+  border: 7px solid transparent;
+  border-left-color: var(--cw-surface); border-right: none;
+}
+@keyframes cw-fadeIn {
+  from { opacity: 0; transform: translateX(10px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ── KHUNG CHAT ── */
+#cw-box {
+  position: fixed; bottom: 100px; right: 28px;
+  width: 360px; height: 520px;
+  background: var(--cw-bg);
+  border: 1px solid rgba(212,175,55,0.25);
+  border-radius: 20px;
+  display: flex; flex-direction: column; overflow: hidden;
+  z-index: 9999;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  font-family: 'Be Vietnam Pro', sans-serif;
+  opacity: 0; transform: translateY(20px) scale(0.95); pointer-events: none;
+  transition: opacity 0.25s cubic-bezier(0.16,1,0.3,1),
+              transform 0.25s cubic-bezier(0.16,1,0.3,1);
+}
+#cw-box.cw-open {
+  opacity: 1; transform: translateY(0) scale(1); pointer-events: all;
+}
+
+/* Header */
+.cw-header {
+  padding: 14px 16px;
+  background: linear-gradient(135deg, rgba(212,175,55,0.15), rgba(212,175,55,0.05));
+  border-bottom: 1px solid rgba(212,175,55,0.15);
+  display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+}
+.cw-avatar {
+  width: 38px; height: 38px;
+  background: linear-gradient(135deg, var(--cw-accent), var(--cw-accent2));
+  border-radius: 11px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; position: relative; flex-shrink: 0;
+}
+.cw-avatar::after {
+  content: ''; position: absolute; bottom: -2px; right: -2px;
+  width: 9px; height: 9px; background: var(--cw-green);
+  border-radius: 50%; border: 2px solid var(--cw-bg);
+}
+.cw-header-info { flex: 1; }
+.cw-name {
+  font-size: 14px; font-weight: 700; color: var(--cw-text);
+  display: flex; align-items: center; gap: 6px;
+}
+.cw-name span {
+  font-size: 10px; background: rgba(212,175,55,0.2); color: var(--cw-accent2);
+  padding: 2px 7px; border-radius: 10px; font-weight: 500;
+}
+.cw-status { font-size: 11px; color: var(--cw-green); margin-top: 1px; }
+.cw-close {
+  width: 28px; height: 28px; background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08); border-radius: 7px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  color: var(--cw-muted); font-size: 16px; transition: all 0.15s;
+}
+.cw-close:hover { background: rgba(255,100,100,0.15); color: #f87171; }
+
+/* Chip gợi ý */
+.cw-chips {
+  padding: 8px 12px; display: flex; gap: 6px; overflow-x: auto;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  scrollbar-width: none; flex-shrink: 0;
+}
+.cw-chips::-webkit-scrollbar { display: none; }
+.cw-chip {
+  background: rgba(212,175,55,0.1); border: 1px solid rgba(212,175,55,0.2);
+  border-radius: 20px; padding: 5px 11px; font-size: 11px; color: var(--cw-accent2);
+  cursor: pointer; white-space: nowrap;
+  font-family: 'Be Vietnam Pro', sans-serif; transition: all 0.15s;
+}
+.cw-chip:hover { background: rgba(212,175,55,0.25); border-color: rgba(212,175,55,0.5); }
+
+/* Messages */
+.cw-messages {
+  flex: 1; overflow-y: auto; padding: 14px 12px;
+  display: flex; flex-direction: column; gap: 12px;
+  scrollbar-width: thin; scrollbar-color: rgba(212,175,55,0.2) transparent;
+}
+.cw-messages::-webkit-scrollbar { width: 3px; }
+.cw-messages::-webkit-scrollbar-thumb { background: rgba(212,175,55,0.3); border-radius: 2px; }
+
+.cw-msg { display: flex; gap: 8px; animation: cw-msgIn 0.25s ease; }
+@keyframes cw-msgIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.cw-msg.cw-user { flex-direction: row-reverse; }
+.cw-msg-avatar {
+  width: 26px; height: 26px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; flex-shrink: 0; margin-top: 2px;
+}
+.cw-msg.cw-ai  .cw-msg-avatar { background: linear-gradient(135deg, var(--cw-accent), var(--cw-accent2)); }
+.cw-msg.cw-user .cw-msg-avatar { background: var(--cw-surface); border: 1px solid rgba(212,175,55,0.2); color: var(--cw-muted); }
+
+.cw-bubble {
+  max-width: 80%; padding: 9px 13px; border-radius: 14px;
+  font-size: 13px; line-height: 1.55; word-break: break-word; color: var(--cw-text);
+}
+.cw-msg.cw-ai  .cw-bubble { background: var(--cw-ai-bubble); border: 1px solid rgba(212,175,55,0.15); border-top-left-radius: 3px; }
+.cw-msg.cw-user .cw-bubble { background: var(--cw-user-bubble); border-top-right-radius: 3px; box-shadow: 0 3px 10px rgba(212,175,55,0.25); }
+
+.cw-time { font-size: 10px; color: var(--cw-muted); margin-top: 4px; padding: 0 2px; }
+.cw-msg.cw-user .cw-time { text-align: right; }
+
+/* Typing */
+.cw-typing {
+  display: flex; gap: 4px; padding: 10px 13px;
+  background: var(--cw-ai-bubble); border: 1px solid rgba(212,175,55,0.15);
+  border-radius: 14px; border-top-left-radius: 3px; width: fit-content;
+}
+.cw-typing-dot {
+  width: 5px; height: 5px; background: var(--cw-muted);
+  border-radius: 50%; animation: cw-typing 1.4s infinite;
+}
+.cw-typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.cw-typing-dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes cw-typing {
+  0%,60%,100% { transform: translateY(0); opacity: 0.4; }
+  30%          { transform: translateY(-5px); opacity: 1; }
+}
+
+/* Input */
+.cw-input-area {
+  padding: 10px 12px; border-top: 1px solid rgba(212,175,55,0.12);
+  background: rgba(255,255,255,0.01); flex-shrink: 0;
+}
+.cw-input-row {
+  display: flex; gap: 8px; align-items: flex-end;
+  background: var(--cw-surface); border: 1px solid rgba(212,175,55,0.15);
+  border-radius: 12px; padding: 6px 6px 6px 12px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.cw-input-row:focus-within {
+  border-color: rgba(212,175,55,0.5);
+  box-shadow: 0 0 0 3px rgba(212,175,55,0.08);
+}
+.cw-input {
+  flex: 1; background: none; border: none; outline: none;
+  color: var(--cw-text); font-family: 'Be Vietnam Pro', sans-serif;
+  font-size: 13px; resize: none; max-height: 80px; line-height: 1.5; padding: 3px 0;
+}
+.cw-input::placeholder { color: var(--cw-muted); }
+.cw-send {
+  width: 34px; height: 34px;
+  background: linear-gradient(135deg, var(--cw-accent), var(--cw-accent2));
+  border: none; border-radius: 9px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: all 0.15s;
+  box-shadow: 0 2px 8px rgba(212,175,55,0.35);
+}
+.cw-send:hover  { transform: scale(1.05); }
+.cw-send:active { transform: scale(0.95); }
+.cw-send:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+.cw-send svg { width: 15px; height: 15px; fill: #0f0f14; }
+
+.cw-footer {
+  text-align: center; font-size: 10px; color: var(--cw-muted);
+  margin-top: 7px; opacity: 0.6;
+}
+
+@media (max-width: 420px) {
+  #cw-box { width: calc(100vw - 20px); right: 10px; bottom: 90px; }
+  #cw-tooltip { display: none; }
+}

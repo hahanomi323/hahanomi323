@@ -1,0 +1,110 @@
+/* ===========================
+   DICH-VU.CSS - Riêng cho trang dịch vụ (dich-vu.html)
+   =========================== */
+
+/* Content Page Styles */
+.content-section {
+    min-height: 60vh;
+}
+
+.content-section h2 {
+    color: #d4af37;
+    margin-bottom: 1rem;
+}
+
+.content-section p {
+    margin-bottom: 1rem;
+    line-height: 1.8;
+}
+
+/* Service List */
+.service-list {
+    list-style: none;
+    margin: 2rem 0;
+}
+
+.service-list li {
+    padding: 1rem;
+    margin: 0.5rem 0;
+    background: white;
+    border-left: 4px solid #d4af37;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.service-list li strong {
+    color: #d4af37;
+}
+
+/* Comparison Table */
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2rem 0;
+    background: white;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.comparison-table th,
+.comparison-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.comparison-table th {
+    background: linear-gradient(135deg, #d4af37 0%, #c5a028 100%);
+    color: white;
+    font-weight: bold;
+}
+
+.comparison-table tr:last-child td {
+    border-bottom: none;
+}
+
+.comparison-table tr:hover {
+    background: #f8f9fa;
+}
+
+/* Tabs for Car Details */
+.tabs {
+    display: flex;
+    border-bottom: 2px solid #ddd;
+    margin-bottom: 2rem;
+}
+
+.tab-link {
+    padding: 1rem 2rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    color: #666;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s;
+}
+
+.tab-link:hover {
+    color: #d4af37;
+}
+
+.tab-link:target,
+.tab-link:focus {
+    color: #d4af37;
+    border-bottom-color: #d4af37;
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.5s;
+}
+
+.tab-content:target {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}

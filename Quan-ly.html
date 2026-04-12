@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản Lý Shop — AutoShop Admin</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { background: #f0f4f8; }
+
+    /* ── LAYOUT ── */
+    .admin-wrapper { display: flex; min-height: calc(100vh - 68px); }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: 230px; flex-shrink: 0;
+      background: #fff;
+      border-right: 1px solid rgba(13,27,42,0.09);
+      padding: 1.5rem 0;
+      position: sticky; top: 68px; height: calc(100vh - 68px);
+      overflow-y: auto;
+      box-shadow: 2px 0 12px rgba(13,27,42,0.06);
+    }
+    .sidebar-section { padding: 0 0.75rem; margin-bottom: 1.8rem; }
+    .sidebar-label {
+      font-size: 0.68rem; font-weight: 800; color: #a0a0b8;
+      text-transform: uppercase; letter-spacing: 1.2px;
+      padding: 0 0.6rem; margin-bottom: 0.4rem;
+    }
+    .sidebar-item {
+      display: flex; align-items: center; gap: 0.7rem;
+      padding: 0.7rem 0.9rem; border-radius: 10px; cursor: pointer;
+      font-size: 0.875rem; font-weight: 600; color: #7a7a9a;
+      transition: all 0.2s; border: none; background: none;
+      width: 100%; font-family: 'Be Vietnam Pro', sans-serif; text-align: left;
+    }
+    .sidebar-item:hover { background: rgba(232,48,26,0.06); color: #0d1b2a; }
+    .sidebar-item.active { background: rgba(232,48,26,0.09); color: #e8301a; }
+    .sidebar-item .s-icon { font-size: 1.05rem; width: 20px; text-align: center; flex-shrink: 0; }
+    .badge-count {
+      margin-left: auto; background: #e8301a; color: #fff;
+      font-size: 0.65rem; font-weight: 800; padding: 2px 7px;
+      border-radius: 20px; min-width: 20px; text-align: center;
+    }
+
+    /* ── MAIN ── */
+    .admin-main { flex: 1; padding: 2rem 2rem 3rem; overflow-x: hidden; min-width: 0; }
+
+    /* ── TOPBAR ── */
+    .admin-topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;
+    }
+    .admin-topbar h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.7rem; color: #0d1b2a; font-weight: 800;
+    }
+    .admin-topbar h1 span { color: #e8301a; }
+    .admin-user-pill {
+      display: flex; align-items: center; gap: 0.75rem;
+      background: #fff; border: 1px solid rgba(13,27,42,0.09);
+      border-radius: 50px; padding: 0.4rem 1rem 0.4rem 0.5rem;
+      box-shadow: 0 2px 8px rgba(13,27,42,0.07);
+    }
+    .admin-avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: linear-gradient(135deg, #e8301a, #c42410);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem; font-weight: 800; color: #fff;
+    }
+    .admin-user-pill span { font-size: 0.85rem; font-weight: 600; color: #0d1b2a; }
+    .btn-logout-admin {
+      padding: 0.4rem 0.9rem; background: transparent;
+      border: 1px solid rgba(230,57,70,0.3); border-radius: 20px;
+      color: #e63946; font-size: 0.78rem; font-weight: 700;
+      cursor: pointer; font-family: 'Be Vietnam Pro', sans-serif; transition: all 0.2s;
+    }
+    .btn-logout-admin:hover { background: rgba(230,57,70,0.08); }
+
+    /* ── PAGE SECTIONS ── */
+    .admin-page { display: none; }
+    .admin-page.show { display: block; }
+
+    /* ── STAT CARDS ── */
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 1.2rem; margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: #fff; border: 1px solid rgba(13,27,42,0.08);
+      border-radius: 16px; padding: 1.4rem 1.5rem;
+      display: flex; align-items: center; gap: 1rem;
+      box-shadow: 0 2px 12px rgba(13,27,42,0.06);
+      transition: all 0.25s;
+    }
+    .stat-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(13,27,42,0.1); }
+    .stat-icon {
+      width: 50px; height: 50px; border-radius: 14px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 1.4rem;
+    }
+    .si-red   { background: rgba(232,48,26,0.1);  border: 1px solid rgba(232,48,26,0.18); }
+    .si-blue  { background: rgba(52,152,219,0.1);  border: 1px solid rgba(52,152,219,0.18); }
+    .si-green { background: rgba(22,163,74,0.1);   border: 1px solid rgba(22,163,74,0.18); }
+    .si-amber { background: rgba(245,158,11,0.1);  border: 1px solid rgba(245,158,11,0.18); }
+    .stat-value { font-size: 2rem; font-weight: 800; color: #0d1b2a; font-family: 'Playfair Display', serif; line-height: 1; }
+    .stat-label { font-size: 0.8rem; color: #7a7a9a; margin-top: 0.3rem; font-weight: 500; }
+
+    /* ── QUICK ACTIONS ── */
+    .quick-actions {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1rem; margin-bottom: 2rem;
+    }
+    .quick-btn {
+      background: #fff; border: 1.5px solid rgba(13,27,42,0.09);
+      border-radius: 14px; padding: 1.2rem; text-align: center;
+      cursor: pointer; transition: all 0.25s;
+      color: #7a7a9a; font-size: 0.875rem; font-weight: 600;
+      font-family: 'Be Vietnam Pro', sans-serif;
+      box-shadow: 0 2px 8px rgba(13,27,42,0.05);
+    }
+    .quick-btn:hover {
+      border-color: rgba(232,48,26,0.35); color: #e8301a;
+      transform: translateY(-2px); box-shadow: 0 6px 18px rgba(232,48,26,0.12);
+    }
+    .quick-btn .q-icon { font-size: 1.6rem; display: block; margin-bottom: 0.5rem; }
+
+    /* ── TABLE WRAP ── */
+    .admin-table-wrap {
+      background: #fff; border: 1px solid rgba(13,27,42,0.08);
+      border-radius: 16px; overflow: hidden; margin-bottom: 2rem;
+      box-shadow: 0 2px 12px rgba(13,27,42,0.06);
+    }
+    .table-header {
+      padding: 1.1rem 1.5rem; border-bottom: 1px solid rgba(13,27,42,0.07);
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem; background: #fafafa;
+    }
+    .table-header h3 { font-size: 0.95rem; font-weight: 700; color: #0d1b2a; }
+    .table-search {
+      padding: 0.5rem 1rem; background: #fff; border: 1.5px solid rgba(13,27,42,0.1);
+      border-radius: 8px; color: #1a1a2e; font-family: 'Be Vietnam Pro', sans-serif;
+      font-size: 0.85rem; outline: none; width: 220px; transition: border-color 0.2s;
+    }
+    .table-search:focus { border-color: #e8301a; box-shadow: 0 0 0 3px rgba(232,48,26,0.08); }
+    table { width: 100%; border-collapse: collapse; }
+    thead th {
+      padding: 0.85rem 1.2rem; text-align: left; font-size: 0.72rem; font-weight: 800;
+      color: #a0a0b8; text-transform: uppercase; letter-spacing: 0.6px;
+      border-bottom: 1px solid rgba(13,27,42,0.07); background: #fafafa;
+    }
+    tbody td {
+      padding: 0.95rem 1.2rem; font-size: 0.875rem; color: #7a7a9a;
+      border-bottom: 1px solid rgba(13,27,42,0.05);
+    }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: rgba(232,48,26,0.03); }
+    tbody td:first-child { color: #0d1b2a; font-weight: 600; }
+
+    /* ── STATUS BADGES ── */
+    .status {
+      padding: 0.25rem 0.8rem; border-radius: 20px;
+      font-size: 0.7rem; font-weight: 800; white-space: nowrap; display: inline-block;
+    }
+    .status-pending { background: rgba(245,158,11,0.12); color: #d97706; }
+    .status-active  { background: rgba(22,163,74,0.12);  color: #16a34a; }
+    .status-sold    { background: rgba(232,48,26,0.12);   color: #e8301a; }
+
+    /* ── ACTION BUTTONS ── */
+    .btn-xs {
+      padding: 0.28rem 0.75rem; border-radius: 6px; font-size: 0.73rem; font-weight: 700;
+      cursor: pointer; border: none; font-family: 'Be Vietnam Pro', sans-serif;
+      transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.3rem;
+    }
+    .btn-xs:hover { transform: translateY(-1px); }
+    .btn-xs.approve { background: rgba(22,163,74,0.12);  color: #16a34a; }
+    .btn-xs.hide    { background: rgba(245,158,11,0.12); color: #d97706; }
+    .btn-xs.del     { background: rgba(232,48,26,0.1);   color: #e8301a; }
+    .btn-xs.show    { background: rgba(22,163,74,0.12);  color: #16a34a; }
+
+    /* ── EMPTY STATE ── */
+    .empty-state { text-align: center; padding: 3.5rem 2rem; color: #a0a0b8; }
+    .empty-state .e-icon { font-size: 2.8rem; margin-bottom: 0.8rem; opacity: 0.4; }
+
+    /* ── MESSAGE CARDS ── */
+    .msg-card {
+      background: #fff; border: 1.5px solid rgba(13,27,42,0.08);
+      border-radius: 12px; padding: 1.1rem 1.4rem; margin-bottom: 0.8rem;
+      transition: border-color 0.2s;
+    }
+    .msg-card:hover { border-color: rgba(232,48,26,0.25); }
+    .msg-card.unread { border-left: 3px solid #e8301a; }
+    .msg-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 0.4rem; }
+    .msg-name { font-weight: 700; color: #0d1b2a; font-size: 0.95rem; }
+    .msg-time { font-size: 0.76rem; color: #a0a0b8; white-space: nowrap; }
+    .msg-phone { font-size: 0.85rem; color: #e8301a; font-weight: 600; margin-bottom: 0.35rem; }
+    .msg-content { font-size: 0.875rem; color: #7a7a9a; line-height: 1.65; }
+
+    /* ── SETTINGS ── */
+    .settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .settings-card {
+      background: #fff; border: 1px solid rgba(13,27,42,0.08);
+      border-radius: 16px; padding: 1.8rem;
+      box-shadow: 0 2px 12px rgba(13,27,42,0.06);
+    }
+    .settings-card h3 { font-size: 0.95rem; font-weight: 700; color: #0d1b2a; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.5rem; }
+    .setting-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.8rem 0; border-bottom: 1px solid rgba(13,27,42,0.05);
+    }
+    .setting-row:last-child { border-bottom: none; }
+    .setting-label { font-size: 0.875rem; color: #3d3d5c; }
+    .toggle-switch {
+      width: 42px; height: 24px; background: #e2e8f0; border-radius: 12px;
+      position: relative; cursor: pointer; transition: background 0.3s; flex-shrink: 0;
+    }
+    .toggle-switch.on { background: #e8301a; }
+    .toggle-switch::after {
+      content: ''; position: absolute; top: 3px; left: 3px;
+      width: 18px; height: 18px; border-radius: 50%; background: white;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2); transition: transform 0.3s;
+    }
+    .toggle-switch.on::after { transform: translateX(18px); }
+
+    /* ── TAG: Shop / User ── */
+    .tag-shop { font-size: 0.62rem; background: rgba(232,48,26,0.1); color: #e8301a; padding: 2px 7px; border-radius: 20px; font-weight: 800; margin-left: 4px; vertical-align: middle; }
+    .tag-user { font-size: 0.62rem; background: rgba(52,152,219,0.1); color: #3498db; padding: 2px 7px; border-radius: 20px; font-weight: 800; margin-left: 4px; vertical-align: middle; }
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:900px){
+      .sidebar { display: none; }
+      .settings-grid { grid-template-columns: 1fr; }
+      .admin-main { padding: 1.5rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <nav>
+    <div class="logo">
+      <span style="color:#e8301a">🏎</span> AutoShop
+      <span style="font-size:0.6rem;background:rgba(232,48,26,0.12);color:#e8301a;padding:2px 8px;border-radius:20px;margin-left:0.3rem;font-family:'Be Vietnam Pro',sans-serif;font-weight:800;letter-spacing:0.5px;">ADMIN</span>
+    </div>
+    <ul class="menu" id="mainMenu">
+      <li><a href="index.html">Trang Chủ</a></li>
+      <li><a href="ban-xe.html">Bán Xe</a></li>
+      <li><a href="dang-ban-xe.html">Đăng Bán Xe</a></li>
+      <li><a href="Quan-ly.html" class="active">Quản Lý</a></li>
+      <li><button onclick="adminLogout()" class="btn-nav" style="cursor:pointer;border:none;">Đăng Xuất</button></li>
+    </ul>
+    <button class="hamburger" onclick="document.getElementById('mainMenu').classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+</header>
+
+<div class="admin-wrapper">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Tổng Quan</div>
+      <button class="sidebar-item active" onclick="showPage('dashboard',this)">
+        <span class="s-icon">📊</span> Dashboard
+      </button>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Quản Lý</div>
+      <button class="sidebar-item" onclick="showPage('listings',this)">
+        <span class="s-icon">🚗</span> Tin Đăng
+        <span class="badge-count" id="badgeListings">0</span>
+      </button>
+      <button class="sidebar-item" onclick="showPage('users',this)">
+        <span class="s-icon">👥</span> Tài Khoản
+        <span class="badge-count" id="badgeUsers">0</span>
+      </button>
+      <button class="sidebar-item" onclick="showPage('messages',this)">
+        <span class="s-icon">💬</span> Tin Nhắn
+        <span class="badge-count" id="badgeMessages">0</span>
+      </button>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Hệ Thống</div>
+      <button class="sidebar-item" onclick="showPage('settings',this)">
+        <span class="s-icon">⚙️</span> Cài Đặt
+      </button>
+      <button class="sidebar-item" onclick="adminLogout()">
+        <span class="s-icon">🚪</span> Đăng Xuất
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="admin-main">
+
+    <!-- TOPBAR -->
+    <div class="admin-topbar">
+      <h1>Trang <span id="pageTitle">Dashboard</span></h1>
+      <div class="admin-user-pill">
+        <div class="admin-avatar" id="adminAvatarEl">A</div>
+        <span id="adminNameEl">Admin</span>
+        <button class="btn-logout-admin" onclick="adminLogout()">🚪 Thoát</button>
+      </div>
+    </div>
+
+    <!-- ===== DASHBOARD ===== -->
+    <div class="admin-page show" id="page-dashboard">
+      <div class="stats-grid" id="statsGrid"></div>
+      <div class="quick-actions">
+        <button class="quick-btn" onclick="gotoPage('listings')"><span class="q-icon">🚗</span>Quản Lý Tin Đăng</button>
+        <button class="quick-btn" onclick="gotoPage('users')"><span class="q-icon">👥</span>Quản Lý Tài Khoản</button>
+        <button class="quick-btn" onclick="gotoPage('messages')"><span class="q-icon">💬</span>Xem Tin Nhắn</button>
+        <button class="quick-btn" onclick="window.open('ban-xe.html','_blank')"><span class="q-icon">🌐</span>Xem Trang Web</button>
+      </div>
+      <div class="admin-table-wrap">
+        <div class="table-header"><h3>🕐 Tin Đăng Gần Đây</h3></div>
+        <div id="recentListings"></div>
+      </div>
+    </div>
+
+    <!-- ===== TIN ĐĂNG ===== -->
+    <div class="admin-page" id="page-listings">
+      <div class="admin-table-wrap">
+        <div class="table-header">
+          <h3>🚗 Tất Cả Tin Đăng</h3>
+          <input class="table-search" placeholder="🔍 Tìm theo tên xe, người đăng..." oninput="filterListings(this.value)">
+        </div>
+        <div id="listingsTableBody"></div>
+      </div>
+    </div>
+
+    <!-- ===== TÀI KHOẢN ===== -->
+    <div class="admin-page" id="page-users">
+      <div class="admin-table-wrap">
+        <div class="table-header">
+          <h3>👥 Tài Khoản Người Dùng</h3>
+          <input class="table-search" placeholder="🔍 Tìm theo tên, email..." oninput="filterUsers(this.value)">
+        </div>
+        <div id="usersTableBody"></div>
+      </div>
+    </div>
+
+    <!-- ===== TIN NHẮN ===== -->
+    <div class="admin-page" id="page-messages">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+        <span style="color:#7a7a9a;font-size:0.875rem;" id="msgCount">Đang tải...</span>
+        <button class="btn-xs del" onclick="clearMessages()">🗑️ Xóa tất cả</button>
+      </div>
+      <div id="messagesContainer"></div>
+    </div>
+
+    <!-- ===== CÀI ĐẶT ===== -->
+    <div class="admin-page" id="page-settings">
+      <div class="settings-grid">
+
+        <div class="settings-card">
+          <h3>⚙️ Cài Đặt Chung</h3>
+          <div class="setting-row">
+            <span class="setting-label">Duyệt tin tự động</span>
+            <div class="toggle-switch" id="toggle-autoApprove" onclick="toggleSetting('autoApprove')"></div>
+          </div>
+          <div class="setting-row">
+            <span class="setting-label">Cho phép đăng ký mới</span>
+            <div class="toggle-switch on" id="toggle-allowRegister" onclick="toggleSetting('allowRegister')"></div>
+          </div>
+          <div class="setting-row">
+            <span class="setting-label">Hiển thị chatbot</span>
+            <div class="toggle-switch on" id="toggle-showChatbot" onclick="toggleSetting('showChatbot')"></div>
+          </div>
+          <div class="setting-row">
+            <span class="setting-label">Chế độ bảo trì</span>
+            <div class="toggle-switch" id="toggle-maintenance" onclick="toggleSetting('maintenance')"></div>
+          </div>
+        </div>
+
+        <div class="settings-card">
+          <h3>🔐 Đổi Mật Khẩu Admin</h3>
+          <div style="margin-bottom:1rem;">
+            <label style="font-size:0.8rem;font-weight:700;color:#3d3d5c;display:block;margin-bottom:0.5rem;">Mật Khẩu Mới</label>
+            <input type="password" id="newAdminPass" placeholder="Tối thiểu 8 ký tự"
+              style="width:100%;padding:0.75rem 1rem;background:#faf8f4;border:1.5px solid rgba(13,27,42,0.12);border-radius:10px;color:#1a1a2e;font-family:'Be Vietnam Pro',sans-serif;font-size:0.9rem;outline:none;">
+          </div>
+          <button onclick="changeAdminPass()"
+            style="padding:0.7rem 1.5rem;background:linear-gradient(135deg,#e8301a,#c42410);color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-family:'Be Vietnam Pro',sans-serif;font-size:0.9rem;">
+            💾 Lưu Mật Khẩu
+          </button>
+          <p style="font-size:0.76rem;color:#a0a0b8;margin-top:0.75rem;">⚠️ Mật khẩu lưu trên trình duyệt này.</p>
+        </div>
+
+        <div class="settings-card">
+          <h3>📊 Thống Kê Dữ Liệu</h3>
+          <div class="setting-row"><span class="setting-label">Số tài khoản</span><span id="set-users" style="color:#e8301a;font-weight:800;">0</span></div>
+          <div class="setting-row"><span class="setting-label">Tổng tin đăng</span><span id="set-listings" style="color:#e8301a;font-weight:800;">0</span></div>
+          <div class="setting-row"><span class="setting-label">Tin chờ duyệt</span><span id="set-pending" style="color:#d97706;font-weight:800;">0</span></div>
+          <div class="setting-row"><span class="setting-label">Xe đã bán</span><span id="set-sold" style="color:#16a34a;font-weight:800;">0</span></div>
+          <button onclick="clearAllData()"
+            style="margin-top:1rem;padding:0.6rem 1.2rem;background:rgba(232,48,26,0.08);border:1px solid rgba(232,48,26,0.25);color:#e8301a;border-radius:8px;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:'Be Vietnam Pro',sans-serif;">
+            ⚠️ Xóa Toàn Bộ Dữ Liệu
+          </button>
+        </div>
+
+        <div class="settings-card">
+          <h3>💾 Xuất / Nhập Dữ Liệu</h3>
+
+          <!-- EXPORT -->
+          <p style="font-size:0.8rem;color:#7a7a9a;margin-bottom:1rem;">Xuất toàn bộ dữ liệu (xe, tài khoản, tin nhắn) ra file <strong>.json</strong> để backup hoặc chuyển máy.</p>
+          <button onclick="exportData()"
+            style="width:100%;padding:0.75rem;background:linear-gradient(135deg,#0d1b2a,#1b2d42);color:#fff;border:none;border-radius:10px;font-weight
+          <div style="font-size:0.875rem;color:#7a7a9a;line-height:2.2;">
+            <div>📞 Hotline: <strong style="color:#0d1b2a">0344 806 179</strong></div>
+            <div>📞 Tư vấn: <strong style="color:#0d1b2a">0337 484 248</strong></div>
+            <div>💬 Zalo: <strong style="color:#0d1b2a">0337 484 248</strong></div>
+            <div>📧 Email: <strong style="color:#e8301a"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b7d6c2c3d8c4dfd8c7f7d0dad6dedb99d4d8da">[email&#160;protected]</a></strong></div>
+            <div>📍 Địa chỉ: <strong style="color:#0d1b2a">Thủ Dầu Một, Bình Dương</strong></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<footer>
+  <p><strong>AutoShop</strong> — Admin Panel · Chỉ dành cho quản trị viên</p>
+  <p>© 2026 AutoShop. Bản quyền thuộc về chúng tôi</p>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="api.js"></script>
+<script>
+// ── ADMIN GUARD ──
+window.addEventListener('DOMContentLoaded', async () => {
+  const user = Auth.getUser();
+  if (!user || user.role !== 'admin') {
+    alert('⛔ Bạn không có quyền truy cập trang này!');
+    window.location.href = 'dang-nhap.html?redirect=Quan-ly.html';
+    return;
+  }
+  document.getElementById('adminNameEl').textContent = user.name;
+  document.getElementById('adminAvatarEl').textContent = user.name.split(' ').pop().charAt(0).toUpperCase();
+
+  await initDashboard();
+  await loadBadges();
+  loadSettings();
+});
+
+function adminLogout() { Auth.logout(); }
+
+// ── NAVIGATION ──
+function showPage(name, btn) {
+  document.querySelectorAll('.admin-page').forEach(p => p.classList.remove('show'));
+  document.querySelectorAll('.sidebar-item').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('show');
+  if (btn) btn.classList.add('active');
+  const titles = { dashboard:'Dashboard', listings:'Tin Đăng', users:'Tài Khoản', messages:'Tin Nhắn', settings:'Cài Đặt' };
+  document.getElementById('pageTitle').textContent = titles[name] || name;
+  if (name === 'listings') renderListings();
+  if (name === 'users')    renderUsers();
+  if (name === 'messages') renderMessages();
+  if (name === 'settings') updateSettingsStats();
+}
+function gotoPage(name) {
+  const map = { listings:'Tin', users:'Tài', messages:'Tin N' };
+  const btn = [...document.querySelectorAll('.sidebar-item')].find(b => b.textContent.trim().startsWith(map[name]||name));
+  showPage(name, btn);
+}
+
+// ── DASHBOARD ──
+async function initDashboard() {
+  try {
+    const stats = await Admin.getStats();
+    document.getElementById('statsGrid').innerHTML = `
+      <div class="stat-card"><div class="stat-icon si-red">🚗</div><div><div class="stat-value">${stats.total_cars}</div><div class="stat-label">Tổng Tin Đăng</div></div></div>
+      <div class="stat-card"><div class="stat-icon si-blue">👥</div><div><div class="stat-value">${stats.users}</div><div class="stat-label">Tài Khoản</div></div></div>
+      <div class="stat-card"><div class="stat-icon si-amber">⏳</div><div><div class="stat-value">${stats.pending}</div><div class="stat-label">Chờ Duyệt</div></div></div>
+      <div class="stat-card"><div class="stat-icon si-green">✅</div><div><div class="stat-value">${stats.active}</div><div class="stat-label">Đang Hiển Thị</div></div></div>`;
+
+    const cars = await Admin.getAllCars();
+    const recent = cars.slice(0,6);
+    if (!recent.length) {
+      document.getElementById('recentListings').innerHTML = '<div class="empty-state"><div class="e-icon">🚗</div><p>Chưa có tin đăng nào</p></div>';
+      return;
+    }
+    const stMap = { active:'✅ Đang bán', pending:'⏳ Chờ duyệt', sold:'🏷️ Đã bán' };
+    document.getElementById('recentListings').innerHTML = `
+      <table><thead><tr><th>Xe</th><th>Giá</th><th>Người Đăng</th><th>Trạng Thái</th><th>Thao Tác</th></tr></thead>
+      <tbody>${recent.map(l=>`
+        <tr>
+          <td>${l.title||l.brand+' '+l.model} ${l.is_shop?'<span class="tag-shop">SHOP</span>':'<span class="tag-user">USER</span>'}</td>
+          <td style="color:#e8301a;font-weight:700;">${l.price} triệu</td>
+          <td>${l.seller_name||'—'}</td>
+          <td><span class="status status-${l.status||'pending'}">${stMap[l.status]||'⏳ Chờ'}</span></td>
+          <td>
+            ${l.status==='pending'?`<button class="btn-xs approve" onclick="approveListing('${l.id}')">✅ Duyệt</button> `:''}
+            <button class="btn-xs del" onclick="adminDeleteCar('${l.id}')">🗑️</button>
+          </td>
+        </tr>`).join('')}
+      </tbody></table>`;
+  } catch (err) {
+    console.error('Dashboard error:', err);
+  }
+}
+
+async function loadBadges() {
+  try {
+    const stats = await Admin.getStats();
+    document.getElementById('badgeListings').textContent = stats.pending;
+    document.getElementById('badgeUsers').textContent    = stats.users;
+    document.getElementById('badgeMessages').textContent = stats.messages;
+  } catch {}
+}
+
+// ── TIN ĐĂNG ──
+let allListings = [];
+async function renderListings() {
+  try {
+    allListings = await Admin.getAllCars();
+    renderListingsTable(allListings);
+  } catch (err) {
+    document.getElementById('listingsTableBody').innerHTML = '<div class="empty-state"><div class="e-icon">❌</div><p>Lỗi tải dữ liệu: ' + err.message + '</p></div>';
+  }
+}
+function renderListingsTable(data) {
+  if (!data.length) {
+    document.getElementById('listingsTableBody').innerHTML = '<div class="empty-state"><div class="e-icon">🚗</div><p>Không có tin đăng nào</p></div>';
+    return;
+  }
+  const stMap = { active:'✅ Đang bán', pending:'⏳ Chờ duyệt', sold:'🏷️ Đã bán' };
+  document.getElementById('listingsTableBody').innerHTML = `
+    <table><thead><tr><th>Xe</th><th>Năm</th><th>Giá</th><th>Người Đăng</th><th>SĐT</th><th>Trạng Thái</th><th>Thao Tác</th></tr></thead>
+    <tbody>${data.map(l=>`
+      <tr>
+        <td>${l.title||l.brand+' '+l.model} ${l.is_shop?'<span class="tag-shop">SHOP</span>':'<span class="tag-user">USER</span>'}</td>
+        <td>${l.year||'—'}</td>
+        <td style="color:#e8301a;font-weight:700;">${l.price||0} triệu</td>
+        <td>${l.seller_name||'—'}</td>
+        <td><a href="tel:${l.seller_phone}" style="color:#e8301a;font-weight:600;">${l.seller_phone||'—'}</a></td>
+        <td><span class="status status-${l.status||'pending'}">${stMap[l.status]||'⏳ Chờ'}</span></td>
+        <td style="white-space:nowrap;display:flex;gap:0.4rem;flex-wrap:wrap;">
+          ${l.status==='pending'?`<button class="btn-xs approve" onclick="approveListing('${l.id}')">✅ Duyệt</button>`:''}
+          ${l.status==='active'?`<button class="btn-xs hide" onclick="hideListing('${l.id}')">⏸️ Ẩn</button>`:''}
+          <button class="btn-xs del" onclick="adminDeleteCar('${l.id}')">🗑️ Xóa</button>
+        </td>
+      </tr>`).join('')}
+    </tbody></table>`;
+}
+function filterListings(q) {
+  const lq = q.toLowerCase();
+  renderListingsTable(allListings.filter(l => {
+    const t = (l.title||l.brand+' '+l.model).toLowerCase();
+    return t.includes(lq)||(l.seller_name||'').toLowerCase().includes(lq);
+  }));
+}
+async function approveListing(id) {
+  try { await Admin.updateCarStatus(id,'active'); await renderListings(); await initDashboard(); await loadBadges(); }
+  catch(err) { alert('❌ '+err.message); }
+}
+async function hideListing(id) {
+  try { await Admin.updateCarStatus(id,'pending'); await renderListings(); await initDashboard(); }
+  catch(err) { alert('❌ '+err.message); }
+}
+async function adminDeleteCar(id) {
+  if (!confirm('Xóa tin đăng này?')) return;
+  try { await Admin.deleteCar(id); await renderListings(); await initDashboard(); await loadBadges(); }
+  catch(err) { alert('❌ '+err.message); }
+}
+
+// ── TÀI KHOẢN ──
+let allUsers = [];
+async function renderUsers() {
+  try {
+    allUsers = await Admin.getAllUsers();
+    renderUsersTable(allUsers);
+  } catch (err) {
+    document.getElementById('usersTableBody').innerHTML = '<div class="empty-state"><div class="e-icon">❌</div><p>Lỗi: ' + err.message + '</p></div>';
+  }
+}
+function renderUsersTable(data) {
+  if (!data.length) {
+    document.getElementById('usersTableBody').innerHTML = '<div class="empty-state"><div class="e-icon">👥</div><p>Chưa có tài khoản nào</p></div>';
+    return;
+  }
+  document.getElementById('usersTableBody').innerHTML = `
+    <table><thead><tr><th>Họ Tên</th><th>Email</th><th>SĐT</th><th>Tỉnh / TP</th><th>Ngày ĐK</th><th>Thao Tác</th></tr></thead>
+    <tbody>${data.map(u=>`
+      <tr>
+        <td>${u.name}</td>
+        <td style="color:#7a7a9a;">${u.email}</td>
+        <td><a href="tel:${u.phone}" style="color:#e8301a;font-weight:600;">${u.phone||'—'}</a></td>
+        <td>${u.city||'—'}</td>
+        <td>${u.created_at?new Date(u.created_at).toLocaleDateString('vi-VN'):'—'}</td>
+        <td><button class="btn-xs del" onclick="deleteUser(${u.id})">🗑️ Xóa</button></td>
+      </tr>`).join('')}
+    </tbody></table>`;
+}
+function filterUsers(q) {
+  const lq = q.toLowerCase();
+  renderUsersTable(allUsers.filter(u => u.name.toLowerCase().includes(lq)||u.email.toLowerCase().includes(lq)||(u.phone||'').includes(q)));
+}
+async function deleteUser(id) {
+  if (!confirm('Xóa tài khoản này?')) return;
+  try { await Admin.deleteUser(id); await renderUsers(); await loadBadges(); }
+  catch(err) { alert('❌ '+err.message); }
+}
+
+// ── TIN NHẮN ──
+async function renderMessages() {
+  try {
+    const msgs = await Admin.getMessages();
+    document.getElementById('msgCount').textContent = msgs.length + ' tin nhắn';
+    if (!msgs.length) {
+      document.getElementById('messagesContainer').innerHTML = '<div class="empty-state"><div class="e-icon">💬</div><p>Chưa có tin nhắn nào</p></div>';
+      return;
+    }
+    document.getElementById('messagesContainer').innerHTML = msgs.map((m,i) => `
+      <div class="msg-card ${i===0?'unread':''}">
+        <div class="msg-top">
+          <div class="msg-name">👤 ${m.name||'Ẩn danh'}</div>
+          <div class="msg-time">${m.created_at?new Date(m.created_at).toLocaleString('vi-VN'):''}</div>
+        </div>
+        <div class="msg-phone">📞 ${m.phone||'—'}${m.email?' · 📧 '+m.email:''}</div>
+        ${m.car_interest?`<div style="font-size:0.8rem;color:#7a7a9a;margin-bottom:0.35rem;">🚗 Xe quan tâm: <strong style="color:#e8301a">${m.car_interest}</strong>${m.budget?' · 💰 '+m.budget:''}</div>`:''}
+        <div class="msg-content">${m.message||'(Không có nội dung)'}</div>
+        <button class="btn-xs del" style="margin-top:0.5rem;" onclick="deleteMessage(${m.id})">🗑️ Xóa</button>
+      </div>`).join('');
+  } catch (err) {
+    document.getElementById('messagesContainer').innerHTML = '<div class="empty-state"><p>Lỗi: ' + err.message + '</p></div>';
+  }
+}
+async function deleteMessage(id) {
+  try { await Admin.deleteMessage(id); await renderMessages(); await loadBadges(); }
+  catch(err) { alert('❌ '+err.message); }
+}
+async function clearMessages() {
+  if (!confirm('Xóa tất cả tin nhắn?')) return;
+  try { await Admin.clearMessages(); await renderMessages(); await loadBadges(); }
+  catch(err) { alert('❌ '+err.message); }
+}
+
+// ── CÀI ĐẶT ──
+function loadSettings() {
+  const s = JSON.parse(localStorage.getItem('autoshop_settings')||'{}');
+  ['autoApprove','allowRegister','showChatbot','maintenance'].forEach(k => {
+    const el = document.getElementById('toggle-'+k);
+    if (el) el.classList.toggle('on', k==='allowRegister'||k==='showChatbot' ? s[k]!==false : !!s[k]);
+  });
+}
+function toggleSetting(key) {
+  const s = JSON.parse(localStorage.getItem('autoshop_settings')||'{}');
+  s[key] = !s[key];
+  localStorage.setItem('autoshop_settings', JSON.stringify(s));
+  document.getElementById('toggle-'+key).classList.toggle('on', s[key]);
+}
+async function updateSettingsStats() {
+  try {
+    const stats = await Admin.getStats();
+    document.getElementById('set-users').textContent    = stats.users;
+    document.getElementById('set-listings').textContent = stats.total_cars;
+    document.getElementById('set-pending').textContent  = stats.pending;
+    document.getElementById('set-sold').textContent     = stats.sold;
+  } catch {}
+}
+function changeAdminPass() {
+  const p = document.getElementById('newAdminPass').value.trim();
+  if (p.length < 8) { alert('Mật khẩu phải ít nhất 8 ký tự!'); return; }
+  alert('Tính năng đổi mật khẩu qua API đang phát triển.
+Hiện tại: sửa trực tiếp trong database MySQL.');
+  document.getElementById('newAdminPass').value = '';
+}
+function clearAllData() {
+  alert('⚠️ Để xóa dữ liệu, vui lòng truy cập MySQL và chạy:
+TRUNCATE TABLE cars;
+TRUNCATE TABLE users;
+TRUNCATE TABLE messages;');
+}
+</script>

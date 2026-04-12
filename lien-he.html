@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Liên Hệ — AutoShop</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .contact-layout {
+      display: grid; grid-template-columns: 1fr 1.2fr; gap: 3rem; align-items: start;
+    }
+    /* INFO SIDE */
+    .contact-info-panel { display: flex; flex-direction: column; gap: 1.5rem; }
+    .info-card {
+      background: var(--dark2); border: 1px solid var(--border); border-radius: var(--radius-lg);
+      padding: 1.8rem; display: flex; gap: 1.2rem; align-items: flex-start;
+      transition: all 0.3s;
+    }
+    .info-card:hover { border-color: rgba(13,27,42,0.18); transform: translateX(4px); }
+    .info-icon {
+      width: 48px; height: 48px; flex-shrink: 0; border-radius: 12px;
+      background: rgba(232,48,26,0.08); border: 1px solid rgba(13,27,42,0.12);
+      display: flex; align-items: center; justify-content: center; font-size: 1.4rem;
+    }
+    .info-text h4 { color: var(--gold); font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.4rem; }
+    .info-text p { color: var(--text-muted); font-size: 0.92rem; line-height: 1.6; }
+    .info-text a { color: var(--gold); }
+
+    /* FORM SIDE */
+    .contact-form-wrap {
+      background: var(--dark2); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 2.5rem;
+    }
+    .contact-form-wrap h3 { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: #0d1b2a; margin-bottom: 0.5rem; }
+    .contact-form-wrap p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2rem; }
+    .submit-btn {
+      width: 100%; padding: 1rem;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: var(--dark); border: none; border-radius: var(--radius);
+      font-size: 1rem; font-weight: 700; cursor: pointer;
+      font-family: 'Be Vietnam Pro', sans-serif; transition: all 0.3s; letter-spacing: 0.3px;
+    }
+    .submit-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-gold); }
+    .submit-btn:active { transform: translateY(0); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    /* MAP */
+    .map-placeholder {
+      background: var(--dark2); border: 1px solid var(--border); border-radius: var(--radius-lg);
+      height: 350px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      margin-top: 3rem; color: var(--text-muted); gap: 1rem;
+    }
+    .map-placeholder .icon { font-size: 3rem; opacity: 0.4; }
+
+    /* SUCCESS TOAST */
+    .toast {
+      position: fixed; top: 90px; right: 24px; z-index: 5000;
+      background: var(--dark2); border: 1px solid var(--green);
+      border-radius: var(--radius); padding: 1rem 1.5rem;
+      display: flex; align-items: center; gap: 0.75rem;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.5); transform: translateX(120%);
+      transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+    }
+    .toast.show { transform: translateX(0); }
+    .toast-icon { font-size: 1.4rem; }
+    .toast-text { font-size: 0.9rem; color: var(--green); font-weight: 600; }
+
+    @media(max-width:900px){ .contact-layout { grid-template-columns: 1fr; } .form-row { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="logo"><span>🏎</span> AutoShop</div>
+    <ul class="menu" id="mainMenu">
+      <li><a href="index.html">Trang Chủ</a></li>
+      <li><a href="ban-xe.html">Bán Xe</a></li>
+      <li><a href="dich-vu.html">Dịch Vụ</a></li>
+      <li><a href="lien-he.html" class="active">Liên Hệ</a></li>
+      <li><a href="dang-ban-xe.html">Đăng Bán Xe</a></li>
+      <li><a href="dang-nhap.html" class="btn-nav">Đăng Nhập</a></li>
+    </ul>
+    <button class="hamburger" onclick="document.getElementById('mainMenu').classList.toggle('open')" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+</header>
+
+<div class="page-hero">
+  <h1>Liên Hệ <span>Với Chúng Tôi</span></h1>
+  <p>Đội ngũ tư vấn sẵn sàng hỗ trợ bạn mọi lúc — hoàn toàn miễn phí</p>
+</div>
+
+<div class="container">
+  <div class="breadcrumb">
+    <a href="index.html">Trang Chủ</a> <span>›</span> <span>Liên Hệ</span>
+  </div>
+
+  <div class="contact-layout">
+    <!-- INFO PANEL -->
+    <div class="contact-info-panel">
+      <h2 class="section-title" style="color:#0d1b2a!important">Thông Tin Liên Hệ</h2>
+
+      <div class="info-card">
+        <div class="info-icon">📞</div>
+        <div class="info-text">
+          <h4>Điện Thoại</h4>
+          <p>Hotline: <a href="tel:0344806179">0344 806 179</a><br>Tư Vấn: <a href="tel:0337484248">0337 484 248</a></p>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-icon">💬</div>
+        <div class="info-text">
+          <h4>Zalo / Messenger</h4>
+          <p><a href="https://zalo.me/0337484248">Zalo: 0337 484 248</a><br><a href="https://m.me/lequocanh">Messenger: AutoShop</a></p>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-icon">📧</div>
+        <div class="info-text">
+          <h4>Email</h4>
+          <p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="751400011a061d1a05351218141c195b161a18">[email&#160;protected]</a><br><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f2818782829d8086b29387869d819a9d82dc849c">[email&#160;protected]</a></p>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-icon">📍</div>
+        <div class="info-text">
+          <h4>Địa Chỉ</h4>
+          <p>Thủ Dầu Một<br>Bình Dương, Việt Nam</p>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-icon">🕐</div>
+        <div class="info-text">
+          <h4>Giờ Làm Việc</h4>
+          <p>Thứ 2 – Thứ 7: 8:00 – 18:00<br>Chủ Nhật: 8:00 – 17:00</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORM -->
+    <div class="contact-form-wrap">
+      <h3>Gửi Tin Nhắn</h3>
+      <p>Hãy để lại thông tin, chúng tôi sẽ liên hệ lại trong thời gian sớm nhất!</p>
+
+      <form id="contactForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Họ và Tên *</label>
+            <input type="text" id="name" placeholder="Nhập họ tên" required>
+          </div>
+          <div class="form-group">
+            <label>Số Điện Thoại *</label>
+            <input type="tel" id="phone" placeholder="0901 234 567" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="email" placeholder="email@example.com">
+        </div>
+
+        <div class="form-group">
+          <label>Xe Quan Tâm</label>
+          <input type="text" id="car-interest" placeholder="Toyota Vios, Honda City..." list="car-suggestions">
+          <datalist id="car-suggestions">
+            <option value="Toyota Vios 2023">
+            <option value="Honda City 2022">
+            <option value="Mazda CX-5 2023">
+            <option value="Hyundai Accent 2022">
+          </datalist>
+        </div>
+
+        <div class="form-group">
+          <label>Ngân Sách Dự Kiến</label>
+          <input type="text" id="budget" placeholder="Ví dụ: 500 triệu VNĐ">
+        </div>
+
+        <div class="form-group">
+          <label>Thời Gian Liên Hệ Thuận Tiện</label>
+          <select id="contact-time">
+            <option value="">Chọn thời gian</option>
+            <option value="morning">Buổi sáng (8h–12h)</option>
+            <option value="afternoon">Buổi chiều (13h–17h)</option>
+            <option value="evening">Buổi tối (18h–20h)</option>
+            <option value="anytime">Bất kỳ lúc nào</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Nội Dung</label>
+          <textarea id="message" placeholder="Nhập nội dung cần tư vấn..."></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">📨 Gửi Thông Tin</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MAP -->
+  <div class="map-placeholder">
+    <div class="icon">🗺️</div>
+    <p>Vị trí showroom AutoShop — Thủ Dầu Một, Bình Dương</p>
+    <a href="https://maps.google.com/?q=Thu+Dau+Mot+Binh+Duong" target="_blank" class="btn btn-outline" style="font-size:0.85rem;padding:0.6rem 1.5rem;">Mở Google Maps →</a>
+  </div>
+</div>
+
+<footer>
+  <p><strong>AutoShop</strong> — Xe Chất Lượng · Dịch Vụ Tận Tâm</p>
+  <p>© 2026 AutoShop. Bản quyền thuộc về chúng tôi</p>
+</footer>
+
+<div class="floating-contact">
+  <a href="tel:0344806179" class="contact-item contact-phone">📞<span class="contact-tooltip">Hotline: 0344 806 179</span></a>
+  <a href="tel:0337484248" class="contact-item contact-phone2">📞<span class="contact-tooltip">Tư Vấn: 0337 484 248</span></a>
+  <a href="https://zalo.me/0337484248" target="_blank" class="contact-item contact-zalo">💬<span class="contact-tooltip">Chat Zalo</span></a>
+  <a href="https://m.me/lequocanh" target="_blank" class="contact-item contact-messenger">💬<span class="contact-tooltip">Messenger</span></a>
+  <a href="lien-he.html" class="contact-item contact-settings">⚙️<span class="contact-tooltip">Liên Hệ</span></a>
+  <a href="ban-xe.html" class="contact-item contact-car">🚗<span class="contact-tooltip">Xem Xe</span></a>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <div class="toast-icon">✅</div>
+  <div class="toast-text">Thông tin đã được gửi thành công!</div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+<script>
+emailjs.init({ publicKey: "LlHF1IANcjpNxf7ex" });
+
+document.getElementById("contactForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const btn = document.getElementById("submitBtn");
+  btn.textContent = "⏳ Đang gửi...";
+  btn.disabled = true;
+
+  const data = {
+    name: document.getElementById("name").value,
+    phone: document.getElementById("phone").value,
+    email: document.getElementById("email").value,
+    car_interest: document.getElementById("car-interest").value,
+    budget: document.getElementById("budget").value,
+    contact_time: document.getElementById("contact-time").value,
+    message: document.getElementById("message").value,
+    time: new Date().toLocaleString()
+  };
+
+  emailjs.send("hahanomi323", "template_3jc1q9f", data)
+    .then(() => {
+      emailjs.send("hahanomi323", "template_56mk9ik", data);
+      document.getElementById("contactForm").reset();
+      btn.textContent = "📨 Gửi Thông Tin";
+      btn.disabled = false;
+      showToast();
+    }, (er<script src="chatbot.js"></script>
+<script src="chatbox.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="api.js"></script>
+<script>
+document.getElementById("contactForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
+  const btn = document.getElementById("submitBtn");
+  btn.textContent = "⏳ Đang gửi...";
+  btn.disabled = true;
+
+  const data = {
+    name:         document.getElementById("name").value,
+    phone:        document.getElementById("phone").value,
+    email:        document.getElementById("email").value,
+    car_interest: document.getElementById("car-interest").value,
+    budget:       document.getElementById("budget").value,
+    contact_time: document.getElementById("contact-time").value,
+    message:      document.getElementById("message").value
+  };
+
+  try {
+    // Gửi vào database MySQL qua API
+    await Messages.send(data);
+    document.getElementById("contactForm").reset();
+    showToast();
+  } catch (err) {
+    alert("❌ Lỗi: " + err.message);
+  } finally {
+    btn.textContent = "📨 Gửi Thông Tin";
+    btn.disabled = false;
+  }
+});
+
+function showToast() {
+  const toast = document.getElementById("toast");
+  if (toast) {
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 3500);
+  } else {
+    alert("✅ Thông tin đã được gửi thành công!");
+  }
+}
+</script>

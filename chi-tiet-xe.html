@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chi Tiết Xe — AutoShop</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* GALLERY */
+    .gallery-wrap { position: relative; }
+    .gallery-main {
+      width: 100%; height: 420px; border-radius: var(--radius-lg);
+      overflow: hidden; background: var(--dark2); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center; margin-bottom: 0.8rem;
+      cursor: zoom-in;
+    }
+    .gallery-main img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
+    .gallery-main img:hover { transform: scale(1.02); }
+    .gallery-main .no-photo { font-size: 6rem; opacity: 0.3; }
+    .gallery-thumbs { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+    .gallery-thumb {
+      width: 80px; height: 60px; border-radius: 8px; overflow: hidden;
+      border: 2px solid transparent; cursor: pointer; transition: all 0.2s;
+      background: var(--dark2);
+    }
+    .gallery-thumb:hover, .gallery-thumb.active { border-color: var(--gold); }
+    .gallery-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* DETAIL LAYOUT */
+    .detail-layout {
+      display: grid; grid-template-columns: 1fr 380px; gap: 2rem; align-items: start;
+    }
+
+    /* SPECS TABLE */
+    .specs-card {
+      background: var(--dark2); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 1.8rem; margin-top: 1.5rem;
+    }
+    .specs-card h3 { font-size: 1rem; font-weight: 700; color: var(--white); margin-bottom: 1.2rem; }
+    .specs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+    .spec-row {
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 0.85rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .specs-grid > :nth-child(odd) { padding-right: 1.5rem; border-right: 1px solid rgba(255,255,255,0.05); }
+    .specs-grid > :nth-child(even) { padding-left: 1.5rem; }
+    .spec-row:nth-last-child(-n+2) { border-bottom: none; }
+    .spec-icon { font-size: 1.1rem; width: 24px; text-align: center; flex-shrink: 0; }
+    .spec-label { font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.4px; }
+    .spec-value { font-size: 0.92rem; font-weight: 700; color: var(--white); }
+
+    /* FEATURES */
+    .features-wrap { margin-top: 1.5rem; }
+    .features-wrap h3 { font-size: 1rem; font-weight: 700; color: var(--white); margin-bottom: 1rem; }
+    .features-list { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .feature-tag {
+      background: rgba(212,175,55,0.1); border: 1px solid rgba(212,175,55,0.25);
+      color: var(--gold); padding: 0.35rem 0.85rem; border-radius: 20px;
+      font-size: 0.8rem; font-weight: 600;
+    }
+
+    /* DESCRIPTION */
+    .desc-wrap { margin-top: 1.5rem; }
+    .desc-wrap h3 { font-size: 1rem; font-weight: 700; color: var(--white); margin-bottom: 0.8rem; }
+    .desc-wrap p { color: var(--text-muted); font-size: 0.92rem; line-height: 1.8; }
+
+    /* RIGHT SIDEBAR */
+    .detail-sidebar { display: flex; flex-direction: column; gap: 1.2rem; }
+
+    .price-card {
+      background: var(--dark2); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 1.8rem;
+    }
+    .car-title-h { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--white); margin-bottom: 0.5rem; line-height: 1.3; }
+    .car-price-big { font-size: 2.2rem; font-weight: 800; color: var(--gold); font-family: 'Playfair Display', serif; margin: 1rem 0; }
+    .car-price-big span { font-size: 1rem; color: var(--text-muted); font-family: 'Be Vietnam Pro', sans-serif; }
+    .quick-specs { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; }
+    .quick-spec-tag {
+      background: var(--dark3); border: 1px solid var(--border);
+      padding: 0.35rem 0.85rem; border-radius: 20px;
+      font-size: 0.8rem; color: var(--text-muted);
+    }
+    .btn-contact-big {
+      display: block; width: 100%; text-align: center; padding: 1rem;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: var(--dark); font-weight: 700; border-radius: var(--radius);
+      font-size: 1rem; margin-bottom: 0.75rem; transition: all 0.25s;
+      font-family: 'Be Vietnam Pro', sans-serif; border: none; cursor: pointer;
+    }
+    .btn-contact-big:hover { transform: translateY(-2px); box-shadow: var(--shadow-gold); }
+    .btn-contact-outline {
+      display: block; width: 100%; text-align: center; padding: 0.85rem;
+      background: transparent; color: var(--gold);
+      border: 2px solid rgba(212,175,55,0.4); border-radius: var(--radius);
+      font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all 0.25s;
+      font-family: 'Be Vietnam Pro', sans-serif; margin-bottom: 0.6rem;
+    }
+    .btn-contact-outline:hover { background: rgba(212,175,55,0.08); transform: translateY(-1px); }
+
+    .seller-card {
+      background: var(--dark2); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 1.5rem;
+    }
+    .seller-card h4 { font-size: 0.82rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1rem; }
+    .seller-info { display: flex; align-items: center; gap: 0.9rem; margin-bottom: 1.2rem; }
+    .seller-avatar {
+      width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; font-weight: 800; color: var(--dark);
+    }
+    .seller-name { font-weight: 700; color: var(--white); font-size: 0.95rem; }
+    .seller-meta { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.15rem; }
+    .seller-contact-row { display: flex; flex-direction: column; gap: 0.5rem; }
+    .contact-link {
+      display: flex; align-items: center; gap: 0.6rem;
+      padding: 0.6rem 0.9rem; border-radius: 10px; font-size: 0.88rem;
+      font-weight: 600; text-decoration: none; transition: all 0.2s;
+    }
+    .contact-link.phone  { background: rgba(37,211,102,0.12); color: #25d366; border: 1px solid rgba(37,211,102,0.2); }
+    .contact-link.zalo   { background: rgba(0,104,255,0.12);  color: #0068ff; border: 1px solid rgba(0,104,255,0.2); }
+    .contact-link.msg    { background: rgba(212,175,55,0.1);   color: var(--gold); border: 1px solid rgba(212,175,55,0.2); }
+    .contact-link:hover  { transform: translateX(3px); }
+
+    /* SHARE / BACK */
+    .back-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.75rem; }
+    .btn-back { display: flex; align-items: center; gap: 0.5rem; color: var(--text-muted); font-size: 0.88rem; font-weight: 600; transition: color 0.2s; cursor: pointer; }
+    .btn-back:hover { color: var(--gold); }
+    .share-btns { display: flex; gap: 0.5rem; }
+    .btn-share {
+      padding: 0.4rem 0.9rem; border-radius: 8px; font-size: 0.78rem; font-weight: 700;
+      cursor: pointer; border: 1px solid var(--border); background: var(--dark2);
+      color: var(--text-muted); transition: all 0.2s; font-family: 'Be Vietnam Pro', sans-serif;
+    }
+    .btn-share:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* NOT FOUND */
+    .not-found { text-align: center; padding: 5rem 2rem; color: var(--text-muted); }
+    .not-found .nf-icon { font-size: 4rem; margin-bottom: 1rem; opacity: 0.4; }
+    .not-found h2 { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--white); margin-bottom: 0.5rem; }
+
+    /* RELATED */
+    .related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.2rem; }
+    .related-card {
+      background: var(--dark2); border: 1px solid var(--border); border-radius: var(--radius-lg);
+      overflow: hidden; transition: all 0.3s;
+    }
+    .related-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: rgba(212,175,55,0.35); }
+    .related-img { width: 100%; height: 150px; object-fit: cover; display: block; background: var(--dark3); }
+    .related-body { padding: 1rem; }
+    .related-name { font-weight: 700; color: var(--white); font-size: 0.92rem; margin-bottom: 0.3rem; }
+    .related-price { color: var(--gold); font-weight: 800; font-size: 1rem; }
+
+    @media(max-width:960px){ .detail-layout { grid-template-columns: 1fr; } }
+    @media(max-width:600px){ .gallery-main { height: 260px; } .specs-grid { grid-template-columns: 1fr; } .specs-grid > :nth-child(odd) { border-right: none; padding-right: 0; } .specs-grid > :nth-child(even) { padding-left: 0; } }
+  </style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="logo"><span>🏎</span> AutoShop</div>
+    <ul class="menu" id="mainMenu">
+      <li><a href="index.html">Trang Chủ</a></li>
+      <li><a href="ban-xe.html" class="active">Bán Xe</a></li>
+      <li><a href="dich-vu.html">Dịch Vụ</a></li>
+      <li><a href="lien-he.html">Liên Hệ</a></li>
+      <li><a href="dang-ban-xe.html">Đăng Bán Xe</a></li>
+      <li><a href="dang-nhap.html" class="btn-nav" id="navLoginLink">Đăng Nhập</a></li>
+    </ul>
+    <button class="hamburger" onclick="document.getElementById('mainMenu').classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+</header>
+
+<div class="page-hero" id="pageHero" style="display:none;">
+  <h1 id="heroTitle">Chi Tiết <span>Xe</span></h1>
+  <p id="heroSub">Thông tin đầy đủ và chính xác về chiếc xe bạn quan tâm</p>
+</div>
+
+<div class="container" id="mainContent">
+  <!-- Filled by JS -->
+</div>
+
+<footer>
+  <p><strong>AutoShop</strong> — Xe Chất Lượng · Dịch Vụ Tận Tâm</p>
+  <p>© 2026 AutoShop. Bản quyền thuộc về chúng tôi</p>
+</footer>
+
+<div class="floating-contact">
+  <a href="tel:0344806179" class="contact-item contact-phone">📞<span class="contact-tooltip">Hotline: 0344 806 179</span></a>
+  <a href="tel:0337484248" class="contact-item contact-phone2">📞<span class="contact-tooltip">Tư Vấn: 0337 484 248</span></a>
+  <a href="https://zalo.me/0337484248" target="_blank" class="contact-item contact-zalo">💬<span class="contact-tooltip">Chat Zalo</span></a>
+  <a href="https://m.me/autoshopvn" target="_blank" class="contact-item contact-messenger">💬<span class="contact-tooltip">Messenger</span></a>
+  <a href="lien-he.html" class="contact-item contact-settings">⚙️<span class="contact-tooltip">Liên Hệ</span></a>
+  <a href="ban-xe.html" class="contact-item contact-car">🚗<span class="contact-tooltip">Xem Xe</span></a>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════
+//  CẤU HÌNH API — Chỉnh URL này cho khớp với backend
+// ══════════════════════════════════════════════════════
+const API_BASE = 'http://localhost:3000/api'; // ← đổi nếu backend chạy port khác
+
+const SESSION_KEY = 'autoshop_session';
+
+// ── NAV update ─────────────────────────────────────────────────────────────
+(function(){
+  const s = JSON.parse(localStorage.getItem(SESSION_KEY)||'null');
+  if(s && s.name){
+    const n = document.getElementById('navLoginLink');
+    if(n){ n.textContent = '👤 ' + s.name.split(' ').pop(); n.href = 'dang-ban-xe.html'; }
+  }
+})();
+
+// ── Helper: map tên cột SQL → tên field JS ─────────────────────────────────
+function mapCarFromDB(row) {
+  return {
+    id:           row.id,
+    title:        row.title,
+    brand:        row.brand,
+    model:        row.model,
+    year:         row.year,
+    carType:      row.car_type,
+    origin:       row.origin,
+    km:           row.km,
+    fuel:         row.fuel,
+    transmission: row.transmission,
+    engine:       row.engine,
+    seats:        row.seats,
+    color:        row.color,
+    condition:    row.car_condition,
+    features:     (() => { try { return JSON.parse(row.car_features||'[]'); } catch(e){ return []; } })(),
+    price:        row.price,
+    sellType:     row.sell_type,
+    province:     row.province,
+    district:     row.district,
+    description:  row.description,
+    photos:       (() => { 
+      if(Array.isArray(row.photos)) return row.photos;
+      try { return JSON.parse(row.photos||'[]'); } catch(e){ return []; }
+    })(),
+    sellerName:   row.seller_name,
+    sellerPhone:  row.seller_phone,
+    sellerZalo:   row.seller_zalo,
+    status:       row.status,
+    badge:        row.plan === 'vip' ? 'VIP' : (row.plan === 'basic' ? 'HOT' : ''),
+  };
+}
+
+// ── MAIN ───────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', async () => {
+  const params = new URLSearchParams(location.search);
+  const id = params.get('id');
+  const container = document.getElementById('mainContent');
+
+  if(!id){
+    renderNotFound(container);
+    return;
+  }
+
+  // Hiển thị loading
+  container.innerHTML = `<div style="text-align:center;padding:4rem;color:var(--text-muted);">
+    <div style="font-size:2rem;margin-bottom:1rem;">⏳</div>
+    <p>Đang tải thông tin xe...</p>
+  </div>`;
+
+  try {
+    // Gọi API lấy chi tiết xe theo ID
+    const res = await fetch(`${API_BASE}/cars/${encodeURIComponent(id)}`);
+
+    if(!res.ok){
+      renderNotFound(container);
+      return;
+    }
+
+    const data = await res.json();
+    // server.js trả về { success: true, data: {...} }
+    const raw = data.data || data;
+    const car = mapCarFromDB(raw);
+
+    if(!car || !car.id){
+      renderNotFound(container);
+      return;
+    }
+
+    // Update page title + hero
+    document.title = `${car.title} — AutoShop`;
+    const hero = document.getElementById('pageHero');
+    if(hero){
+      hero.style.display = '';
+      document.getElementById('heroTitle').innerHTML = `${car.title.replace(/(\d{4})/,'<span>$1</span>')}`;
+      document.getElementById('heroSub').textContent =
+        `📅 Năm ${car.year||'—'}  ·  ⛽ ${car.fuel||'—'}  ·  ⚙️ ${car.transmission||'—'}  ·  📍 ${car.province||'Bình Dương'}`;
+    }
+
+    renderDetail(container, car);
+
+  } catch(err) {
+    console.error('Lỗi kết nối API:', err);
+    container.innerHTML = `<div class="not-found">
+      <div class="nf-icon">⚠️</div>
+      <h2>Không thể kết nối server</h2>
+      <p>Vui lòng kiểm tra backend Node.js đang chạy tại <strong>${API_BASE}</strong></p>
+      <a href="ban-xe.html" class="btn btn-gold" style="margin-top:1.5rem;display:inline-flex;">← Xem tất cả xe</a>
+    </div>`;
+  }
+});
+
+// ── Hàm lấy xe liên quan từ API ────────────────────────────────────────────
+async function fetchRelatedCars(currentCar) {
+  try {
+    const res = await fetch(`${API_BASE}/cars?status=active&brand=${encodeURIComponent(currentCar.brand||'')}`);
+    if(!res.ok) return [];
+    const data = await res.json();
+    // server.js trả về { success: true, data: [...] }
+    const list = data.data || [];
+    return list
+      .map(r => mapCarFromDB(r))
+      .filter(c => String(c.id) !== String(currentCar.id))
+      .slice(0, 4);
+  } catch(e) {
+    return [];
+  }
+}
+
+function renderDetail(container, car){
+  const photos = (car.photos && car.photos.length > 0) ? car.photos : [];
+  const km = parseInt(car.km||0).toLocaleString('vi-VN');
+  const price = parseInt(car.price||0).toLocaleString('vi-VN');
+  const features = Array.isArray(car.features) ? car.features : [];
+  const sellerInitial = (car.sellerName||'A').charAt(0).toUpperCase();
+
+  container.innerHTML = `
+    <div class="breadcrumb">
+      <a href="index.html">Trang Chủ</a> <span>›</span>
+      <a href="ban-xe.html">Xe Đang Bán</a> <span>›</span>
+      <span>${car.title}</span>
+    </div>
+
+    <div class="back-bar">
+      <a class="btn-back" href="ban-xe.html">← Quay lại danh sách xe</a>
+      <div class="share-btns">
+        <button class="btn-share" onclick="copyLink()">🔗 Sao chép link</button>
+        <button class="btn-share" onclick="shareZalo()">💬 Chia sẻ Zalo</button>
+      </div>
+    </div>
+
+    <div class="detail-layout">
+      <!-- LEFT: Gallery + Specs -->
+      <div>
+        <!-- GALLERY -->
+        <div class="gallery-wrap">
+          <div class="gallery-main" id="galleryMain" onclick="openFullscreen()">
+            ${photos.length > 0
+              ? `<img src="" alt="${car.title}" id="mainImg">`
+              : ''}
+            <div class="no-photo" id="noPhotoIcon" style="display:${photos.length===0?'flex':'none'}">🚗</div>
+          </div>
+          ${photos.length > 1 ? `
+          <div class="gallery-thumbs" id="galleryThumbs">
+            ${photos.map((p,i)=>`
+              <div class="gallery-thumb ${i===0?'active':''}" onclick="setPhotoByIndex(${i}, this)">
+                <img src="" data-src="${i}" alt="Ảnh ${i+1}">
+              </div>`).join('')}
+          </div>` : ''}
+        </div>
+
+        <!-- SPECS TABLE -->
+        <div class="specs-card">
+          <h3>📋 Thông Số Kỹ Thuật</h3>
+          <div class="specs-grid">
+            <div class="spec-row"><span class="spec-icon">📅</span><div><div class="spec-label">Năm sản xuất</div><div class="spec-value">${car.year||'—'}</div></div></div>
+            <div class="spec-row"><span class="spec-icon">🛣</span><div><div class="spec-label">Số km đã đi</div><div class="spec-value">${km} km</div></div></div>
+            <div class="spec-row"><span class="spec-icon">⛽</span><div><div class="spec-label">Nhiên liệu</div><div class="spec-value">${car.fuel||'—'}</div></div></div>
+            <div class="spec-row"><span class="spec-icon">⚙️</span><div><div class="spec-label">Hộp số</div><div class="spec-value">${car.transmission||'—'}</div></div></div>
+            <div class="spec-row"><span class="spec-icon">🎨</span><div><div class="spec-label">Màu sắc</div><div class="spec-value">${car.color||'—'}</div></div></div>
+            <div class="spec-row"><span class="spec-icon">🌏</span><div><div class="spec-label">Xuất xứ</div><div class="spec-value">${car.origin||'—'}</div></div></div>
+            <div class="spec-row"><span class="spec-icon">🚘</span><div><div class="spec-label">Tình trạng</div><div class="spec-value">${car.condition||'—'}</div></div></div>
+            <div class="spec-row"><span class="spec-icon">📍</span><div><div class="spec-label">Tỉnh / Thành</div><div class="spec-value">${car.province||'—'}</div></div></div>
+            ${car.carType ? `<div class="spec-row"><span class="spec-icon">🚗</span><div><div class="spec-label">Loại xe</div><div class="spec-value">${car.carType}</div></div></div>` : ''}
+            ${car.sellType ? `<div class="spec-row"><span class="spec-icon">📄</span><div><div class="spec-label">Hình thức bán</div><div class="spec-value">${car.sellType}</div></div></div>` : ''}
+          </div>
+        </div>
+
+        ${features.length > 0 ? `
+        <div class="features-wrap">
+          <h3>✨ Tính Năng Nổi Bật</h3>
+          <div class="features-list">
+            ${features.map(f=>`<span class="feature-tag">✓ ${f}</span>`).join('')}
+          </div>
+        </div>` : ''}
+
+        ${car.description ? `
+        <div class="desc-wrap">
+          <h3>📝 Mô Tả Chi Tiết</h3>
+          <p>${(car.description||'').replace(/\n/g,'<br>')}</p>
+        </div>` : ''}
+      </div>
+
+      <!-- RIGHT: Price + Contact -->
+      <div class="detail-sidebar">
+        <div class="price-card">
+          <h1 class="car-title-h">${car.title}</h1>
+          <div class="quick-specs">
+            <span class="quick-spec-tag">📅 ${car.year}</span>
+            <span class="quick-spec-tag">🛣 ${km} km</span>
+            <span class="quick-spec-tag">⚙️ ${car.transmission||'—'}</span>
+            <span class="quick-spec-tag">📍 ${car.province||'—'}</span>
+          </div>
+          <div class="car-price-big">${price} <span>triệu VNĐ</span></div>
+          <a href="tel:${car.sellerPhone||'0344806179'}" class="btn-contact-big">📞 Gọi Ngay Hỏi Mua</a>
+          <a href="https://zalo.me/${car.sellerPhone||'0337484248'}" target="_blank" class="btn-contact-outline">💬 Chat Zalo Tư Vấn</a>
+          <a href="lien-he.html" class="btn-contact-outline">📨 Gửi Yêu Cầu Tư Vấn</a>
+        </div>
+
+        <div class="seller-card">
+          <h4>Thông Tin Người Bán</h4>
+          <div class="seller-info">
+            <div class="seller-avatar">${sellerInitial}</div>
+            <div>
+              <div class="seller-name">${car.sellerName||'AutoShop'}</div>
+              <div class="seller-meta">📍 ${car.province||'Bình Dương'} · Phản hồi nhanh</div>
+            </div>
+          </div>
+          <div class="seller-contact-row">
+            <a href="tel:${car.sellerPhone||'0344806179'}" class="contact-link phone">📞 ${car.sellerPhone||'0344 806 179'}</a>
+            <a href="https://zalo.me/${car.sellerZalo||car.sellerPhone||'0337484248'}" target="_blank" class="contact-link zalo">💬 Zalo: ${car.sellerZalo||car.sellerPhone||'0337 484 248'}</a>
+            <a href="lien-he.html" class="contact-link msg">✉️ Để lại tin nhắn</a>
+          </div>
+        </div>
+
+        <div style="background:var(--dark2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.2rem;font-size:0.82rem;color:var(--text-muted);line-height:1.8;">
+          🛡️ <strong style="color:var(--white)">Cam kết AutoShop:</strong><br>
+          • Xe đã kiểm định kỹ lưỡng<br>
+          • Hỗ trợ vay vốn & trả góp<br>
+          • Hỗ trợ thủ tục sang tên<br>
+          • Bảo hành theo gói đã chọn
+        </div>
+      </div>
+    </div>
+
+    <!-- RELATED CARS -->
+    <div style="margin-top:3rem;">
+      <h2 class="section-title">Xe Tương Tự</h2>
+      <div class="related-grid" id="relatedGrid"></div>
+    </div>
+  `;
+
+  // Set ảnh sau khi innerHTML đã render xong (tránh nhúng base64 vào attribute)
+  window.__carPhotos = photos;
+  if(photos.length > 0) {
+    const mainImg = document.getElementById('mainImg');
+    if(mainImg) mainImg.src = photos[0];
+    // Set thumbnail
+    document.querySelectorAll('.gallery-thumb img').forEach((img, i) => {
+      if(photos[i]) img.src = photos[i];
+    });
+  }
+
+  renderRelated(car);
+}
+
+function setPhotoByIndex(index, thumb) {
+  const photos = window.__carPhotos || [];
+  if(!photos[index]) return;
+  const mainImg = document.getElementById('mainImg');
+  if(mainImg) mainImg.src = photos[index];
+  document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
+  if(thumb) thumb.classList.add('active');
+}
+
+async function renderRelated(currentCar){
+  const grid = document.getElementById('relatedGrid');
+  if(!grid) return;
+
+  grid.innerHTML = '<p style="color:var(--text-muted)">Đang tải...</p>';
+
+  const related = await fetchRelatedCars(currentCar);
+
+  if(related.length === 0){
+    grid.innerHTML = '<p style="color:var(--text-muted)">Không có xe tương tự.</p>';
+    return;
+  }
+
+  grid.innerHTML = related.map(car => {
+    const photo = car.photos && car.photos.length > 0 ? car.photos[0] : '';
+    return `
+      <a href="chi-tiet-xe.html?id=${encodeURIComponent(car.id)}" class="related-card">
+        ${photo
+          ? `<img src="${photo}" alt="${car.title}" class="related-img" onerror="this.style.display='none'">`
+          : `<div class="related-img" style="display:flex;align-items:center;justify-content:center;font-size:3rem;opacity:0.3;">🚗</div>`}
+        <div class="related-body">
+          <div class="related-name">${car.title}</div>
+          <div class="related-price">${parseInt(car.price||0).toLocaleString('vi-VN')} triệu VNĐ</div>
+        </div>
+      </a>`;
+  }).join('');
+}
+
+function renderNotFound(container){
+  document.title = 'Không tìm thấy xe — AutoShop';
+  container.innerHTML = `
+    <div class="not-found">
+      <div class="nf-icon">🔍</div>
+      <h2>Không tìm thấy xe này</h2>
+      <p>Xe có thể đã được bán hoặc link không hợp lệ.</p>
+      <a href="ban-xe.html" class="btn btn-gold" style="margin-top:1.5rem;display:inline-flex;">← Xem tất cả xe đang bán</a>
+    </div>`;
+}
+
+function setPhoto(src, thumb){
+  document.getElementById('mainImg') && (document.getElementById('mainImg').src = src);
+  document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
+  if(thumb) thumb.classList.add('active');
+}
+
+function copyLink(){
+  navigator.clipboard.writeText(location.href).then(()=>alert('✅ Đã sao chép link!'));
+}
+function shareZalo(){
+  window.open('https://zalo.me/share?url='+encodeURIComponent(location.href), '_blank');
+}
+function openFullscreen(){
+  const img = document.getElementById('mainImg');
+  if(img && img.requestFullscreen) img.requestFullscreen();
+}
+</script>
+
+<script src="chatbot.js"></script>
+<script src="auth.js"></script>
+</body>
+</html>

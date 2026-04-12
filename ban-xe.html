@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Xe Đang Bán — AutoShop</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* SEARCH / FILTER */
+    .filter-panel {
+      background: var(--dark2); border: 1px solid var(--border); border-radius: var(--radius-lg);
+      padding: 2rem; margin-bottom: 2rem;
+    }
+    .search-row {
+      display: flex; gap: 0.75rem; margin-bottom: 1.5rem;
+    }
+    .search-row input {
+      flex: 1; padding: 0.85rem 1.2rem;
+      background: var(--dark3); border: 1.5px solid rgba(255,255,255,0.1);
+      border-radius: 50px; color: var(--text);
+      font-family: 'Be Vietnam Pro', sans-serif; font-size: 0.95rem;
+      outline: none; transition: all 0.25s;
+    }
+    .search-row input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(13,27,42,0.08); }
+    .search-row input::placeholder { color: #a0a0b8; }
+    .search-btn {
+      padding: 0.85rem 2rem; background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: var(--dark); border: none; border-radius: 50px;
+      font-weight: 700; font-size: 0.95rem; cursor: pointer;
+      font-family: 'Be Vietnam Pro', sans-serif; white-space: nowrap;
+      transition: all 0.25s;
+    }
+    .search-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-gold); }
+    .filter-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem;
+    }
+    .filter-group label { font-size: 0.78rem; font-weight: 700; color: #7a7a9a; display: block; margin-bottom: 0.45rem; text-transform: uppercase; letter-spacing: 0.5px; }
+    .filter-group select {
+      width: 100%; padding: 0.75rem 1rem;
+      background: var(--dark3); border: 1.5px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius); color: var(--text);
+      font-family: 'Be Vietnam Pro', sans-serif; font-size: 0.9rem; outline: none; cursor: pointer;
+      transition: all 0.25s;
+    }
+    .filter-group select:focus { border-color: var(--gold); }
+    .price-label { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.45rem; }
+    .price-label span:first-child { font-size: 0.78rem; font-weight: 700; color: #7a7a9a; text-transform: uppercase; letter-spacing: 0.5px; }
+    .price-value { color: var(--gold); font-weight: 700; font-size: 0.85rem; }
+    input[type=range] {
+      -webkit-appearance: none; width: 100%; height: 4px;
+      background: linear-gradient(90deg, var(--gold) 0%, var(--dark3) 0%);
+      border-radius: 2px; outline: none; cursor: pointer;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 18px; height: 18px;
+      background: var(--gold); border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(13,27,42,0.25);
+    }
+
+    /* SORT BAR */
+    .sort-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;
+    }
+    .result-count { color: #7a7a9a; font-size: 0.9rem; }
+    .result-count strong { color: var(--gold); }
+    .sort-controls { display: flex; align-items: center; gap: 1rem; }
+    .sort-controls select {
+      padding: 0.55rem 1rem; background: var(--dark2); border: 1px solid var(--border);
+      border-radius: 8px; color: #1a1a2e; font-family: 'Be Vietnam Pro', sans-serif;
+      font-size: 0.88rem; outline: none; cursor: pointer;
+    }
+    .view-btns { display: flex; gap: 0.4rem; }
+    .view-btn {
+      width: 36px; height: 36px; border-radius: 8px; border: 1px solid var(--border);
+      background: var(--dark2); color: #7a7a9a; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+    .view-btn.active, .view-btn:hover { background: rgba(13,27,42,0.08); color: var(--gold); border-color: rgba(13,27,42,0.15); }
+
+    /* CAR GRID */
+    .car-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 1.5rem;
+    }
+    .car-card {
+      background: var(--dark2); border: 1px solid var(--border); border-radius: var(--radius-lg);
+      overflow: hidden; transition: all 0.3s; position: relative;
+    }
+    .car-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(0,0,0,0.5); border-color: rgba(13,27,42,0.18); }
+    .car-badge-wrap { position: absolute; top: 12px; right: 12px; z-index: 2; }
+    .car-img-wrap {
+      position: relative; overflow: hidden; height: 200px;
+      background: linear-gradient(135deg, var(--dark3), var(--dark2));
+      display: flex; align-items: center; justify-content: center;
+    }
+    .car-img-wrap img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.5s;
+    }
+    .car-card:hover .car-img-wrap img { transform: scale(1.05); }
+    .car-img-fallback { font-size: 5rem; opacity: 0.4; }
+    .car-body { padding: 1.5rem; }
+    .car-name { font-size: 1.2rem; font-weight: 700; color: #0d1b2a; margin-bottom: 1rem; }
+    .car-specs { list-style: none; margin-bottom: 1.2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem 0.8rem; }
+    .car-specs li { font-size: 0.83rem; color: #7a7a9a; display: flex; align-items: center; gap: 0.35rem; }
+    .car-price { font-size: 1.5rem; font-weight: 800; color: var(--gold); margin-bottom: 1.2rem; font-family: 'Playfair Display', serif; }
+    .car-btn {
+      display: block; text-align: center; padding: 0.8rem;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: var(--dark); font-weight: 700; border-radius: var(--radius);
+      transition: all 0.25s; font-size: 0.92rem;
+    }
+    .car-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-gold); background: linear-gradient(135deg, var(--gold-light), var(--gold)); }
+
+    /* LIST VIEW */
+    .car-grid.list-view { grid-template-columns: 1fr; }
+    .car-grid.list-view .car-card { display: flex; flex-direction: row; }
+    .car-grid.list-view .car-img-wrap { width: 240px; flex-shrink: 0; height: auto; min-height: 160px; }
+    .car-grid.list-view .car-body { flex: 1; }
+    .car-grid.list-view .car-specs { grid-template-columns: repeat(4, 1fr); }
+
+    /* NO RESULTS */
+    .no-results {
+      text-align: center; padding: 5rem 2rem; color: #7a7a9a;
+      display: none; grid-column: 1/-1;
+    }
+    .no-results .icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.4; }
+
+    @media(max-width:600px){
+      .search-row { flex-direction: column; }
+      .car-grid.list-view .car-card { flex-direction: column; }
+      .car-grid.list-view .car-img-wrap { width: 100%; min-height: 200px; }
+      .car-grid.list-view .car-specs { grid-template-columns: 1fr 1fr; }
+    }
+      @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="logo"><span>🏎</span> AutoShop</div>
+    <ul class="menu" id="mainMenu">
+      <li><a href="index.html">Trang Chủ</a></li>
+      <li><a href="ban-xe.html" class="active">Bán Xe</a></li>
+      <li><a href="dich-vu.html">Dịch Vụ</a></li>
+      <li><a href="lien-he.html">Liên Hệ</a></li>
+      <li><a href="dang-ban-xe.html">Đăng Bán Xe</a></li>
+      <li><a href="dang-nhap.html" class="btn-nav">Đăng Nhập</a></li>
+    </ul>
+    <button class="hamburger" onclick="document.getElementById('mainMenu').classList.toggle('open')" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+</header>
+
+<div class="page-hero">
+  <h1>Xe <span>Đang Bán</span></h1>
+  <p>Tìm chiếc xe hoàn hảo từ kho hàng chất lượng đã kiểm định</p>
+</div>
+
+<div class="container">
+  <div class="breadcrumb">
+    <a href="index.html">Trang Chủ</a>
+    <span>›</span>
+    <span>Xe Đang Bán</span>
+  </div>
+
+  <!-- FILTER PANEL -->
+  <div class="filter-panel">
+    <div class="search-row">
+      <input type="text" id="searchInput" placeholder="🔍 Tìm kiếm xe theo tên, hãng...">
+      <button class="search-btn" onclick="filterCars()">Tìm Kiếm</button>
+    </div>
+    <div class="filter-grid">
+      <div class="filter-group">
+        <label>Hãng Xe</label>
+        <select id="brand" onchange="filterCars()">
+          <option value="">Tất cả hãng</option>
+          <option value="toyota">Toyota</option>
+          <option value="honda">Honda</option>
+          <option value="mazda">Mazda</option>
+          <option value="hyundai">Hyundai</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Năm Sản Xuất</label>
+        <select id="year" onchange="filterCars()">
+          <option value="">Tất cả năm</option>
+          <option value="2023">2023</option>
+          <option value="2022">2022</option>
+          <option value="2021">2021</option>
+          <option value="2020">2020</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Nhiên Liệu</label>
+        <select id="fuel" onchange="filterCars()">
+          <option value="">Tất cả loại</option>
+          <option value="xăng">Xăng</option>
+          <option value="dầu">Dầu</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Hộp Số</label>
+        <select id="transmission" onchange="filterCars()">
+          <option value="">Tất cả</option>
+          <option value="tự động">Tự động</option>
+          <option value="số sàn">Số sàn</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <div class="price-label">
+          <span>Khoảng Giá</span>
+          <span class="price-value" id="priceDisplay">0 – 2,000 triệu</span>
+        </div>
+        <input type="range" id="price" min="0" max="2000" value="2000" step="50" oninput="updatePrice(); filterCars()">
+      </div>
+    </div>
+  </div>
+
+  <!-- SORT BAR -->
+  <div class="sort-bar">
+    <div class="result-count">Hiển thị <strong id="countDisplay">4</strong> xe</div>
+    <div class="sort-controls">
+      <select id="sort" onchange="sortCars()">
+        <option value="newest">Mới nhất</option>
+        <option value="price-asc">Giá thấp → cao</option>
+        <option value="price-desc">Giá cao → thấp</option>
+        <option value="km-asc">Km thấp → cao</option>
+        <option value="year-desc">Năm mới nhất</option>
+      </select>
+      <div class="view-btns">
+        <button class="view-btn active" id="gridBtn" onclick="setView('grid')" title="Lưới">⊞</button>
+        <button class="view-btn" id="listBtn" onclick="setView('list')" title="Danh sách">☰</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CAR GRID — xe được tải từ API/database -->
+  <div class="car-grid" id="carGrid">
+
+    <div class="no-results" id="noResults">
+      <div class="icon">🔍</div>
+      <p>Không tìm thấy xe phù hợp với tiêu chí của bạn.</p>
+      <p style="margin-top:0.5rem;font-size:0.88rem;">Hãy thử điều chỉnh bộ lọc hoặc liên hệ chúng tôi để được tư vấn.</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p><strong>AutoShop</strong> — Xe Chất Lượng · Dịch Vụ Tận Tâm</p>
+  <p>© 2026 AutoShop. Bản quyền thuộc về chúng tôi</p>
+</footer>
+
+<div class="floating-contact">
+  <a href="tel:0344806179" class="contact-item contact-phone">📞<span class="contact-tooltip">Hotline: 0344 806 179</span></a>
+  <a href="tel:0337484248" class="contact-item contact-phone2">📞<span class="contact-tooltip">Tư Vấn: 0337 484 248</span></a>
+  <a href="https://zalo.me/0337484248" target="_blank" class="contact-item contact-zalo">💬<span class="contact-tooltip">Chat Zalo</span></a>
+  <a href="https://m.me/autoshopvn" target="_blank" class="contact-item contact-messenger">💬<span class="contact-tooltip">Messenger</span></a>
+  <a href="lien-he.html" class="contact-item contact-settings">⚙️<span class="contact-tooltip">Liên Hệ</span></a>
+  <a href="ban-xe.html" class="contact-item contact-car">🚗<span class="contact-tooltip">Xem Xe</span></a>
+</div>
+
+<script>
+function updatePrice(){
+  const val=document.getElementById('price').value;
+  document.getElementById('priceDisplay').textContent=`0 – ${parseInt(val).toLocaleString()} triệu`;
+  const pct=(val/2000)*100;
+  document.getElementById('price').style.background=`linear-gradient(90deg, var(--gold) ${pct}%, var(--dark3) ${pct}%)`;
+}
+updatePrice();
+
+function filterCars(){
+  const search=document.getElementById('searchInput').value.toLowerCase();
+  const brand=document.getElementById('brand').value;
+  const year=document.getElementById('year').value;
+  const fuel=document.getElementById('fuel').value;
+  const trans=document.getElementById('transmission').value;
+  const maxPrice=parseInt(document.getElementById('price').value);
+  const cards=document.querySelectorAll('.car-card[data-brand]');
+  let visible=0;
+  cards.forEach(card=>{
+    const name=card.querySelector('.car-name').textContent.toLowerCase();
+    const b=card.dataset.brand, y=card.dataset.year, f=card.dataset.fuel, t=card.dataset.transmission, p=parseInt(card.dataset.price);
+    const ok=(!search||name.includes(search)||b.includes(search))&&
+              (!brand||b===brand)&&(!year||y===year)&&
+              (!fuel||f===fuel)&&(!trans||t===trans)&&p<=maxPrice;
+    card.style.display=ok?'':'none';
+    if(ok)visible++;
+  });
+  document.getElementById('countDisplay').textContent=visible;
+  document.getElementById('noResults').style.display=visible===0?'block':'none';
+}
+
+function sortCars(){
+  const grid=document.getElementById('carGrid');
+  const cards=[...grid.querySelectorAll('.car-card[data-brand]')];
+  const sort=document.getElementById('sort').value;
+  cards.sort((a,b)=>{
+    if(sort==='price-asc')return parseInt(a.dataset.price)-parseInt(b.dataset.price);
+    if(sort==='price-desc')return parseInt(b.dataset.price)-parseInt(a.dataset.price);
+    if(sort==='km-asc')return parseInt(a.dataset.km)-parseInt(b.dataset.km);
+    if(sort==='year-desc')return parseInt(b.dataset.year)-parseInt(a.dataset.year);
+    return 0;
+  });
+  const noRes=document.getElementById('noResults');
+  cards.forEach(c=>grid.insertBefore(c,noRes));
+}
+
+function setView(v){
+  const grid=document.getElementById('carGrid');
+  if(v==='list'){grid.classList.add('list-view');document.getElementById('gridBtn').classList.remove('active');document.getElementById('listBtn').classList.add('active');}
+  else{grid.classList.remove('list-view');document.getElementById('gridBtn').classList.add('active');document.getElementById('listBtn').classList.remove('active');}
+}
+
+document.getElementById('searchInput').addEventListener('keypress',e=>{if(e.key==='Enter')filterCars();});
+</script>
+<script src="chatbot.js"></script>
+<script src="chatbox.js"></script>
+
+<script src="api.js"></script>
+<script>
+// ── TẢI XE TỪ API ──
+let allCars = [];
+
+document.addEventListener('DOMContentLoaded', async function() {
+  await loadCars();
+  updatePrice();
+});
+
+async function loadCars() {
+  // Hiển thị loading
+  document.getElementById('carGrid').innerHTML = `
+    <div style="grid-column:1/-1;text-align:center;padding:4rem 2rem;color:#7a7a9a;">
+      <div style="font-size:2.5rem;margin-bottom:1rem;animation:spin 1s linear infinite;display:inline-block">⏳</div>
+      <p style="font-size:1rem;">Đang tải xe từ database...</p>
+    </div>
+    <div class="no-results" id="noResults">
+      <div class="icon">🔍</div>
+      <p>Không tìm thấy xe phù hợp.</p>
+    </div>`;
+  try {
+    allCars = await Cars.getAll();
+    renderCars(allCars);
+    document.getElementById('countDisplay').textContent = allCars.length;
+  } catch (err) {
+    console.error('Lỗi tải xe:', err);
+    // Fallback: hiển thị xe HTML tĩnh nếu API lỗi
+    const cards = document.querySelectorAll('.car-card[data-brand]');
+    document.getElementById('countDisplay').textContent = cards.length;
+  }
+}
+
+function renderCars(cars) {
+  const grid = document.getElementById('carGrid');
+  const noRes = document.getElementById('noResults');
+
+  // Xóa loading spinner và xe cũ, giữ lại noResults
+  grid.querySelectorAll('.car-card[data-api], div[style*="Đang tải"], div[style*="spin"]').forEach(el => el.remove());
+  // Xóa tất cả children trừ noResults
+  Array.from(grid.children).forEach(el => {
+    if (el.id !== 'noResults') el.remove();
+  });
+
+  if (cars.length === 0) {
+    noRes.style.display = 'block';
+    document.getElementById('countDisplay').textContent = '0';
+    return;
+  }
+  noRes.style.display = 'none';
+  document.getElementById('countDisplay').textContent = cars.length;
+
+  cars.forEach(car => {
+    const badge = car.is_shop ? '<span class="badge badge-hot">SHOP</span>' :
+                  car.status === 'active' ? '<span class="badge badge-new">MỚI</span>' : '';
+    const firstPhoto = car.photos && car.photos.length ? car.photos[0] : null;
+    const photoSrc = firstPhoto
+      ? (typeof firstPhoto === 'object' ? firstPhoto.data : firstPhoto)
+      : null;
+    const photo = photoSrc
+      ? `<img src="${photoSrc}" alt="${car.title}" onerror="this.style.display='none'">`
+      : `<div class="car-img-fallback">🚗</div>`;
+
+    const div = document.createElement('div');
+    div.className = 'car-card';
+    div.setAttribute('data-api', '1');
+    div.setAttribute('data-brand', car.brand?.toLowerCase() || '');
+    div.setAttribute('data-year', car.year || '');
+    div.setAttribute('data-fuel', car.fuel || '');
+    div.setAttribute('data-transmission', car.transmission || '');
+    div.setAttribute('data-price', car.price || '0');
+    div.setAttribute('data-km', car.km || '0');
+    div.innerHTML = `
+      <div class="car-badge-wrap">${badge}</div>
+      <div class="car-img-wrap">${photo}</div>
+      <div class="car-body">
+        <h3 class="car-name">${car.title || car.brand + ' ' + car.model + ' ' + car.year}</h3>
+        <ul class="car-specs">
+          <li>📅 Năm ${car.year || '—'}</li>
+          <li>⛽ ${car.fuel || '—'}</li>
+          <li>🛣 ${Number(car.km || 0).toLocaleString()} km</li>
+          <li>⚙️ ${car.transmission || '—'}</li>
+        </ul>
+        <div class="car-price">${Number(car.price || 0).toLocaleString()} triệu VNĐ</div>
+        <button class="car-btn" onclick="viewCar('${car.id}')">Xem Chi Tiết →</button>
+      </div>`;
+    grid.insertBefore(div, document.getElementById('noResults'));
+  });
+}
+
+function viewCar(id) {
+  // Mở trang chi tiết xe (tạo sau) hoặc hiển thị popup
+  window.location.href = 'chi-tiet-xe.html?id=' + id;
+}
+
+// ── FILTER ──
+async function filterCars() {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const brand  = document.getElementById('brand').value;
+  const year   = document.getElementById('year').value;
+  const fuel   = document.getElementById('fuel').value;
+  const trans  = document.getElementById('transmission').value;
+  const maxP   = parseInt(document.getElementById('price').value);
+
+  let filtered = allCars.filter(car => {
+    const name = (car.title || car.brand + ' ' + car.model).toLowerCase();
+    return (!search || name.includes(search) || (car.brand||'').toLowerCase().includes(search))
+      && (!brand || (car.brand||'').toLowerCase() === brand)
+      && (!year  || car.year === year)
+      && (!fuel  || car.fuel === fuel)
+      && (!trans || car.transmission === trans)
+      && (car.price || 0) <= maxP;
+  });
+  renderCars(filtered);
+}
+
+function sortCars() {
+  const sort = document.getElementById('sort').value;
+  let sorted = [...allCars];
+  if (sort === 'price-asc')  sorted.sort((a,b) => a.price - b.price);
+  if (sort === 'price-desc') sorted.sort((a,b) => b.price - a.price);
+  if (sort === 'km-asc')     sorted.sort((a,b) => a.km - b.km);
+  if (sort === 'year-desc')  sorted.sort((a,b) => (b.year||0) - (a.year||0));
+  renderCars(sorted);
+}
+
+function updatePrice() {
+  const val = document.getElementById('price').value;
+  document.getElementById('priceDisplay').textContent = '0 – ' + parseInt(val).toLocaleString() + ' triệu';
+  const pct = (val / 2000) * 100;
+  document.getElementById('price').style.background =
+    `linear-gradient(90deg, var(--red) ${pct}%, #e2e8f0 ${pct}%)`;
+}
+
+function setView(v) {
+  const grid = document.getElementById('carGrid');
+  if (v === 'list') { grid.classList.add('list-view'); document.getElementById('gridBtn').classList.remove('active'); document.getElementById('listBtn').classList.add('active'); }
+  else { grid.classList.remove('list-view'); document.getElementById('gridBtn').classList.add('active'); document.getElementById('listBtn').classList.remove('active'); }
+}
+
+document.getElementById('searchInput').addEventListener('keypress', e => { if(e.key==='Enter') filterCars(); });
+</script>

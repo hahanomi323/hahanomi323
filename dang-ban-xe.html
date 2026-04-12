@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đăng Bán Xe — AutoShop</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ===== LAYOUT ===== */
+    .main-container { max-width: 960px; margin: 0 auto; padding: 2.5rem 1.5rem 5rem; }
+
+    /* ===== AUTH GATE ===== */
+    .auth-gate {
+      background: #ffffff; border: 1px solid rgba(13,27,42,0.1);
+      border-radius: 24px; padding: 4rem 2rem; text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    .auth-gate .gate-icon { font-size: 4rem; margin-bottom: 1.2rem; }
+    .auth-gate h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: #0d1b2a; margin-bottom: 0.6rem; }
+    .auth-gate p { color: #7a7a9a; margin-bottom: 2rem; font-size: 0.95rem; }
+    .gate-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-gate {
+      padding: 0.9rem 2rem; border-radius: 12px; font-weight: 700; font-size: 0.95rem;
+      transition: all 0.25s; cursor: pointer; border: none; font-family: 'Be Vietnam Pro', sans-serif;
+      text-decoration: none; display: inline-block;
+    }
+    .btn-gate.primary { background: linear-gradient(135deg, #e8301a, #c42410); color: #faf8f4; }
+    .btn-gate.secondary { background: transparent; color: #e8301a; border: 2px solid rgba(13,27,42,0.2); }
+    .btn-gate:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(13,27,42,0.12); }
+
+    /* ===== LISTING FORM ===== */
+    .listing-form { display: none; }
+    .listing-form.show { display: block; }
+
+    /* ===== USER BAR ===== */
+    .user-bar {
+      background: #ffffff; border: 1px solid rgba(13,27,42,0.1); border-radius: 14px;
+      padding: 1rem 1.5rem; margin-bottom: 1.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .user-bar-left { display: flex; align-items: center; gap: 0.9rem; }
+    .user-bar-avatar {
+      width: 42px; height: 42px; border-radius: 50%;
+      background: linear-gradient(135deg, #e8301a, #c42410);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; color: #faf8f4; font-size: 1.1rem; flex-shrink: 0;
+    }
+    .user-bar-name { font-weight: 700; color: #0d1b2a; font-size: 0.95rem; }
+    .user-bar-email { font-size: 0.8rem; color: #7a7a9a; }
+    .btn-logout {
+      padding: 0.5rem 1.1rem; border: 1.5px solid rgba(230,57,70,0.3);
+      border-radius: 8px; color: #e63946; background: transparent;
+      font-size: 0.83rem; font-weight: 600; cursor: pointer;
+      font-family: 'Be Vietnam Pro', sans-serif; transition: all 0.2s;
+    }
+    .btn-logout:hover { background: rgba(230,57,70,0.1); }
+
+    /* ===== PROGRESS ===== */
+    .progress-bar {
+      background: #ffffff; border: 1px solid rgba(13,27,42,0.1);
+      border-radius: 14px; padding: 1.5rem 2rem; margin-bottom: 1.5rem;
+    }
+    .progress-steps { display: flex; align-items: center; justify-content: center; }
+    .step { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; flex: 1; position: relative; }
+    .step::after {
+      content: ''; position: absolute; top: 20px; left: 60%; width: 80%; height: 2px;
+      background: rgba(13,27,42,0.12); z-index: 0;
+    }
+    .step:last-child::after { display: none; }
+    .step-num {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: #e8edf5; color: #7a7a9a; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.9rem; position: relative; z-index: 1; transition: all 0.3s;
+      border: 2px solid rgba(13,27,42,0.1);
+    }
+    .step.active .step-num { background: linear-gradient(135deg, #e8301a, #c42410); color: #faf8f4; border-color: transparent; box-shadow: 0 4px 15px rgba(13,27,42,0.18); }
+    .step.done .step-num { background: #2dc88a; color: #fff; border-color: transparent; }
+    .step-label { font-size: 0.75rem; color: #7a7a9a; text-align: center; font-weight: 600; }
+    .step.active .step-label { color: #e8301a; }
+    .step.done .step-label { color: #2dc88a; }
+
+    /* ===== MY LISTINGS TOGGLE ===== */
+    .my-listings-toggle { margin-bottom: 1rem; text-align: right; }
+    .btn-toggle-listings {
+      padding: 0.6rem 1.3rem; background: #ffffff; border: 1px solid rgba(13,27,42,0.12);
+      color: #e8301a; border-radius: 10px; font-size: 0.85rem; font-weight: 700;
+      cursor: pointer; font-family: 'Be Vietnam Pro', sans-serif; transition: all 0.2s;
+    }
+    .btn-toggle-listings:hover { background: rgba(232,48,26,0.08); }
+
+    /* ===== FORM SECTIONS ===== */
+    .form-section {
+      background: #ffffff; border: 1px solid rgba(13,27,42,0.08);
+      border-radius: 20px; padding: 2rem; margin-bottom: 1.5rem;
+      transition: border-color 0.3s;
+    }
+    .form-section:focus-within { border-color: rgba(13,27,42,0.15); }
+
+    .section-header {
+      display: flex; align-items: center; gap: 0.9rem;
+      margin-bottom: 1.8rem; padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(13,27,42,0.07);
+    }
+    .section-icon {
+      width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
+      background: linear-gradient(135deg, #e8301a, #c42410);
+      display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+    }
+    .section-header h3 { font-size: 1.1rem; font-weight: 700; color: #0d1b2a; }
+    .section-header p { font-size: 0.82rem; color: #7a7a9a; margin-top: 0.15rem; }
+
+    /* ===== FORM GRID ===== */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+    .form-grid.three { grid-template-columns: 1fr 1fr 1fr; }
+    .form-grid.full { grid-template-columns: 1fr; }
+    .fg { display: flex; flex-direction: column; gap: 0.4rem; }
+    .fg.span2 { grid-column: span 2; }
+    .fg label { font-size: 0.8rem; font-weight: 700; color: #7a7a9a; text-transform: uppercase; letter-spacing: 0.5px; }
+    .fg label .req { color: #e63946; }
+    .fg input, .fg select, .fg textarea {
+      padding: 0.85rem 1rem;
+      background: #faf8f4; border: 1.5px solid rgba(13,27,42,0.1);
+      border-radius: 12px; color: #1a1a2e;
+      font-family: 'Be Vietnam Pro', sans-serif; font-size: 0.93rem;
+      transition: all 0.25s; outline: none;
+    }
+    .fg input:focus, .fg select:focus, .fg textarea:focus {
+      border-color: #e8301a; background: #f8f5f0;
+      box-shadow: 0 0 0 3px rgba(232,48,26,0.08);
+    }
+    .fg input::placeholder, .fg textarea::placeholder { color: rgba(152,152,170,0.5); }
+    .fg select option { background: #f2ede4; color: #1a1a2e; }
+    .fg input.err, .fg select.err, .fg textarea.err { border-color: #e63946 !important; }
+    .fg textarea { min-height: 130px; resize: vertical; }
+    .err-msg { font-size: 0.76rem; color: #e63946; display: none; }
+    .err-msg.show { display: block; }
+
+    /* ===== PRICE INPUT ===== */
+    .price-wrap { position: relative; }
+    .price-wrap input { padding-right: 7.5rem; }
+    .price-unit {
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      font-size: 0.8rem; color: #7a7a9a; font-weight: 600; white-space: nowrap; pointer-events: none;
+    }
+    .price-preview { font-size: 0.82rem; color: #e8301a; font-weight: 600; margin-top: 0.35rem; }
+
+    /* ===== FEATURES CHECKBOXES ===== */
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.6rem; }
+    .feature-check {
+      display: flex; align-items: center; gap: 0.55rem; padding: 0.65rem 0.9rem;
+      border: 1.5px solid rgba(13,27,42,0.1); border-radius: 10px; cursor: pointer;
+      transition: all 0.2s; font-size: 0.85rem; color: #7a7a9a; user-select: none;
+    }
+    .feature-check:hover { border-color: rgba(13,27,42,0.18); color: #1a1a2e; }
+    .feature-check.checked { border-color: rgba(13,27,42,0.25); background: rgba(232,48,26,0.06); color: #e8301a; }
+    .feature-check input[type=checkbox] { width: 15px; height: 15px; accent-color: #e8301a; margin: 0; flex-shrink: 0; }
+
+    /* ===== PHOTO UPLOAD ===== */
+    .photo-upload-area {
+      border: 2px dashed rgba(13,27,42,0.18); border-radius: 16px;
+      padding: 2.5rem; text-align: center; cursor: pointer;
+      transition: all 0.3s; background: rgba(212,175,55,0.03);
+    }
+    .photo-upload-area:hover { border-color: #e8301a; background: rgba(212,175,55,0.07); }
+    .photo-upload-area input[type=file] { display: none; }
+    .upload-icon { font-size: 2.5rem; margin-bottom: 0.6rem; }
+    .photo-upload-area h4 { color: #0d1b2a; margin-bottom: 0.3rem; }
+    .photo-upload-area p { font-size: 0.82rem; color: #7a7a9a; }
+    .photo-preview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 0.8rem; margin-top: 1rem; }
+    .photo-thumb-wrap { position: relative; }
+    .photo-thumb-wrap img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 10px; display: block; border: 1px solid rgba(255,255,255,0.1); }
+    .remove-photo {
+      position: absolute; top: -7px; right: -7px; width: 22px; height: 22px;
+      border-radius: 50%; background: #e63946; color: white; border: 2px solid #ffffff;
+      cursor: pointer; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; font-weight: 700;
+    }
+
+    /* ===== CONTACT METHODS ===== */
+    .contact-methods { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; margin-top: 0.8rem; }
+    .contact-method {
+      padding: 0.85rem; border: 1.5px solid rgba(13,27,42,0.1); border-radius: 12px;
+      text-align: center; cursor: pointer; transition: all 0.2s;
+      font-size: 0.85rem; font-weight: 600; color: #7a7a9a;
+    }
+    .contact-method input { display: none; }
+    .contact-method:hover { border-color: rgba(13,27,42,0.18); }
+    .contact-method.selected { border-color: rgba(13,27,42,0.25); background: rgba(232,48,26,0.06); color: #e8301a; }
+
+    /* ===== PRICING PLANS ===== */
+    .pricing-plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.2rem; }
+    .plan-card {
+      border: 1.5px solid rgba(13,27,42,0.1); border-radius: 16px; padding: 1.4rem;
+      cursor: pointer; transition: all 0.25s; text-align: center; position: relative;
+      background: #ffffff;
+    }
+    .plan-card:hover { border-color: rgba(13,27,42,0.2); }
+    .plan-card.selected { border-color: #e8301a; background: rgba(212,175,55,0.07); box-shadow: 0 0 0 1px rgba(13,27,42,0.1); }
+    .plan-badge {
+      position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+      background: #e63946; color: white; font-size: 0.68rem; font-weight: 800;
+      padding: 3px 10px; border-radius: 20px; white-space: nowrap; letter-spacing: 0.5px;
+    }
+    .plan-name { font-weight: 700; color: #1a1a2e; margin-bottom: 0.4rem; font-size: 0.95rem; }
+    .plan-price { font-size: 1.4rem; font-weight: 800; color: #e8301a; font-family: 'Playfair Display', serif; }
+    .plan-duration { font-size: 0.78rem; color: #7a7a9a; margin: 0.3rem 0; }
+    .plan-features { font-size: 0.78rem; color: #7a7a9a; line-height: 1.7; }
+    .plan-info {
+      padding: 1rem 1.2rem; background: rgba(212,175,55,0.06);
+      border: 1px solid rgba(13,27,42,0.1); border-radius: 10px;
+      font-size: 0.88rem; color: #7a7a9a;
+    }
+
+    /* ===== SUBMIT ===== */
+    .submit-area {
+      background: #ffffff; border: 1px solid rgba(13,27,42,0.1);
+      border-radius: 20px; padding: 2.5rem; text-align: center;
+    }
+    .btn-submit {
+      padding: 1.1rem 3.5rem; background: linear-gradient(135deg, #e8301a, #c42410);
+      color: #faf8f4; border: none; border-radius: 14px; font-size: 1.05rem; font-weight: 700;
+      cursor: pointer; transition: all 0.3s; font-family: 'Be Vietnam Pro', sans-serif; letter-spacing: 0.4px;
+    }
+    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(13,27,42,0.2); }
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .submit-note { font-size: 0.82rem; color: #7a7a9a; margin-top: 0.9rem; }
+
+    /* ===== MY LISTINGS ===== */
+    .listing-card {
+      background: #ffffff; border: 1px solid rgba(13,27,42,0.08);
+      border-radius: 14px; padding: 1.2rem; margin-bottom: 1rem;
+      display: flex; gap: 1.1rem; align-items: flex-start; transition: border-color 0.3s;
+    }
+    .listing-card:hover { border-color: rgba(13,27,42,0.12); }
+    .listing-thumb {
+      width: 90px; height: 70px; border-radius: 10px;
+      background: linear-gradient(135deg, #e8301a, #c42410);
+      display: flex; align-items: center; justify-content: center; font-size: 2rem;
+      flex-shrink: 0; overflow: hidden;
+    }
+    .listing-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .listing-info { flex: 1; min-width: 0; }
+    .listing-info h4 { font-size: 0.98rem; color: #0d1b2a; margin-bottom: 0.3rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .listing-price { font-size: 1.1rem; font-weight: 700; color: #e8301a; }
+    .listing-meta { font-size: 0.78rem; color: #7a7a9a; margin-top: 0.3rem; line-height: 1.6; }
+    .listing-status { padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.72rem; font-weight: 700; white-space: nowrap; }
+    .status-pending { background: rgba(244,162,33,0.15); color: #f4a221; }
+    .status-active  { background: rgba(45,200,138,0.15); color: #2dc88a; }
+    .status-sold    { background: rgba(230,57,70,0.15);  color: #e63946; }
+    .listing-actions { display: flex; gap: 0.5rem; margin-top: 0.7rem; flex-wrap: wrap; }
+    .btn-small {
+      padding: 0.3rem 0.8rem; border-radius: 6px; font-size: 0.76rem; font-weight: 700;
+      cursor: pointer; border: none; font-family: 'Be Vietnam Pro', sans-serif; transition: all 0.2s;
+    }
+    .btn-small.edit   { background: rgba(52,152,219,0.15); color: #3498db; }
+    .btn-small.sold   { background: rgba(45,200,138,0.15); color: #2dc88a; }
+    .btn-small.delete { background: rgba(230,57,70,0.15);  color: #e63946; }
+    .btn-small:hover  { opacity: 0.8; transform: translateY(-1px); }
+
+    /* ===== SUCCESS MODAL ===== */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(13,27,42,0.6); backdrop-filter: blur(8px);
+      z-index: 9999; align-items: center; justify-content: center; padding: 1rem;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal-box {
+      background: #ffffff; border: 1px solid rgba(13,27,42,0.15);
+      border-radius: 24px; padding: 3rem 2rem; text-align: center;
+      max-width: 440px; width: 100%;
+      animation: popIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.7);
+    }
+    @keyframes popIn { from{transform:scale(0.85);opacity:0} to{transform:scale(1);opacity:1} }
+    .modal-icon { font-size: 4rem; margin-bottom: 1rem; }
+    .modal-box h2 { font-family: 'Playfair Display', serif; font-size: 1.7rem; color: #0d1b2a; margin-bottom: 0.5rem; }
+    .modal-box p { color: #7a7a9a; margin-bottom: 0.5rem; font-size: 0.92rem; }
+    .modal-id { font-size: 1.15rem; font-weight: 700; color: #e8301a; margin: 0.8rem 0; }
+    .modal-actions { display: flex; gap: 0.8rem; justify-content: center; margin-top: 1.8rem; flex-wrap: wrap; }
+    .btn-modal {
+      padding: 0.8rem 1.6rem; border-radius: 12px; font-weight: 700; cursor: pointer;
+      font-size: 0.92rem; font-family: 'Be Vietnam Pro', sans-serif; transition: all 0.2s; text-decoration: none; display: inline-block;
+    }
+    .btn-modal.primary { background: linear-gradient(135deg, #e8301a, #c42410); color: #faf8f4; border: none; }
+    .btn-modal.secondary { background: transparent; color: #7a7a9a; border: 1.5px solid rgba(13,27,42,0.18); }
+    .btn-modal:hover { transform: translateY(-2px); }
+
+    /* ===== CHAR COUNTER ===== */
+    .char-meta { display: flex; justify-content: space-between; margin-top: 0.3rem; }
+    .char-count { font-size: 0.76rem; color: #7a7a9a; }
+
+    /* ===== RESPONSIVE ===== */
+    @media(max-width:768px) {
+      .form-grid, .form-grid.three { grid-template-columns: 1fr; }
+      .fg.span2 { grid-column: span 1; }
+      .pricing-plans, .contact-methods { grid-template-columns: 1fr; }
+    }
+    @media(max-width:500px) {
+      .user-bar { flex-direction: column; align-items: flex-start; gap: 0.8rem; }
+      .progress-bar { padding: 1.2rem 1rem; }
+      .step-label { font-size: 0.65rem; }
+      .form-section { padding: 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <nav>
+    <div class="logo"><span>🏎</span> AutoShop</div>
+    <ul class="menu" id="mainMenu">
+      <li><a href="index.html">Trang Chủ</a></li>
+      <li><a href="ban-xe.html">Bán Xe</a></li>
+      <li><a href="dich-vu.html">Dịch Vụ</a></li>
+      <li><a href="lien-he.html">Liên Hệ</a></li>
+      <li><a href="dang-ban-xe.html" class="active">Đăng Bán Xe</a></li>
+      <li><a href="dang-nhap.html" class="btn-nav" id="navLoginLink">Đăng Nhập</a></li>
+    </ul>
+    <button class="hamburger" onclick="document.getElementById('mainMenu').classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+</header>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <h1>Đăng <span>Bán Xe</span></h1>
+  <p>Đăng tin miễn phí · Tiếp cận hàng nghìn người mua tiềm năng</p>
+</div>
+
+<div class="main-container">
+
+  <!-- AUTH GATE -->
+  <div class="auth-gate" id="authGate" style="display:none;">
+    <div class="gate-icon">🔐</div>
+    <h2>Vui lòng đăng nhập để tiếp tục</h2>
+    <p>Bạn cần có tài khoản AutoShop để đăng tin bán xe. Đăng ký hoàn toàn miễn phí!</p>
+    <div class="gate-actions">
+      <a href="dang-nhap.html?redirect=dang-ban-xe.html" class="btn-gate primary">🔑 Đăng Nhập</a>
+      <a href="dang-nhap.html?redirect=dang-ban-xe.html" class="btn-gate secondary">📝 Đăng Ký Ngay</a>
+    </div>
+  </div>
+
+  <!-- LISTING FORM -->
+  <div class="listing-form" id="listingForm">
+
+    <!-- USER BAR -->
+    <div class="user-bar">
+      <div class="user-bar-left">
+        <div class="user-bar-avatar" id="headerAvatar">👤</div>
+        <div>
+          <div class="user-bar-name" id="headerName">Người dùng</div>
+          <div class="user-bar-email" id="headerEmail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="8df8fee8ffcde8f5ece0fde1e8a3eee2e0">[email&#160;protected]</a></div>
+        </div>
+      </div>
+      <button class="btn-logout" onclick="logout()">🚪 Đăng Xuất</button>
+    </div>
+
+    <!-- PROGRESS -->
+    <div class="progress-bar">
+      <div class="progress-steps">
+        <div class="step active" id="step1">
+          <div class="step-num">1</div>
+          <div class="step-label">Thông tin xe</div>
+        </div>
+        <div class="step" id="step2">
+          <div class="step-num">2</div>
+          <div class="step-label">Hình ảnh</div>
+        </div>
+        <div class="step" id="step3">
+          <div class="step-num">3</div>
+          <div class="step-label">Liên hệ & Gói</div>
+        </div>
+        <div class="step" id="step4">
+          <div class="step-num">4</div>
+          <div class="step-label">Hoàn tất</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MY LISTINGS TOGGLE -->
+    <div class="my-listings-toggle">
+      <button class="btn-toggle-listings" onclick="toggleMyListings()">📋 Tin Đăng Của Tôi</button>
+    </div>
+
+    <!-- MY LISTINGS PANEL -->
+    <div id="myListingsPanel" style="display:none;">
+      <div class="form-section">
+        <div class="section-header">
+          <div class="section-icon">📋</div>
+          <div><h3>Tin Đăng Bán Xe Của Tôi</h3></div>
+        </div>
+        <div id="myListingsContent">
+          <p style="text-align:center;color:#7a7a9a;padding:2rem;">Bạn chưa có tin đăng nào.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 1: THÔNG TIN CƠ BẢN -->
+    <div class="form-section">
+      <div class="section-header">
+        <div class="section-icon">🚗</div>
+        <div><h3>Thông Tin Cơ Bản</h3><p>Điền đầy đủ để thu hút người mua</p></div>
+      </div>
+      <div class="form-grid">
+        <div class="fg">
+          <label>Hãng xe <span class="req">*</span></label>
+          <select id="brand" onchange="updateStep(1)">
+            <option value="">-- Chọn hãng --</option>
+            <option>Toyota</option><option>Honda</option><option>Mazda</option>
+            <option>Hyundai</option><option>Kia</option><option>Ford</option>
+            <option>Mitsubishi</option><option>Suzuki</option><option>Nissan</option>
+            <option>Mercedes-Benz</option><option>BMW</option><option>Audi</option>
+            <option>Volkswagen</option><option>Hãng khác</option>
+          </select>
+          <div class="err-msg" id="brandErr">Vui lòng chọn hãng xe</div>
+        </div>
+
+        <div class="fg">
+          <label>Dòng xe / Tên xe <span class="req">*</span></label>
+          <input type="text" id="carModel" placeholder="VD: Vios, City, CX-5..." oninput="updateStep(1)">
+          <div class="err-msg" id="carModelErr">Vui lòng nhập tên xe</div>
+        </div>
+
+        <div class="fg">
+          <label>Năm sản xuất <span class="req">*</span></label>
+          <select id="carYear">
+            <option value="">-- Chọn năm --</option>
+            <option>2026</option><option>2025</option>
+            <option>2024</option><option>2023</option><option>2022</option><option>2021</option>
+            <option>2020</option><option>2019</option><option>2018</option><option>2017</option>
+            <option>2016</option><option>2015</option><option>2014</option><option>Trước 2014</option>
+          </select>
+          <div class="err-msg" id="carYearErr">Vui lòng chọn năm</div>
+        </div>
+
+        <div class="fg">
+          <label>Số km đã đi <span class="req">*</span></label>
+          <input type="number" id="carKm" placeholder="VD: 25000" min="0">
+          <div class="err-msg" id="carKmErr">Vui lòng nhập số km</div>
+        </div>
+
+        <div class="fg">
+          <label>Hộp số <span class="req">*</span></label>
+          <select id="transmission">
+            <option value="">-- Chọn loại --</option>
+            <option>Tự động</option><option>Số sàn</option><option>Bán tự động (CVT)</option>
+          </select>
+          <div class="err-msg" id="transmissionErr">Vui lòng chọn hộp số</div>
+        </div>
+
+        <div class="fg">
+          <label>Nhiên liệu <span class="req">*</span></label>
+          <select id="fuel">
+            <option value="">-- Chọn loại --</option>
+            <option>Xăng</option><option>Dầu Diesel</option>
+            <option>Hybrid (Xăng + Điện)</option><option>Điện hoàn toàn</option>
+          </select>
+          <div class="err-msg" id="fuelErr">Vui lòng chọn nhiên liệu</div>
+        </div>
+
+        <div class="fg">
+          <label>Màu xe <span class="req">*</span></label>
+          <select id="color">
+            <option value="">-- Chọn màu --</option>
+            <option>Trắng</option><option>Đen</option><option>Bạc/Xám</option>
+            <option>Đỏ</option><option>Xanh dương</option><option>Xanh lá</option>
+            <option>Nâu/Be</option><option>Vàng</option><option>Cam</option><option>Khác</option>
+          </select>
+          <div class="err-msg" id="colorErr">Vui lòng chọn màu</div>
+        </div>
+
+        <div class="fg">
+          <label>Dung tích động cơ</label>
+          <select id="engine">
+            <option value="">-- Chọn dung tích --</option>
+            <option>Dưới 1.0L</option><option>1.0L - 1.5L</option>
+            <option>1.5L - 2.0L</option><option>2.0L - 2.5L</option><option>Trên 2.5L</option>
+          </select>
+        </div>
+
+        <div class="fg">
+          <label>Loại xe</label>
+          <select id="carType">
+            <option value="">-- Chọn loại --</option>
+            <option>Sedan</option><option>SUV / Crossover</option>
+            <option>Hatchback</option><option>MPV / Van</option>
+            <option>Bán tải (Pickup)</option><option>Coupe</option>
+          </select>
+        </div>
+
+        <div class="fg">
+          <label>Tình trạng xe <span class="req">*</span></label>
+          <select id="condition">
+            <option value="">-- Chọn tình trạng --</option>
+            <option>Xe đẹp, không tai nạn</option>
+            <option>Xe đẹp, đã qua tai nạn nhẹ</option>
+            <option>Cần sửa chữa nhỏ</option>
+            <option>Cần sửa chữa lớn</option>
+          </select>
+          <div class="err-msg" id="conditionErr">Vui lòng chọn tình trạng</div>
+        </div>
+
+        <div class="fg">
+          <label>Xuất xứ</label>
+          <select id="origin">
+            <option value="">-- Chọn xuất xứ --</option>
+            <option>Sản xuất trong nước</option><option>Nhập khẩu nguyên chiếc</option>
+          </select>
+        </div>
+
+        <div class="fg">
+          <label>Tỉnh / Thành phố <span class="req">*</span></label>
+          <select id="province">
+            <option value="">-- Chọn tỉnh/thành --</option>
+            <option>TP. Hồ Chí Minh</option><option>Bình Dương</option>
+            <option>Đồng Nai</option><option>Long An</option>
+            <option>Hà Nội</option><option>Đà Nẵng</option>
+            <option>Cần Thơ</option><option>Bình Phước</option>
+            <option>Vũng Tàu</option><option>Tiền Giang</option><option>Khác</option>
+          </select>
+          <div class="err-msg" id="provinceErr">Vui lòng chọn tỉnh/thành</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 2: GIÁ & MÔ TẢ -->
+    <div class="form-section">
+      <div class="section-header">
+        <div class="section-icon">💰</div>
+        <div><h3>Giá Bán & Mô Tả</h3></div>
+      </div>
+      <div class="form-grid">
+        <div class="fg">
+          <label>Giá bán <span class="req">*</span></label>
+          <div class="price-wrap">
+            <input type="number" id="carPrice" placeholder="VD: 520" min="0" oninput="updatePricePreview()">
+            <span class="price-unit">triệu VNĐ</span>
+          </div>
+          <div class="price-preview" id="pricePreview"></div>
+          <div class="err-msg" id="carPriceErr">Vui lòng nhập giá bán</div>
+        </div>
+
+        <div class="fg">
+          <label>Hình thức bán</label>
+          <select id="sellType">
+            <option>Bán đứt</option><option>Thương lượng</option>
+            <option>Hỗ trợ trả góp</option><option>Thu cũ đổi mới</option>
+          </select>
+        </div>
+
+        <div class="fg span2">
+          <label>Tiêu đề tin đăng <span class="req">*</span></label>
+          <input type="text" id="carTitle" placeholder="VD: Cần bán Toyota Vios 2023, màu trắng, 15.000km, giá tốt..." maxlength="100" oninput="updateCharCount(this,'titleCount',100)">
+          <div class="char-meta">
+            <div class="err-msg" id="carTitleErr">Vui lòng nhập tiêu đề</div>
+            <span class="char-count"><span id="titleCount">0</span>/100</span>
+          </div>
+        </div>
+
+        <div class="fg span2">
+          <label>Mô tả chi tiết <span class="req">*</span></label>
+          <textarea id="carDesc" placeholder="Mô tả tình trạng xe, lịch sử bảo dưỡng, các điểm nổi bật... Càng chi tiết càng nhiều người quan tâm!" maxlength="1000" oninput="updateCharCount(this,'descCount',1000)"></textarea>
+          <div class="char-meta">
+            <div class="err-msg" id="carDescErr">Vui lòng nhập mô tả</div>
+            <span class="char-count"><span id="descCount">0</span>/1000</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 3: TRANG BỊ -->
+    <div class="form-section">
+      <div class="section-header">
+        <div class="section-icon">⚙️</div>
+        <div><h3>Trang Bị & Tiện Nghi</h3></div>
+      </div>
+      <div class="features-grid">
+        <label class="feature-check" onclick="this.classList.toggle('checked')"><input type="checkbox" name="features" value="camera-lui"> 📷 Camera lùi</label>
+        <label class="feature-check" onclick="this.classList.toggle('checked')"><input type="checkbox" name="features" value="camera-360"> 🎥 Camera 360°</label>
+        <label class="feature-check" onclick="this.classList.toggle('checked')"><input type="checkbox" name="features" value="man-hinh"> 📱 Màn hình cảm ứng</label>
+        <label class="feature-check" onclick="this.classList.toggle('checked')"><input type="checkbox" name="features" value="cruise"> 🚀 Cruise Control</label>
+        <label class="feature-check" onclick="this.classList.toggle('checked')"><input type="checkbox" name="features" value="abs"> 🛑 Phanh ABS/EBD</label>
+        <label class="feature-check" onclick="this.classList.toggle('checked')"><input type="checkbox" name="features" value="airbag"> 💨 Túi khí (6 túi+)</label>
+        <label class="feature-check" onclick="this.classList.toggle('checked')"><input type="checkbox" name="features" value="dieu-hoa"> ❄️ Điều hòa tự động</label>
+        <label class="feature-check" onclick="this.classList.toggle('checked')"><input type="checkbox" name="features" value="ghe-da"> 💺 Ghế da</label>
+        <label class="feature-check" onclick="this.classList.toggle('checked')"><input type="checkbox" name="features" value="ghe-dien"> ⚡ Ghế chỉnh điện</label>
+        <label class="feature-check" onclick="this.classList.toggle('checked')"><input type="checkbox" name="features" value="cua-cao"> 🚪 Cửa sổ trời</label>
+        <label class="feature-check" onclick="this.classList.toggle('checked')"><input type="checkbox" name="features" value="den-led"> 💡 Đèn LED toàn bộ</label>
+        <label class="feature-check" onclick="this.classList.toggle('checked')"><input type="checkbox" name="features" value="keyless"> 🔑 Keyless Entry</label>
+        <label class="feature-check" onclick="this.classList.toggle('checked')"><input type="checkbox" name="features" value="bluetooth"> 🔵 Bluetooth</label>
+        <label class="feature-check" onclick="this.classList.toggle('checked')"><input type="checkbox" name="features" value="usb"> 🔌 Cổng USB</label>
+        <label class="feature-check" onclick="this.classList.toggle('checked')"><input type="checkbox" name="features" value="parking"> 🅿️ Cảm biến đỗ xe</label>
+        <label class="feature-check" onclick="this.classList.toggle('checked')"><input type="checkbox" name="features" value="lane"> ↔️ Cảnh báo làn đường</label>
+      </div>
+    </div>
+
+    <!-- SECTION 4: HÌNH ẢNH -->
+    <div class="form-section" id="photoSection">
+      <div class="section-header">
+        <div class="section-icon">📸</div>
+        <div><h3>Hình Ảnh Xe</h3><p>Tối thiểu 3, tối đa 10 ảnh • JPG / PNG / WEBP • Max 5MB/ảnh</p></div>
+      </div>
+      <div class="photo-upload-area" onclick="document.getElementById('photoInput').click()" id="uploadArea">
+        <input type="file" id="photoInput" accept="image/*" multiple onchange="handlePhotos(this)">
+        <div class="upload-icon">📸</div>
+        <h4>Nhấn để chọn ảnh</h4>
+        <p>Nên chụp nhiều góc độ: đầu xe, đuôi xe, nội thất, số km</p>
+      </div>
+      <div class="photo-preview-grid" id="photoPreview"></div>
+      <div class="err-msg" id="photoErr" style="margin-top:0.8rem;">Vui lòng thêm ít nhất 1 ảnh xe</div>
+    </div>
+
+    <!-- SECTION 5: LIÊN HỆ -->
+    <div class="form-section">
+      <div class="section-header">
+        <div class="section-icon">📞</div>
+        <div><h3>Thông Tin Liên Hệ</h3></div>
+      </div>
+      <div class="form-grid">
+        <div class="fg">
+          <label>Tên người bán <span class="req">*</span></label>
+          <input type="text" id="sellerName" placeholder="Nhập họ tên của bạn">
+          <div class="err-msg" id="sellerNameErr">Vui lòng nhập tên</div>
+        </div>
+        <div class="fg">
+          <label>Số điện thoại <span class="req">*</span></label>
+          <input type="tel" id="sellerPhone" placeholder="VD: 0901 234 567">
+          <div class="err-msg" id="sellerPhoneErr">SĐT không hợp lệ</div>
+        </div>
+        <div class="fg">
+          <label>Zalo (nếu có)</label>
+          <input type="tel" id="sellerZalo" placeholder="Số Zalo">
+        </div>
+        <div class="fg">
+          <label>Thời gian liên hệ tốt nhất</label>
+          <select id="contactTime">
+            <option>Cả ngày (8h-18h)</option><option>Sáng (8h-12h)</option>
+            <option>Chiều (12h-18h)</option><option>Tối (18h-21h)</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-top:1rem;">
+        <div class="fg" style="gap:0.6rem;">
+          <label>Phương thức liên hệ ưu tiên</label>
+          <div class="contact-methods">
+            <div class="contact-method selected" onclick="toggleMethod(this)"><input type="checkbox" checked> 📞 Gọi điện</div>
+            <div class="contact-method" onclick="toggleMethod(this)"><input type="checkbox"> 💬 Zalo</div>
+            <div class="contact-method" onclick="toggleMethod(this)"><input type="checkbox"> 📘 Messenger</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 6: GÓI ĐĂNG TIN -->
+    <div class="form-section">
+      <div class="section-header">
+        <div class="section-icon">⭐</div>
+        <div><h3>Chọn Gói Đăng Tin</h3></div>
+      </div>
+      <div class="pricing-plans">
+        <div class="plan-card selected" onclick="selectPlan(this,'free')">
+          <div class="plan-name">🆓 Miễn Phí</div>
+          <div class="plan-price">0đ</div>
+          <div class="plan-duration">Hiển thị 7 ngày</div>
+          <div class="plan-features">• Tối đa 5 ảnh<br>• Vị trí thường<br>• Không nổi bật</div>
+        </div>
+        <div class="plan-card" onclick="selectPlan(this,'basic')">
+          <div class="plan-badge">PHỔ BIẾN</div>
+          <div class="plan-name">⭐ Cơ Bản</div>
+          <div class="plan-price">5k</div>
+          <div class="plan-duration">Hiển thị 30 ngày</div>
+          <div class="plan-features">• Tối đa 10 ảnh<br>• Tin nổi bật<br>• Huy hiệu xác minh</div>
+        </div>
+        <div class="plan-card" onclick="selectPlan(this,'vip')">
+          <div class="plan-name">💎 VIP</div>
+          <div class="plan-price">10k</div>
+          <div class="plan-duration">Hiển thị 60 ngày</div>
+          <div class="plan-features">• Không giới hạn ảnh<br>• Tin VIP đầu trang<br>• Hỗ trợ ưu tiên 24/7</div>
+        </div>
+      </div>
+      <div class="plan-info" id="selectedPlanInfo">
+        ✅ Bạn đang chọn <strong style="color:#e8301a;">Gói Miễn Phí</strong> — Tin sẽ hiển thị 7 ngày.
+      </div>
+    </div>
+
+    <!-- SUBMIT -->
+    <div class="submit-area">
+      <button class="btn-submit" id="submitBtn" onclick="submitListing()">
+        🚀 Đăng Tin Bán Xe Ngay
+      </button>
+      <p class="submit-note">Tin đăng sẽ được duyệt trong vòng 24 giờ. AutoShop cam kết bảo vệ thông tin người dùng.</p>
+    </div>
+
+  </div><!-- end listing-form -->
+</div><!-- end main-container -->
+
+<!-- SUCCESS MODAL -->
+<div class="modal-overlay" id="successModal">
+  <div class="modal-box">
+    <div class="modal-icon">🎉</div>
+    <h2>Đăng tin thành công!</h2>
+    <p>Tin đăng bán xe của bạn đã được gửi và đang chờ duyệt.</p>
+    <div class="modal-id" id="listingId">Mã tin: #AS-000000</div>
+    <p style="font-size:0.82rem;">Chúng tôi sẽ liên hệ qua SĐT trong vòng 24 giờ.</p>
+    <div class="modal-actions">
+      <a href="ban-xe.html" class="btn-modal secondary">Xem Xe Bán</a>
+      <button class="btn-modal primary" onclick="closeModal()">Đăng Thêm Xe</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p><strong>AutoShop</strong> — Xe Chất Lượng · Dịch Vụ Tận Tâm</p>
+  <p>© 2026 AutoShop. Bản quyền thuộc về chúng tôi</p>
+</footer>
+
+<div class="floating-contact">
+  <a href="tel:0344806179" class="contact-item contact-phone">📞<span class="contact-tooltip">Hotline: 0344 806 179</span></a>
+  <a href="tel:0337484248" class="contact-item contact-phone2">📞<span class="contact-tooltip">Tư Vấn: 0337 484 248</span></a>
+  <a href="https://zalo.me/0337484248" target="_blank" class="contact-item contact-zalo">💬<span class="contact-tooltip">Chat Zalo</span></a>
+  <a href="ban-xe.html" class="contact-item contact-car">🚗<span class="contact-tooltip">Xem Xe</span></a>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ── HELPERS localStorage ──
+function getSession(){
+  try{
+    // Thử localStorage trước (api.js lưu ở đây)
+    const u = localStorage.getItem('autoshop_user');
+    if(u) return JSON.parse(u);
+    // Fallback: sessionStorage (firebase.js lưu ở đây)
+    const s = sessionStorage.getItem('autoshop_session');
+    if(s) return JSON.parse(s);
+    return null;
+  }catch{return null;}
+}
+function getListings(){ try{ return JSON.parse(localStorage.getItem('autoshop_listings')||'[]'); }catch{return [];} }
+function saveListings(l){ localStorage.setItem('autoshop_listings', JSON.stringify(l)); }
+function getUsers(){ try{ return JSON.parse(localStorage.getItem('autoshop_users')||'[]'); }catch{return [];} }
+function saveUsers(u){ localStorage.setItem('autoshop_users', JSON.stringify(u)); }
+// fallback Auth.logout nếu api.js chưa load
+if(typeof Auth==='undefined'){
+  window.Auth = { logout(){ sessionStorage.removeItem('autoshop_session'); location.href='dang-nhap.html'; } };
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  const session=getSession();
+  if(session){ showListingForm(session); }
+  else { document.getElementById('authGate').style.display='block'; }
+});
+
+function showListingForm(user){
+  document.getElementById('authGate').style.display='none';
+  document.getElementById('listingForm').classList.add('show');
+  document.getElementById('headerName').textContent=user.name;
+  document.getElementById('headerEmail').textContent=user.email;
+  document.getElementById('headerAvatar').textContent=user.name.split(' ').pop().charAt(0).toUpperCase();
+  document.getElementById('sellerName').value=user.name;
+  document.getElementById('sellerPhone').value=user.phone||'';
+  const navLink=document.getElementById('navLoginLink');
+  if(navLink)navLink.textContent='👤 '+user.name.split(' ').pop();
+  renderMyListings(user);
+}
+
+function logout(){ Auth.logout(); }
+
+// PHOTOS
+let uploadedPhotos=[];
+function handlePhotos(input){
+  const files=Array.from(input.files);
+  const remaining=10-uploadedPhotos.length;
+  files.slice(0,remaining).forEach(file=>{
+    if(file.size>5*1024*1024){alert(`Ảnh "${file.name}" vượt quá 5MB.`);return;}
+    const r=new FileReader();
+    r.onload=e=>{uploadedPhotos.push({name:file.name,data:e.target.result});renderPhotos();};
+    r.readAsDataURL(file);
+  });
+  input.value=''; updateStep(2);
+}
+function renderPhotos(){
+  const grid=document.getElementById('photoPreview');
+  grid.innerHTML=uploadedPhotos.map((p,i)=>`
+    <div class="photo-thumb-wrap">
+      <img src="${p.data}" alt="Ảnh xe ${i+1}">
+      <button class="remove-photo" onclick="removePhoto(${i})">✕</button>
+    </div>`).join('');
+  const area=document.getElementById('uploadArea');
+  area.style.opacity=uploadedPhotos.length>=10?'0.4':'1';
+  area.style.pointerEvents=uploadedPhotos.length>=10?'none':'auto';
+}
+function removePhoto(i){uploadedPhotos.splice(i,1);renderPhotos();updateStep(2);}
+
+// HELPERS
+function toggleMethod(el){el.classList.toggle('selected');el.querySelector('input').checked=el.classList.contains('selected');}
+
+let selectedPlan='free';
+let paymentConfirmed=false;
+const planInfo={
+  free:  {label:'Gói Miễn Phí', desc:'Tin sẽ hiển thị 7 ngày.', price:0, code:'MIENPH'},
+  basic: {label:'Gói Cơ Bản (5k)', desc:'Tin nổi bật, hiển thị 30 ngày.', price:5000, code:'COBAN'},
+  vip:   {label:'Gói VIP (10k)', desc:'Tin VIP đầu trang, hiển thị 60 ngày.', price:10000, code:'GOIVIP'},
+};
+function selectPlan(el,plan){
+  document.querySelectorAll('.plan-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected'); selectedPlan=plan; paymentConfirmed=false;
+  const p=planInfo[plan];
+  document.getElementById('selectedPlanInfo').innerHTML=`✅ Bạn đang chọn <strong style="color:#e8301a;">${p.label} — ${p.desc}</strong>`;
+}
+function getUserId(){const s=getSession();return s?(s.id||s.phone||'U').toString().replace(/\D/g,'').slice(-6)||'000001':'000001';}
+function showQRModal(plan,onSuccess){
+  const p=planInfo[plan];
+  const userId=getUserId();
+  const orderCode=p.code+'-'+userId;
+  const qrUrl=`https://img.vietqr.io/image/MB-12000501032009-compact2.png?amount=${p.price}&addInfo=${encodeURIComponent(orderCode)}&accountName=${encodeURIComponent('LE QUOC ANH')}`;
+  let modal=document.getElementById('qrPayModal');
+  if(!modal){
+    modal=document.createElement('div');
+    modal.id='qrPayModal';
+    modal.style.cssText='display:none;position:fixed;inset:0;background:rgba(13,27,42,0.7);backdrop-filter:blur(8px);z-index:99999;align-items:center;justify-content:center;padding:1rem;';
+    modal.innerHTML=`<div style="background:#fff;border-radius:24px;padding:2rem;max-width:400px;width:100%;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,0.5);">
+      <div style="font-size:1.3rem;font-weight:700;color:#0d1b2a;margin-bottom:0.2rem;" id="qrPlanName"></div>
+      <div style="font-size:2rem;font-weight:800;color:#e8301a;margin-bottom:0.8rem;" id="qrAmount"></div>
+      <img id="qrImage" src="" alt="QR" style="width:180px;height:180px;border-radius:12px;border:1px solid #eee;margin-bottom:0.8rem;">
+      <div style="font-size:0.82rem;color:#7a7a9a;margin-bottom:0.4rem;">MB Bank · TK: <strong>12000501032009</strong> · <strong>LE QUOC ANH</strong></div>
+      <div style="background:#fff8e1;border:1px solid #ffd54f;border-radius:8px;padding:0.6rem 1rem;font-size:0.83rem;color:#7a5c00;margin-bottom:0.8rem;">Nội dung CK: <strong id="qrOrderCode"></strong></div>
+      <div id="qrStatus" style="padding:0.7rem;border-radius:8px;font-size:0.85rem;background:#fff8e1;color:#7a5c00;border:1px solid #ffd54f;margin-bottom:1rem;">⏳ Đang chờ thanh toán...</div>
+      <button onclick="closeQRModal()" style="padding:0.6rem 1.5rem;border-radius:10px;border:1.5px solid rgba(13,27,42,0.2);background:transparent;color:#7a7a9a;cursor:pointer;font-size:0.85rem;">Hủy</button>
+    </div>`;
+    document.body.appendChild(modal);
+  }
+  document.getElementById('qrPlanName').textContent=p.label;
+  document.getElementById('qrAmount').textContent=p.price.toLocaleString('vi-VN')+'đ';
+  document.getElementById('qrImage').src=qrUrl;
+  document.getElementById('qrOrderCode').textContent=orderCode;
+  document.getElementById('qrStatus').innerHTML='⏳ Đang chờ thanh toán...';
+  document.getElementById('qrStatus').style='padding:0.7rem;border-radius:8px;font-size:0.85rem;background:#fff8e1;color:#7a5c00;border:1px solid #ffd54f;margin-bottom:1rem;';
+  modal.style.display='flex';
+  modal._onSuccess=onSuccess;
+  modal._pollTimer=setInterval(async()=>{
+    try{
+      const res=await fetch(`https://dangtin-webhook.quocanhlequocanh755.workers.dev/check?code=${orderCode}`);
+      if(res.ok){const data=await res.json();if(data.paid){clearInterval(modal._pollTimer);
+        document.getElementById('qrStatus').innerHTML='✅ Thanh toán thành công!';
+        document.getElementById('qrStatus').style='padding:0.7rem;border-radius:8px;font-size:0.85rem;background:#e8f5e9;color:#1b5e20;border:1px solid #a5d6a7;margin-bottom:1rem;';
+        setTimeout(()=>{closeQRModal();if(modal._onSuccess)modal._onSuccess();},1500);}}
+    }catch(e){}
+  },4000);
+}
+function closeQRModal(){const modal=document.getElementById('qrPayModal');if(modal){clearInterval(modal._pollTimer);modal.style.display='none';}}
+
+function updatePricePreview(){
+  const val=document.getElementById('carPrice').value;
+  const prev=document.getElementById('pricePreview');
+  if(val&&!isNaN(val)&&val>0){
+    const n=parseFloat(val);
+    prev.textContent=n>=1000?`≈ ${(n/1000).toFixed(2)} tỷ VNĐ`:`= ${n.toLocaleString('vi-VN')} triệu VNĐ`;
+  }else{prev.textContent='';}
+}
+
+function updateCharCount(el,id,max){document.getElementById(id).textContent=el.value.length;}
+
+function updateStep(n){
+  if(document.getElementById('brand').value&&document.getElementById('carModel').value){
+    document.getElementById('step1').classList.add('done');
+    document.getElementById('step2').classList.add('active');
+  }
+  if(uploadedPhotos.length>=1){
+    document.getElementById('step2').classList.add('done');
+    document.getElementById('step3').classList.add('active');
+  }
+}
+
+// VALIDATION
+function showErr(id,msg){const e=document.getElementById(id);if(e){e.textContent=msg;e.classList.add('show');}}
+function clearAllErrors(){
+  document.querySelectorAll('.err-msg').forEach(e=>e.classList.remove('show'));
+  document.querySelectorAll('.err').forEach(e=>e.classList.remove('err'));
+}
+
+// SUBMIT
+async function submitListing(){
+  clearAllErrors();
+  let valid=true;
+  const required=[
+    ['brand','brandErr','Vui lòng chọn hãng xe'],
+    ['carModel','carModelErr','Vui lòng nhập tên xe'],
+    ['carYear','carYearErr','Vui lòng chọn năm sản xuất'],
+    ['carKm','carKmErr','Vui lòng nhập số km'],
+    ['transmission','transmissionErr','Vui lòng chọn hộp số'],
+    ['fuel','fuelErr','Vui lòng chọn nhiên liệu'],
+    ['color','colorErr','Vui lòng chọn màu xe'],
+    ['condition','conditionErr','Vui lòng chọn tình trạng'],
+    ['province','provinceErr','Vui lòng chọn tỉnh/thành'],
+    ['carPrice','carPriceErr','Vui lòng nhập giá bán'],
+    ['carTitle','carTitleErr','Vui lòng nhập tiêu đề'],
+    ['carDesc','carDescErr','Vui lòng nhập mô tả'],
+    ['sellerName','sellerNameErr','Vui lòng nhập tên người bán'],
+    ['sellerPhone','sellerPhoneErr','Vui lòng nhập số điện thoại'],
+  ];
+  required.forEach(([id,errId,msg])=>{
+    const el=document.getElementById(id);
+    if(!el||!el.value.trim()){showErr(errId,msg);if(el)el.classList.add('err');valid=false;}
+  });
+  const phone=document.getElementById('sellerPhone').value.replace(/\s/g,'');
+  if(phone&&!/^(0[3-9])\d{8}$/.test(phone)){showErr('sellerPhoneErr','Số điện thoại không hợp lệ (10 số)');document.getElementById('sellerPhone').classList.add('err');valid=false;}
+  if(uploadedPhotos.length===0&&!confirm('Bạn chưa thêm ảnh xe. Tin không có ảnh ít được quan tâm hơn. Tiếp tục?'))return;
+  if(!valid){document.querySelector('.err-msg.show')?.scrollIntoView({behavior:'smooth',block:'center'});return;}
+
+  // Nếu chọn gói có phí và chưa thanh toán → hiện QR
+  if(planInfo[selectedPlan].price > 0 && !paymentConfirmed){
+    showQRModal(selectedPlan, ()=>{
+      paymentConfirmed=true;
+      submitListing(); // gọi lại sau khi thanh toán xong
+    });
+    return;
+  }
+
+  const btn=document.getElementById('submitBtn');
+  btn.textContent='⏳ Đang gửi...'; btn.disabled=true;
+
+  try {
+    const features=Array.from(document.querySelectorAll('input[name="features"]:checked')).map(i=>i.value);
+    const carData={
+      title:       document.getElementById('carTitle').value,
+      brand:       document.getElementById('brand').value,
+      model:       document.getElementById('carModel').value,
+      year:        document.getElementById('carYear').value,
+      km:          parseInt(document.getElementById('carKm').value)||0,
+      transmission:document.getElementById('transmission').value,
+      fuel:        document.getElementById('fuel').value,
+      color:       document.getElementById('color').value,
+      engine:      document.getElementById('engine').value,
+      car_type:    document.getElementById('carType').value,
+      car_condition:document.getElementById('condition').value,
+      origin:      document.getElementById('origin').value,
+      province:    document.getElementById('province').value,
+      price:       parseInt(document.getElementById('carPrice').value)||0,
+      sell_type:   document.getElementById('sellType').value,
+      description: document.getElementById('carDesc').value,
+      car_features:JSON.stringify(features),
+      photos:      uploadedPhotos.map(p => p.data),
+      seller_name: document.getElementById('sellerName').value,
+      seller_phone:document.getElementById('sellerPhone').value,
+      seller_zalo: document.getElementById('sellerZalo').value,
+      plan:        selectedPlan,
+    };
+
+    // ── Gọi API → Express → INSERT vào SQL Server ──
+    const result = await Cars.create(carData);
+
+    btn.textContent='🚀 Đăng Tin Bán Xe Ngay'; btn.disabled=false;
+    const listingId = result?.data?.id || result?.id || 'AS-??????';
+    document.getElementById('listingId').textContent='Mã tin: #'+listingId;
+    document.getElementById('successModal').classList.add('show');
+    document.getElementById('step3').classList.add('done');
+    document.getElementById('step4').classList.add('active');
+
+  } catch(err) {
+    btn.textContent='🚀 Đăng Tin Bán Xe Ngay'; btn.disabled=false;
+    alert('❌ Đăng tin thất bại: ' + (err.message || 'Lỗi kết nối server. Vui lòng thử lại.'));
+    console.error('submitListing error:', err);
+  }
+}
+
+function closeModal(){
+  document.getElementById('successModal').classList.remove('show');
+  uploadedPhotos=[]; renderPhotos();
+  document.getElementById('pricePreview').textContent='';
+  document.getElementById('titleCount').textContent='0';
+  document.getElementById('descCount').textContent='0';
+  clearAllErrors();
+  ['step1','step2','step3','step4'].forEach(s=>document.getElementById(s).classList.remove('done','active'));
+  document.getElementById('step1').classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function toggleMyListings(){
+  const p=document.getElementById('myListingsPanel');
+  p.style.display=p.style.display==='none'?'block':'none';
+  if(p.style.display==='block'){const s=getSession();if(s)renderMyListings(s);}
+}
+
+function renderMyListings(user){
+  const c=document.getElementById('myListingsContent');
+  const listings=getListings().filter(l=>l.userId===user.id);
+  if(!listings.length){c.innerHTML='<p style="text-align:center;color:#7a7a9a;padding:2rem;">Bạn chưa có tin đăng nào. Hãy đăng bán xe đầu tiên!</p>';return;}
+  c.innerHTML=listings.slice().reverse().map(l=>`
+    <div class="listing-card">
+      <div class="listing-thumb">${l.photos?.length?`<img src="${l.photos[0]}" alt="${l.title}">`:'🚗'}</div>
+      <div class="listing-info">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:0.5rem;">
+          <h4>${l.title||l.brand+' '+l.model+' '+l.year}</h4>
+          <span class="listing-status ${l.status==='active'?'status-active':l.status==='sold'?'status-sold':'status-pending'}">
+            ${l.status==='active'?'✅ Đang hiển thị':l.status==='sold'?'🏷️ Đã bán':'⏳ Chờ duyệt'}
+          </span>
+        </div>
+        <div class="listing-price">${l.price} triệu VNĐ</div>
+        <div class="listing-meta">📅 ${l.year} · 🔧 ${Number(l.km||0).toLocaleString()} km · 📍 ${l.province} · ${new Date(l.createdAt).toLocaleDateString('vi-VN')}</div>
+        <div class="listing-actions">
+          <button class="btn-small sold" onclick="markSold('${l.id}')">✅ Đã bán</button>
+          <button class="btn-small delete" onclick="deleteListing('${l.id}')">🗑️ Xóa</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function markSold(id){
+  if(!confirm('Đánh dấu xe này là đã bán?'))return;
+  const listings=getListings(),idx=listings.findIndex(l=>l.id===id);
+  if(idx>=0){listings[idx].status='sold';saveListings(listings);}
+  const s=getSession();if(s)renderMyListings(s);
+}
+function deleteListing(id){
+  if(!confirm('Xóa tin đăng này?'))return;
+  const listings=getListings().filter(l=>l.id!==id);
+  saveListings(listings);
+  const s=getSession();if(s)renderMyListings(s);
+}
+</script>
+<script src="api.js"></script>

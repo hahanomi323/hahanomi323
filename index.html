@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AutoShop — Xe Chất Lượng Bình Dương</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ===== HERO ===== */
+    .hero {
+      position: relative; min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; text-align: center;
+    }
+    .hero-video-wrap {
+      position: absolute; inset: 0; z-index: 0;
+    }
+    .hero-video-wrap video {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(to bottom,
+        rgba(10,10,15,0.55) 0%,
+        rgba(10,10,15,0.4) 50%,
+        rgba(10,10,15,0.85) 100%);
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      max-width: 720px; padding: 2rem;
+    }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14);
+      color: var(--red); padding: 0.4rem 1.2rem; border-radius: 50px;
+      font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+      margin-bottom: 1.5rem;
+    }
+    .hero-content h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 6vw, 4.5rem);
+      color: var(--white); line-height: 1.15; margin-bottom: 1.2rem;
+    }
+    .hero-content h1 span { color: var(--red); }
+    .hero-content p {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: rgba(240,237,230,0.8); margin-bottom: 2.5rem; line-height: 1.7;
+    }
+    .hero-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .hero-scroll {
+      position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      z-index: 2; color: rgba(255,255,255,0.4); font-size: 0.78rem; letter-spacing: 1px;
+      text-transform: uppercase; animation: bounce 2s ease-in-out infinite;
+      display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+    }
+    @keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(6px)} }
+
+    /* ===== STATS ===== */
+    .stats-section {
+      background: #0f0f0f; border-top: 1px solid rgba(255,255,255,0.08); border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding: 3rem 2rem;
+    }
+    .stats-grid {
+      max-width: 1000px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1px;
+      background: rgba(255,255,255,0.08);
+    }
+    .stat-item {
+      background: #0f0f0f; padding: 2.5rem 1.5rem; text-align: center;
+      transition: background 0.3s;
+    }
+    .stat-item:hover { background: #1a1a1a; }
+    .stat-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem; font-weight: 800; color: var(--red);
+      line-height: 1; margin-bottom: 0.5rem;
+    }
+    .stat-label { font-size: 0.9rem; color: #999999; font-weight: 600; }
+
+    /* ===== FEATURES ===== */
+    .features { padding: 5rem 2rem; background: #1a1a1a; }
+    .features-grid {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem;
+    }
+    .feature-card {
+      background: #0f0f0f; border: 1px solid rgba(13,27,42,0.09); border-radius: 20px;
+      padding: 2.5rem 2rem; text-align: center;
+      transition: all 0.3s; position: relative; overflow: hidden;
+    }
+    .feature-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--red), transparent);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .feature-card:hover { transform: translateY(-6px); box-shadow: 0 16px 50px rgba(0,0,0,0.6); border-color: rgba(13,27,42,0.22); background: #f0ece4; }
+    .feature-card:hover::before { opacity: 1; }
+    .feature-icon {
+      width: 64px; height: 64px; margin: 0 auto 1.5rem;
+      background: rgba(232,48,26,0.08); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px; display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem; transition: all 0.3s;
+    }
+    .feature-card:hover .feature-icon { background: rgba(255,255,255,0.08); transform: scale(1.08); }
+    .feature-title { font-size: 1.15rem; font-weight: 700; color: #ffffff; margin-bottom: 0.75rem; }
+    .feature-desc { font-size: 0.9rem; color: #999999; line-height: 1.7; }
+
+    /* ===== TESTIMONIALS ===== */
+    .testimonials { padding: 5rem 2rem; background: #0f0f0f; border-top: 1px solid rgba(255,255,255,0.08); }
+    .testimonial-grid {
+      max-width: 1100px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;
+    }
+    .testimonial-card {
+      background: #0f0f0f; border: 1px solid rgba(255,255,255,0.05); border-radius: 20px;
+      padding: 2rem; position: relative;
+    }
+    .testimonial-card::before {
+      content: '"'; font-family: 'Playfair Display', serif;
+      font-size: 5rem; color: var(--red); opacity: 0.15;
+      position: absolute; top: -0.5rem; left: 1.2rem; line-height: 1;
+    }
+    .testimonial-rating { color: #e8301a; font-size: 0.9rem; margin-bottom: 1rem; letter-spacing: 2px; }
+    .testimonial-text { font-size: 0.95rem; color: #cccccc; line-height: 1.75; margin-bottom: 1.2rem; font-style: italic; }
+    .testimonial-author { font-weight: 700; color: var(--red); font-size: 0.9rem; }
+
+    /* ===== SECTION TITLE: navy on light, white on dark ===== */
+    .faq-section .section-title, .features .section-title { color: #ffffff !important; }
+    .testimonials .section-title { color: #ffffff !important; }
+
+    /* ===== FAQ ===== */
+    .faq-section {
+      padding: 5rem 2rem;
+      background: #1a1a1a;
+    }
+    .faq-section > div { max-width: 1200px; margin: 0 auto; }
+    .accordion { max-width: 860px; margin: 0 auto; }
+    .accordion-item {
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 14px;
+      margin-bottom: 0.75rem; overflow: hidden; transition: border-color 0.3s;
+    }
+    .accordion-item:has(input:checked) { border-color: rgba(13,27,42,0.22); }
+    .accordion-item input[type="checkbox"] { display: none; }
+    .accordion-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.4rem 1.5rem; cursor: pointer;
+      font-weight: 600; color: #ffffff; background: #0f0f0f;
+      user-select: none; transition: background 0.2s, color 0.2s;
+    }
+    .accordion-item:has(input:checked) .accordion-header { color: #e8301a; background: #f0ece4; }
+    .accordion-header:hover { background: #1a1a1a; }
+    .accordion-header::after { content: '+'; font-size: 1.4rem; color: #e8301a; transition: transform 0.3s; line-height: 1; flex-shrink: 0; }
+    .accordion-item:has(input:checked) .accordion-header::after { content: '−'; }
+    .accordion-content {
+      max-height: 0; overflow: hidden; transition: max-height 0.35s ease, padding 0.3s;
+      background: #141414; color: #999999; font-size: 0.95rem; line-height: 1.8;
+    }
+    .accordion-item input:checked ~ .accordion-content { max-height: 500px; padding: 1.5rem; }
+
+    /* ===== CTA SECTION ===== */
+    .cta-section {
+      padding: 6rem 2rem; text-align: center;
+      background: #0f0f0f;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      position: relative; overflow: hidden;
+    }
+    .cta-section::before {
+      content: ''; position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 50% 0%, rgba(232,48,26,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse at 50% 100%, rgba(232,48,26,0.08) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .cta-section h2 {
+      font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4vw, 3rem);
+      color: #ffffff; margin-bottom: 1rem; position: relative;
+    }
+    .cta-section h2 span { color: #e8301a; }
+    .cta-section > p { color: #999999; margin-bottom: 2.5rem; font-size: 1.05rem; position: relative; }
+    .cta-info {
+      display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap;
+      font-size: 0.95rem; color: #999999; position: relative;
+    }
+    .cta-info-item { display: flex; align-items: center; gap: 0.6rem; }
+    .cta-info-item span:first-child { font-size: 1.2rem; }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <nav>
+    <div class="logo">
+      <span>🏎</span> AutoShop
+    </div>
+    <ul class="menu" id="mainMenu">
+      <li><a href="index.html" class="active">Trang Chủ</a></li>
+      <li><a href="ban-xe.html">Bán Xe</a></li>
+      <li><a href="dich-vu.html">Dịch Vụ</a></li>
+      <li><a href="lien-he.html">Liên Hệ</a></li>
+      <li><a href="dang-ban-xe.html">Đăng Bán Xe</a></li>
+      <li><a href="dang-nhap.html" class="btn-nav">Đăng Nhập</a></li>
+    </ul>
+    <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-video-wrap">
+    <video autoplay muted loop playsinline disablepictureinpicture controlslist="nodownload nofullscreen noremoteplayback">
+      <source src="video/Siêu phẩm Honda Civic Type R sắp ra mắt tại thị trường Việt Nam - Honda Việt Nam Official (1080p, h264).mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-tag">✦ Showroom Uy Tín Tại Bình Dương</div>
+    <h1>Tìm Chiếc Xe<br><span>Hoàn Hảo</span> Của Bạn</h1>
+    <p>Xe chất lượng kiểm định kỹ lưỡng · Giá cả minh bạch · Hỗ trợ vay vốn tận tâm</p>
+    <div class="hero-actions">
+      <a href="ban-xe.html" class="btn btn-gold">🚗 Xem Xe Ngay</a>
+      <a href="lien-he.html" class="btn btn-outline">📞 Liên Hệ Tư Vấn</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span>Khám Phá</span>
+    <span>↓</span>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats-section">
+  <div class="stats-grid">
+    <div class="stat-item">
+      <div class="stat-number" id="stat1">0</div>
+      <div class="stat-label">Xe Đã Bán</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number" id="stat2">0</div>
+      <div class="stat-label">Khách Hàng Tin Dùng</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number" id="stat3">0</div>
+      <div class="stat-label">Năm Kinh Nghiệm</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number" id="stat4">0</div>
+      <div class="stat-label">Khách Hài Lòng</div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features">
+  <div style="max-width:1200px;margin:0 auto;">
+    <h2 class="section-title center">Tại Sao Chọn AutoShop?</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">✅</div>
+        <h3 class="feature-title">Đảm Bảo Chất Lượng</h3>
+        <p class="feature-desc">Tất cả xe được kiểm tra kỹ lưỡng 50 điểm trước khi bàn giao. Giấy tờ đầy đủ, nguồn gốc rõ ràng.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💰</div>
+        <h3 class="feature-title">Giá Cả Minh Bạch</h3>
+        <p class="feature-desc">Cam kết giá tốt nhất thị trường, không phát sinh chi phí ẩn. Định giá công khai, thương lượng công bằng.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔧</div>
+        <h3 class="feature-title">Bảo Hành Uy Tín</h3>
+        <p class="feature-desc">Bảo hành động cơ & hộp số 6–12 tháng. Hỗ trợ bảo dưỡng định kỳ miễn phí theo gói.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🏦</div>
+        <h3 class="feature-title">Hỗ Trợ Vay Vốn</h3>
+        <p class="feature-desc">Hợp tác nhiều ngân hàng uy tín, vay đến 80% giá trị xe, giải ngân nhanh trong 24–48 giờ.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div style="max-width:1200px;margin:0 auto;">
+    <h2 class="section-title center">Khách Hàng Nói Gì?</h2>
+    <div class="testimonial-grid">
+      <div class="testimonial-card">
+        <div class="testimonial-rating">★★★★★</div>
+        <p class="testimonial-text">"Mình đã mua Toyota Vios tại AutoShop, xe chất lượng, giá cả hợp lý. Nhân viên tư vấn nhiệt tình, thủ tục nhanh gọn. Rất hài lòng!"</p>
+        <div class="testimonial-author">— Anh Minh, TP.HCM</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-rating">★★★★★</div>
+        <p class="testimonial-text">"Showroom uy tín, xe đẹp, giấy tờ đầy đủ. Được hỗ trợ vay vốn ngân hàng rất tốt. Cảm ơn AutoShop đã giúp tôi có được chiếc xe mơ ước!"</p>
+        <div class="testimonial-author">— Chị Lan, Bình Dương</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-rating">★★★★★</div>
+        <p class="testimonial-text">"Lần đầu mua xe cũ nhưng rất yên tâm với AutoShop. Xe được kiểm tra kỹ càng, bảo hành tốt. Sẽ giới thiệu bạn bè đến đây!"</p>
+        <div class="testimonial-author">— Anh Tuấn, Đồng Nai</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section">
+  <div style="max-width:1200px;margin:0 auto;">
+    <h2 class="section-title center">Câu Hỏi Thường Gặp</h2>
+    <div class="accordion">
+      <div class="accordion-item">
+        <input type="checkbox" id="faq1">
+        <label class="accordion-header" for="faq1">Làm thế nào để kiểm tra chất lượng xe?</label>
+        <div class="accordion-content">Chúng tôi có dịch vụ kiểm định chuyên nghiệp với 50 điểm kiểm tra, bao gồm động cơ, hộp số, gầm xe, điện, nội thất. Bạn có thể yêu cầu báo cáo chi tiết trước khi quyết định mua.</div>
+      </div>
+      <div class="accordion-item">
+        <input type="checkbox" id="faq2">
+        <label class="accordion-header" for="faq2">Có hỗ trợ vay ngân hàng không?</label>
+        <div class="accordion-content">Có, chúng tôi hợp tác với nhiều ngân hàng uy tín. Hỗ trợ vay lên đến 80% giá trị xe với lãi suất ưu đãi. Thủ tục đơn giản, giải ngân nhanh trong 24–48 giờ.</div>
+      </div>
+      <div class="accordion-item">
+        <input type="checkbox" id="faq3">
+        <label class="accordion-header" for="faq3">Chế độ bảo hành như thế nào?</label>
+        <div class="accordion-content">Xe được bảo hành từ 6–12 tháng tùy theo dòng xe và năm sản xuất, bao gồm động cơ, hộp số và các bộ phận quan trọng. Hỗ trợ bảo dưỡng định kỳ miễn phí.</div>
+      </div>
+      <div class="accordion-item">
+        <input type="checkbox" id="faq4">
+        <label class="accordion-header" for="faq4">Có nhận thu mua xe cũ không?</label>
+        <div class="accordion-content">Có, chúng tôi nhận thu mua xe cũ với giá cao nhất thị trường. Đánh giá miễn phí, thanh toán nhanh. Hỗ trợ thu cũ đổi mới với nhiều ưu đãi hấp dẫn.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2>Sẵn Sàng Tìm<br><span>Chiếc Xe Của Bạn?</span></h2>
+  <p>Liên hệ ngay để được tư vấn miễn phí và hỗ trợ tận tâm 24/7</p>
+  <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:3rem;position:relative;">
+    <a href="ban-xe.html" class="btn btn-gold">Xem Tất Cả Xe</a>
+    <a href="lien-he.html" class="btn btn-outline">Liên Hệ Ngay</a>
+  </div>
+  <div class="cta-info">
+    <div class="cta-info-item"><span>📞</span><span>Hotline: <strong style="color:var(--red)">0909 123 456</strong></span></div>
+    <div class="cta-info-item"><span>📧</span><span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="9effebeaf1edf6f1eedef9f3fff7f2b0fdf1f3">[email&#160;protected]</a></span></div>
+    <div class="cta-info-item"><span>📍</span><span>Thủ Dầu Một, Bình Dương</span></div>
+    <div class="cta-info-item"><span>⏰</span><span>T2–CN: 08:00 – 18:00</span></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p><strong>AutoShop</strong> — Xe Chất Lượng · Dịch Vụ Tận Tâm</p>
+  <p>© 2026 AutoShop. Bản quyền thuộc về chúng tôi · Thủ Dầu Một, Bình Dương</p>
+</footer>
+
+<!-- FLOATING CONTACT -->
+<div class="floating-contact">
+  <a href="tel:0344806179" class="contact-item contact-phone">📞<span class="contact-tooltip">Hotline: 0344 806 179</span></a>
+  <a href="tel:0337484248" class="contact-item contact-phone2">📞<span class="contact-tooltip">Tư Vấn: 0337 484 248</span></a>
+  <a href="https://zalo.me/0337484248" target="_blank" class="contact-item contact-zalo">💬<span class="contact-tooltip">Chat Zalo</span></a>
+  <a href="https://m.me/autoshopvn" target="_blank" class="contact-item contact-messenger">💬<span class="contact-tooltip">Messenger</span></a>
+  <a href="#" class="contact-item contact-settings" onclick="return false">⚙️<span class="contact-tooltip">Hỗ Trợ</span></a>
+  <a href="ban-xe.html" class="contact-item contact-car">🚗<span class="contact-tooltip">Xem Xe Bán</span></a>
+</div>
+
+<script src="chatbot.js"></script>
+<script src="api.js"></script>
+<script>
+// ── HAMBURGER MENU ──
+function toggleMenu() {
+  document.getElementById('mainMenu').classList.toggle('open');
+}
+
+// ── COUNTER ANIMATION ──
+const counters = [
+  { id: 'stat1', target: 500,  suffix: '+' },
+  { id: 'stat2', target: 1200, suffix: '+' },
+  { id: 'stat3', target: 10,   suffix: '+' },
+  { id: 'stat4', target: 98,   suffix: '%' },
+];
+
+function animateCounter(el, target, suffix, duration) {
+  let start = 0;
+  const step = Math.ceil(target / (duration / 16));
+  const timer = setInterval(() => {
+    start += step;
+    if (start >= target) {
+      start = target;
+      clearInterval(timer);
+    }
+    el.textContent = start.toLocaleString('vi-VN') + suffix;
+  }, 16);
+}
+
+// Dùng IntersectionObserver để chạy counter khi section vào viewport
+const statsSection = document.querySelector('.stats-section');
+if (statsSection) {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        counters.forEach(c => {
+          const el = document.getElementById(c.id);
+          if (el) animateCounter(el, c.target, c.suffix, 1800);
+        });
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  observer.observe(statsSection);
+}
+</script>
+</body>
+</html>

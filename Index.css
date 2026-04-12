@@ -1,0 +1,250 @@
+/* ===========================
+   INDEX.CSS - Riêng cho trang chủ (index.html)
+   =========================== */
+
+/* Hero Section */
+.hero {
+    background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%23333" width="1200" height="600"/><path fill="%23444" d="M0 300h1200v300H0z"/></svg>');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    text-align: center;
+    padding: 8rem 2rem;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.hero p {
+    font-size: 1.3rem;
+    margin-bottom: 2rem;
+}
+
+.btn {
+    display: inline-block;
+    padding: 1rem 2rem;
+    background: #d4af37;
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+}
+
+/* Stats Counter */
+.stats-section {
+    background: #f8f9fa;
+    padding: 4rem 2rem;
+    text-align: center;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.stat-item {
+    padding: 2rem;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+}
+
+.stat-number {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #d4af37;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: 1.1rem;
+    color: #666;
+}
+
+/* Features Section */
+.features {
+    background: #f8f9fa;
+    padding: 4rem 0;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.feature-card {
+    text-align: center;
+    padding: 2rem;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+}
+
+.feature-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.feature-title {
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.feature-desc {
+    color: #666;
+}
+
+/* Testimonials */
+.testimonials {
+    padding: 4rem 2rem;
+    background: white;
+}
+
+.testimonial-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 2rem auto;
+}
+
+.testimonial-card {
+    padding: 2rem;
+    background: #f8f9fa;
+    border-radius: 15px;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+.testimonial-card::before {
+    content: '"';
+    font-size: 4rem;
+    color: #d4af37;
+    opacity: 0.3;
+    position: absolute;
+    top: 0;
+    left: 1rem;
+}
+
+.testimonial-text {
+    margin-bottom: 1rem;
+    font-style: italic;
+    color: #666;
+}
+
+.testimonial-author {
+    font-weight: bold;
+    color: #333;
+}
+
+.testimonial-rating {
+    color: #ffd93d;
+    font-size: 1.2rem;
+}
+
+/* Accordion for FAQ */
+.accordion {
+    max-width: 900px;
+    margin: 2rem auto;
+}
+
+.accordion-item {
+    margin-bottom: 1rem;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.accordion-header {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.3s;
+}
+
+.accordion-header:hover {
+    background: #e9ecef;
+}
+
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    padding: 0 1.5rem;
+}
+
+.accordion-item input[type="checkbox"] {
+    display: none;
+}
+
+.accordion-item input[type="checkbox"]:checked ~ .accordion-content {
+    max-height: 500px;
+    padding: 1.5rem;
+}
+
+.accordion-header::after {
+    content: "▼";
+    transition: transform 0.3s;
+}
+
+.accordion-item input[type="checkbox"]:checked ~ label.accordion-header::after {
+    transform: rotate(180deg);
+}
+
+/* Contact Section (banner ở cuối trang chủ) */
+.contact {
+    background: linear-gradient(135deg, #d4af37 0%, #c5a028 100%);
+    color: white;
+    text-align: center;
+    padding: 4rem 2rem;
+}
+
+.contact h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.contact p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.contact-info {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+}
+
+.contact-item {
+    font-size: 1.1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .hero p {
+        font-size: 1rem;
+    }
+}

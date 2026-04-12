@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đăng Nhập / Đăng Ký — AutoShop</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { background: linear-gradient(135deg, #0a0a0f 0%, #f5f2ec 50%, #0a0a0f 100%); }
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      background: radial-gradient(ellipse at 70% 30%, rgba(232,48,26,0.06) 0%, transparent 55%),
+                  radial-gradient(ellipse at 20% 80%, rgba(212,175,55,0.05) 0%, transparent 50%);
+      pointer-events: none; z-index: 0;
+    }
+
+    .auth-wrapper {
+      min-height: calc(100vh - 68px); display: flex; align-items: center;
+      justify-content: center; padding: 3rem 1rem; position: relative; z-index: 1;
+    }
+
+    .auth-card {
+      background: var(--dark2); border: 1px solid var(--border);
+      border-radius: 24px; width: 100%; max-width: 480px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.6); overflow: hidden;
+    }
+
+    .auth-tabs { display: flex; background: var(--dark); border-bottom: 1px solid var(--border); }
+    .auth-tab {
+      flex: 1; padding: 1.2rem; text-align: center; font-weight: 700;
+      font-size: 0.95rem; cursor: pointer; border: none;
+      background: transparent; color: var(--text-muted);
+      transition: all 0.3s; font-family: 'Be Vietnam Pro', sans-serif;
+      border-bottom: 2px solid transparent;
+    }
+    .auth-tab.active { color: var(--gold); border-bottom-color: var(--gold); background: rgba(212,175,55,0.04); }
+
+    .auth-panel { display: none; padding: 2.5rem; }
+    .auth-panel.active { display: block; }
+
+    .auth-logo { text-align: center; margin-bottom: 2rem; }
+    .auth-logo .icon { font-size: 3rem; display: block; margin-bottom: 0.5rem; }
+    .auth-logo h2 { font-family: 'Playfair Display', serif; font-size: 1.7rem; color: #0d1b2a; }
+    .auth-logo p { color: var(--text-muted); font-size: 0.9rem; margin-top: 0.3rem; }
+
+    .social-login { display: flex; gap: 0.8rem; margin-bottom: 1.5rem; }
+    .btn-social {
+      flex: 1; padding: 0.75rem; border: 1.5px solid var(--border);
+      border-radius: var(--radius); background: var(--dark3); cursor: pointer;
+      font-size: 0.85rem; font-weight: 600; color: #1a1a2e;
+      transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+      font-family: 'Be Vietnam Pro', sans-serif;
+    }
+    .btn-social:hover { border-color: var(--gold); background: rgba(232,48,26,0.06); transform: translateY(-1px); }
+
+    .divider {
+      text-align: center; position: relative; margin: 1.2rem 0;
+      color: var(--text-muted); font-size: 0.82rem;
+    }
+    .divider::before, .divider::after {
+      content: ''; position: absolute; top: 50%; width: 42%; height: 1px; background: var(--border);
+    }
+    .divider::before { left: 0; } .divider::after { right: 0; }
+
+    /* FORM */
+    .auth-panel .form-group label {
+      font-size: 0.82rem; font-weight: 700; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .input-wrapper { position: relative; }
+    .input-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 0.95rem; pointer-events: none; z-index: 1; }
+    .auth-panel .form-group input, .auth-panel .form-group select {
+      padding-left: 2.8rem; background: #faf8f4; border-color: rgba(13,27,42,0.12);
+    }
+    .toggle-pw {
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      cursor: pointer; font-size: 0.95rem; color: var(--text-muted); user-select: none;
+    }
+    .toggle-pw:hover { color: var(--gold); }
+
+    .error-msg { font-size: 0.78rem; color: #e63946; margin-top: 0.4rem; display: none; }
+    .error-msg.show { display: block; }
+    .form-group input.err { border-color: #e63946 !important; }
+
+    .form-extras {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem;
+    }
+    .checkbox-wrap { display: flex; align-items: center; gap: 0.5rem; }
+    .checkbox-wrap input[type=checkbox] { width: 16px; height: 16px; accent-color: var(--gold); cursor: pointer; }
+    .checkbox-wrap label { font-size: 0.85rem; color: var(--text-muted); cursor: pointer; }
+    .forgot-link { font-size: 0.85rem; color: var(--gold); font-weight: 600; }
+    .forgot-link:hover { text-decoration: underline; }
+
+    /* PASSWORD STRENGTH */
+    .strength-bar { height: 3px; background: var(--dark3); border-radius: 2px; overflow: hidden; margin-top: 0.5rem; }
+    .strength-fill { height: 100%; border-radius: 2px; transition: all 0.3s; width: 0; }
+    .strength-text { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.3rem; }
+
+    /* SUBMIT */
+    .btn-submit {
+      width: 100%; padding: 1rem; border-radius: var(--radius);
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: var(--dark); border: none; font-size: 1rem; font-weight: 700;
+      cursor: pointer; font-family: 'Be Vietnam Pro', sans-serif;
+      transition: all 0.3s; letter-spacing: 0.3px; position: relative;
+    }
+    .btn-submit:hover { transform: translateY(-2px); box-shadow: var(--shadow-gold); }
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .spinner {
+      display: none; width: 18px; height: 18px; border: 2px solid rgba(0,0,0,0.2);
+      border-top-color: var(--dark); border-radius: 50%;
+      animation: spin 0.8s linear infinite; margin: 0 auto;
+    }
+    .btn-submit.loading .btn-text { display: none; }
+    .btn-submit.loading .spinner { display: block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .alert { padding: 0.9rem 1rem; border-radius: var(--radius); margin-bottom: 1rem; font-size: 0.9rem; display: none; }
+    .alert.error { background: #fff0ee; border: 1px solid rgba(232,48,26,0.3); color: #c42410; display: block; }
+    .alert.success { background: #f0fdf4; border: 1px solid rgba(22,163,74,0.35); color: #16a34a; display: block; }
+
+    .switch-tab { text-align: center; margin-top: 1.5rem; font-size: 0.88rem; color: var(--text-muted); }
+    .switch-tab a { color: var(--gold); font-weight: 700; cursor: pointer; }
+    .switch-tab a:hover { text-decoration: underline; }
+
+    .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    /* LOGGED IN */
+    .user-panel { display: none; padding: 2.5rem; text-align: center; }
+    .user-panel.show { display: block; }
+    .user-avatar {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem; margin: 0 auto 1.2rem;
+    }
+    .user-panel h2 { color: #0d1b2a; font-size: 1.4rem; margin-bottom: 0.3rem; }
+    .user-panel p { color: var(--text-muted); margin-bottom: 2rem; }
+    .user-actions { display: flex; flex-direction: column; gap: 0.8rem; }
+    .btn-action {
+      padding: 0.85rem 1.5rem; border-radius: var(--radius); font-size: 0.95rem; font-weight: 600;
+      cursor: pointer; display: block; transition: all 0.2s; font-family: 'Be Vietnam Pro', sans-serif;
+      text-align: center;
+    }
+    .btn-action.primary { background: linear-gradient(135deg, var(--gold), var(--gold-dark)); color: var(--dark); border: none; }
+    .btn-action.secondary { background: transparent; color: #1a1a2e; border: 1.5px solid var(--border); }
+    .btn-action.danger { background: transparent; color: #e63946; border: 1.5px solid rgba(230,57,70,0.3); }
+    .btn-action:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+
+    @media(max-width:480px){ .auth-panel { padding: 1.8rem 1.2rem; } .form-row-2 { grid-template-columns: 1fr; } .social-login { flex-direction: column; } }
+  </style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="logo"><span>🏎</span> AutoShop</div>
+    <ul class="menu" id="mainMenu">
+      <li><a href="index.html">Trang Chủ</a></li>
+      <li><a href="ban-xe.html">Bán Xe</a></li>
+      <li><a href="dich-vu.html">Dịch Vụ</a></li>
+      <li><a href="lien-he.html">Liên Hệ</a></li>
+      <li><a href="dang-ban-xe.html">Đăng Bán Xe</a></li>
+      <li><a href="dang-nhap.html" class="btn-nav" style="color:var(--gold)!important">Đăng Nhập</a></li>
+    </ul>
+    <button class="hamburger" onclick="document.getElementById('mainMenu').classList.toggle('open')"><span></span><span></span><span></span></button>
+  </nav>
+</header>
+
+<div class="auth-wrapper">
+  <div class="auth-card" id="authCard">
+
+    <!-- LOGGED IN -->
+    <div class="user-panel" id="userPanel">
+      <div class="user-avatar" id="userAvatar">👤</div>
+      <h2 id="welcomeName">Xin chào!</h2>
+      <p id="welcomeEmail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="2055534552604558414d504c450e434f4d">[email&#160;protected]</a></p>
+      <div class="user-actions">
+        <a href="dang-ban-xe.html" class="btn-action primary">🚗 Đăng Bán Xe</a>
+        <a href="ban-xe.html" class="btn-action secondary">🔍 Xem Xe Đang Bán</a>
+        <button class="btn-action danger" onclick="logout()">🚪 Đăng Xuất</button>
+      </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="auth-tabs" id="authTabs">
+      <button class="auth-tab active" onclick="switchTab('login')">🔑 Đăng Nhập</button>
+      <button class="auth-tab" onclick="switchTab('register')">📝 Đăng Ký</button>
+    </div>
+
+    <!-- LOGIN -->
+    <div class="auth-panel active" id="loginPanel">
+      <div class="auth-logo">
+        <span class="icon">🔑</span>
+        <h2>Chào mừng trở lại!</h2>
+        <p>Đăng nhập để tiếp tục mua bán xe</p>
+      </div>
+      <div class="social-login">
+        <button class="btn-social" onclick="socialLogin('google')">🌐 Google</button>
+        <button class="btn-social" onclick="socialLogin('facebook')">📘 Facebook</button>
+      </div>
+      <div class="divider">hoặc đăng nhập bằng email</div>
+      <div class="alert" id="loginAlert"></div>
+      <form id="loginForm" novalidate>
+        <div class="form-group">
+          <label>Email hoặc Số điện thoại *</label>
+          <div class="input-wrapper">
+            <span class="input-icon">📧</span>
+            <input type="text" id="loginEmail" placeholder="Nhập email hoặc SĐT" autocomplete="username">
+          </div>
+          <div class="error-msg" id="loginEmailErr">Vui lòng nhập email hoặc số điện thoại</div>
+        </div>
+        <div class="form-group">
+          <label>Mật khẩu *</label>
+          <div class="input-wrapper">
+            <span class="input-icon">🔒</span>
+            <input type="password" id="loginPassword" placeholder="Nhập mật khẩu" autocomplete="current-password">
+            <span class="toggle-pw" onclick="togglePw('loginPassword',this)">👁️</span>
+          </div>
+          <div class="error-msg" id="loginPasswordErr">Vui lòng nhập mật khẩu</div>
+        </div>
+        <div class="form-extras">
+          <div class="checkbox-wrap">
+            <input type="checkbox" id="rememberMe">
+            <label for="rememberMe">Ghi nhớ đăng nhập</label>
+          </div>
+          <a href="#" class="forgot-link" onclick="showForgot()">Quên mật khẩu?</a>
+        </div>
+        <button type="submit" class="btn-submit" id="loginBtn">
+          <span class="btn-text">Đăng Nhập</span>
+          <div class="spinner"></div>
+        </button>
+      </form>
+      <div class="switch-tab">Chưa có tài khoản? <a onclick="switchTab('register')">Đăng ký ngay</a></div>
+    </div>
+
+    <!-- REGISTER -->
+    <div class="auth-panel" id="registerPanel">
+      <div class="auth-logo">
+        <span class="icon">📝</span>
+        <h2>Tạo tài khoản mới</h2>
+        <p>Tham gia AutoShop để mua bán xe dễ dàng</p>
+      </div>
+      <div class="alert" id="registerAlert"></div>
+      <form id="registerForm" novalidate>
+        <div class="form-row-2">
+          <div class="form-group">
+            <label>Họ *</label>
+            <div class="input-wrapper"><span class="input-icon">👤</span><input type="text" id="regHo" placeholder="Họ"></div>
+            <div class="error-msg" id="regHoErr">Vui lòng nhập họ</div>
+          </div>
+          <div class="form-group">
+            <label>Tên *</label>
+            <div class="input-wrapper"><span class="input-icon">👤</span><input type="text" id="regTen" placeholder="Tên"></div>
+            <div class="error-msg" id="regTenErr">Vui lòng nhập tên</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email *</label>
+          <div class="input-wrapper"><span class="input-icon">📧</span><input type="email" id="regEmail" placeholder="example@email.com"></div>
+          <div class="error-msg" id="regEmailErr">Email không hợp lệ</div>
+        </div>
+        <div class="form-group">
+          <label>Số điện thoại *</label>
+          <div class="input-wrapper"><span class="input-icon">📞</span><input type="tel" id="regPhone" placeholder="0901 234 567"></div>
+          <div class="error-msg" id="regPhoneErr">Số điện thoại không hợp lệ (10 số)</div>
+        </div>
+        <div class="form-group">
+          <label>Tỉnh / Thành phố *</label>
+          <div class="input-wrapper">
+            <span class="input-icon">📍</span>
+            <select id="regCity" style="padding-left:2.8rem;">
+              <option value="">-- Chọn tỉnh/thành --</option>
+              <option>TP. Hồ Chí Minh</option>
+              <option>Bình Dương</option>
+              <option>Đồng Nai</option>
+              <option>Long An</option>
+              <option>Hà Nội</option>
+              <option>Đà Nẵng</option>
+              <option>Cần Thơ</option>
+              <option>Khác</option>
+            </select>
+          </div>
+          <div class="error-msg" id="regCityErr">Vui lòng chọn tỉnh/thành</div>
+        </div>
+        <div class="form-group">
+          <label>Mật khẩu *</label>
+          <div class="input-wrapper">
+            <span class="input-icon">🔒</span>
+            <input type="password" id="regPassword" placeholder="Tối thiểu 8 ký tự" oninput="checkStrength(this.value)">
+            <span class="toggle-pw" onclick="togglePw('regPassword',this)">👁️</span>
+          </div>
+          <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+          <div class="strength-text" id="strengthText"></div>
+          <div class="error-msg" id="regPasswordErr">Mật khẩu phải có ít nhất 8 ký tự</div>
+        </div>
+        <div class="form-group">
+          <label>Xác nhận mật khẩu *</label>
+          <div class="input-wrapper">
+            <span class="input-icon">🔒</span>
+            <input type="password" id="regConfirm" placeholder="Nhập lại mật khẩu">
+            <span class="toggle-pw" onclick="togglePw('regConfirm',this)">👁️</span>
+          </div>
+          <div class="error-msg" id="regConfirmErr">Mật khẩu không khớp</div>
+        </div>
+        <div class="checkbox-wrap" style="margin-bottom:1.2rem;">
+          <input type="checkbox" id="agreeTerms">
+          <label for="agreeTerms">Tôi đồng ý với <a href="#" style="color:var(--gold)">Điều khoản sử dụng</a></label>
+        </div>
+        <div class="error-msg" id="agreeErr" style="margin-bottom:1rem;">Vui lòng đồng ý điều khoản</div>
+        <button type="submit" class="btn-submit" id="registerBtn">
+          <span class="btn-text">🚀 Tạo Tài Khoản</span>
+          <div class="spinner"></div>
+        </button>
+      </form>
+      <div class="switch-tab">Đã có tài khoản? <a onclick="switchTab('login')">Đăng nhập ngay</a></div>
+    </div>
+
+  </div>
+</div>
+
+<footer style="position:relative;z-index:1;">
+  <p>© 2026 <strong>AutoShop</strong>. Bản quyền thuộc về chúng tôi</p>
+</footer>
+
+<div class="floating-contact">
+  <a href="tel:0344806179" class="contact-item contact-phone">📞<span class="contact-tooltip">Hotline: 0344 806 179</span></a>
+  <a href="tel:0337484248" class="contact-item contact-phone2">📞<span class="contact-tooltip">Tư Vấn: 0337 484 248</span></a>
+  <a href="https://zalo.me/0337484248" target="_blank" class="contact-item contact-zalo">💬<span class="contact-tooltip">Chat Zalo</span></a>
+  <a href="ban-xe.html" class="contact-item contact-car">🚗<span class="contact-tooltip">Xem Xe</span></a>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+<script src="api.js"></script>
+<script>
+// ── HIỂN THỊ TRẠNG THÁI ĐÃ ĐĂNG NHẬP ──
+document.addEventListener('DOMContentLoaded', function() {
+  const user = Auth.getUser();
+  if (user) showUserPanel(user);
+  updateNavLogin();
+});
+
+function updateNavLogin() {
+  const user = Auth.getUser();
+  const navLink = document.querySelector('a[href="dang-nhap.html"]');
+  if (navLink && user) navLink.textContent = '👤 ' + user.name.split(' ').pop();
+}
+
+function showUserPanel(user) {
+  document.getElementById('authTabs').style.display = 'none';
+  document.getElementById('loginPanel').style.display = 'none';
+  document.getElementById('registerPanel').style.display = 'none';
+  const p = document.getElementById('userPanel');
+  p.classList.add('show');
+  document.getElementById('welcomeName').textContent = 'Xin chào, ' + user.name + '!';
+  document.getElementById('welcomeEmail').textContent = user.email;
+  document.getElementById('userAvatar').textContent = user.name.split(' ').pop().charAt(0).toUpperCase();
+}
+
+function logout() { Auth.logout(); }
+
+function switchTab(tab) {
+  document.querySelectorAll('.auth-tab').forEach((t, i) =>
+    t.classList.toggle('active', (tab==='login'&&i===0)||(tab==='register'&&i===1)));
+  document.getElementById('loginPanel').classList.toggle('active', tab==='login');
+  document.getElementById('registerPanel').classList.toggle('active', tab==='register');
+  ['loginAlert','registerAlert'].forEach(id => {
+    const el = document.getElementById(id); el.className = 'alert'; el.textContent = '';
+  });
+}
+
+function togglePw(id, icon) {
+  const el = document.getElementById(id);
+  el.type = el.type === 'password' ? 'text' : 'password';
+  icon.textContent = el.type === 'password' ? '👁️' : '🙈';
+}
+
+function checkStrength(pw) {
+  const fill = document.getElementById('strengthFill'), text = document.getElementById('strengthText');
+  let sc = 0;
+  if (pw.length >= 8) sc++; if (/[A-Z]/.test(pw)) sc++;
+  if (/[0-9]/.test(pw)) sc++; if (/[^A-Za-z0-9]/.test(pw)) sc++;
+  const lvs = [{p:0,c:'#e2e8f0',l:''},{p:25,c:'#e63946',l:'⚠️ Yếu'},{p:50,c:'#f4a261',l:'🔶 Trung bình'},{p:75,c:'#3498db',l:'✅ Mạnh'},{p:100,c:'#16a34a',l:'🔒 Rất mạnh'}];
+  const lv = pw.length === 0 ? lvs[0] : lvs[Math.min(sc, 4)];
+  fill.style.width = lv.p + '%'; fill.style.background = lv.c; text.textContent = lv.l;
+}
+
+function showErr(id, msg) { const e = document.getElementById(id); e.textContent = msg; e.classList.add('show'); }
+function clearErr(id) { document.getElementById(id).classList.remove('show'); }
+function markErr(id, err) { document.getElementById(id).classList.toggle('err', err); }
+
+// ── ĐĂNG NHẬP ──
+document.getElementById('loginForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass  = document.getElementById('loginPassword').value;
+  let valid = true;
+  clearErr('loginEmailErr'); clearErr('loginPasswordErr');
+  markErr('loginEmail', false); markErr('loginPassword', false);
+  if (!email) { showErr('loginEmailErr','Vui lòng nhập email hoặc SĐT'); markErr('loginEmail',true); valid=false; }
+  if (!pass)  { showErr('loginPasswordErr','Vui lòng nhập mật khẩu');    markErr('loginPassword',true); valid=false; }
+  if (!valid) return;
+
+  const btn = document.getElementById('loginBtn');
+  btn.classList.add('loading');
+
+  try {
+    const result = await Auth.login(email, pass);
+    const alert = document.getElementById('loginAlert');
+    alert.className = 'alert success';
+    alert.textContent = '✅ Đăng nhập thành công! Đang chuyển hướng...';
+    setTimeout(() => {
+      const redirect = new URLSearchParams(location.search).get('redirect') || 'index.html';
+      window.location.href = redirect;
+    }, 1000);
+  } catch (err) {
+    const alert = document.getElementById('loginAlert');
+    alert.className = 'alert error';
+    alert.textContent = '❌ ' + err.message;
+    markErr('loginEmail', true); markErr('loginPassword', true);
+  } finally {
+    btn.classList.remove('loading');
+  }
+});
+
+// ── ĐĂNG KÝ ──
+document.getElementById('registerForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const ho    = document.getElementById('regHo').value.trim();
+  const ten   = document.getElementById('regTen').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const phone = document.getElementById('regPhone').value.trim().replace(/\s/g,'');
+  const city  = document.getElementById('regCity').value;
+  const pass  = document.getElementById('regPassword').value;
+  const confirm = document.getElementById('regConfirm').value;
+  const agree = document.getElementById('agreeTerms').checked;
+
+  ['regHo','regTen','regEmail','regPhone','regCity','regPassword','regConfirm'].forEach(id => {
+    clearErr(id+'Err'); markErr(id, false);
+  });
+  clearErr('agreeErr');
+
+  let valid = true;
+  if (!ho)   { showErr('regHoErr','Vui lòng nhập họ');           markErr('regHo',true);       valid=false; }
+  if (!ten)  { showErr('regTenErr','Vui lòng nhập tên');          markErr('regTen',true);      valid=false; }
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showErr('regEmailErr','Email không hợp lệ'); markErr('regEmail',true); valid=false; }
+  if (!phone || !/^(0[3-9])\d{8}$/.test(phone)) { showErr('regPhoneErr','SĐT không hợp lệ'); markErr('regPhone',true); valid=false; }
+  if (!city) { showErr('regCityErr','Vui lòng chọn tỉnh/thành'); markErr('regCity',true);      valid=false; }
+  if (!pass || pass.length < 8) { showErr('regPasswordErr','Mật khẩu ít nhất 8 ký tự');       markErr('regPassword',true); valid=false; }
+  if (pass !== confirm)         { showErr('regConfirmErr','Mật khẩu không khớp');               markErr('regConfirm',true);  valid=false; }
+  if (!agree)                   { showErr('agreeErr','Vui lòng đồng ý điều khoản');             valid=false; }
+  if (!valid) return;
+
+  const btn = document.getElementById('registerBtn');
+  btn.classList.add('loading');
+
+  try {
+    await Auth.register(ho + ' ' + ten, email, phone, city, pass);
+    const a = document.getElementById('registerAlert');
+    a.className = 'alert success';
+    a.textContent = '🎉 Đăng ký thành công! Đang chuyển hướng...';
+    setTimeout(() => {
+      window.location.href = new URLSearchParams(location.search).get('redirect') || 'index.html';
+    }, 1500);
+  } catch (err) {
+    const a = document.getElementById('registerAlert');
+    a.className = 'alert error';
+    a.textContent = '❌ ' + err.message;
+  } finally {
+    btn.classList.remove('loading');
+  }
+});
+
+function socialLogin(p) { alert('Tính năng đăng nhập ' + (p==='google'?'Google':'Facebook') + ' đang phát triển!'); }
+function showForgot() { alert('Vui lòng liên hệ admin@autoshop.vn để lấy lại mật khẩu.'); }
+</script>

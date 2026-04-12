@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dịch Vụ — AutoShop</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .service-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.5rem; margin-bottom: 4rem;
+    }
+    .service-card {
+      background: var(--dark2); border: 1px solid var(--border); border-radius: var(--radius-lg);
+      padding: 2rem; transition: all 0.3s; display: flex; gap: 1.2rem; align-items: flex-start;
+    }
+    .service-card:hover { border-color: rgba(13,27,42,0.2); transform: translateY(-3px); box-shadow: var(--shadow); }
+    .service-icon-box {
+      width: 52px; height: 52px; flex-shrink: 0; border-radius: 12px;
+      background: rgba(232,48,26,0.08); border: 1px solid rgba(13,27,42,0.12);
+      display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
+    }
+    .service-text h3 { font-size: 1.05rem; font-weight: 700; color: #0d1b2a; margin-bottom: 0.5rem; }
+    .service-text p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.7; }
+
+    /* PACKAGE TABLE */
+    .table-wrap { overflow-x: auto; margin: 3rem 0; border-radius: var(--radius-lg); border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; min-width: 560px; }
+    thead tr { background: linear-gradient(135deg, var(--gold), var(--gold-dark)); }
+    thead th { padding: 1.1rem 1.3rem; text-align: left; font-size: 0.9rem; font-weight: 700; color: var(--dark); }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background 0.2s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--dark3); }
+    tbody td { padding: 1rem 1.3rem; font-size: 0.9rem; color: var(--text-muted); }
+    tbody td:first-child { color: #0d1b2a; font-weight: 600; }
+    .check { color: var(--green); font-weight: 700; }
+    .dash { color: var(--text-muted); opacity: 0.4; }
+
+    /* COMMITMENT */
+    .commitment {
+      background: linear-gradient(135deg, rgba(232,48,26,0.06), rgba(212,175,55,0.04));
+      border: 1px solid rgba(13,27,42,0.1); border-radius: var(--radius-lg);
+      padding: 3rem; text-align: center; margin: 3rem 0;
+    }
+    .commitment h3 { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--gold); margin-bottom: 1rem; }
+    .commitment p { color: var(--text-muted); max-width: 650px; margin: 0 auto; line-height: 1.8; }
+  </style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="logo"><span>🏎</span> AutoShop</div>
+    <ul class="menu" id="mainMenu">
+      <li><a href="index.html">Trang Chủ</a></li>
+      <li><a href="ban-xe.html">Bán Xe</a></li>
+      <li><a href="dich-vu.html" class="active">Dịch Vụ</a></li>
+      <li><a href="lien-he.html">Liên Hệ</a></li>
+      <li><a href="dang-ban-xe.html">Đăng Bán Xe</a></li>
+      <li><a href="dang-nhap.html" class="btn-nav">Đăng Nhập</a></li>
+    </ul>
+    <button class="hamburger" onclick="document.getElementById('mainMenu').classList.toggle('open')" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+</header>
+
+<div class="page-hero">
+  <h1>Dịch Vụ <span>Của Chúng Tôi</span></h1>
+  <p>Đa dạng gói dịch vụ chất lượng cao — từ kiểm định đến sang tên trọn gói</p>
+</div>
+
+<div class="container">
+  <div class="breadcrumb">
+    <a href="index.html">Trang Chủ</a> <span>›</span> <span>Dịch Vụ</span>
+  </div>
+
+  <h2 class="section-title" style="color:#0d1b2a!important">Các Dịch Vụ Cung Cấp</h2>
+  <div class="service-grid">
+    <div class="service-card">
+      <div class="service-icon-box">🚗</div>
+      <div class="service-text">
+        <h3>Mua Bán Xe Cũ</h3>
+        <p>Chuyên mua bán xe đã qua sử dụng với giá hợp lý. Tất cả xe được kiểm định kỹ lưỡng, giấy tờ đầy đủ và nguồn gốc rõ ràng.</p>
+      </div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon-box">🔍</div>
+      <div class="service-text">
+        <h3>Kiểm Định Xe Trước Mua</h3>
+        <p>Kiểm tra toàn diện 50 điểm — động cơ, hộp số, gầm xe, điện, nội thất. Báo cáo chi tiết tình trạng xe, minh bạch 100%.</p>
+      </div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon-box">💰</div>
+      <div class="service-text">
+        <h3>Hỗ Trợ Vay Vốn Mua Xe</h3>
+        <p>Hợp tác nhiều ngân hàng uy tín, lãi suất ưu đãi. Hỗ trợ vay đến 80% giá trị xe, giải ngân nhanh 24–48 giờ.</p>
+      </div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon-box">📝</div>
+      <div class="service-text">
+        <h3>Làm Thủ Tục Sang Tên</h3>
+        <p>Hỗ trợ hoàn tất toàn bộ thủ tục sang tên, đổi chủ nhanh chóng, đúng quy định pháp luật. Khách hàng không cần lo lắng.</p>
+      </div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon-box">🔧</div>
+      <div class="service-text">
+        <h3>Bảo Hành & Bảo Dưỡng</h3>
+        <p>Bảo hành 6–12 tháng cho xe đã qua sử dụng. Bảo dưỡng định kỳ với kỹ thuật viên chuyên nghiệp, phụ tùng chính hãng.</p>
+      </div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon-box">🔄</div>
+      <div class="service-text">
+        <h3>Thu Cũ Đổi Mới</h3>
+        <p>Thu mua xe cũ với giá cao nhất thị trường. Đánh giá miễn phí, hỗ trợ thu cũ đổi mới với nhiều ưu đãi hấp dẫn.</p>
+      </div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon-box">📱</div>
+      <div class="service-text">
+        <h3>Tư Vấn Miễn Phí 24/7</h3>
+        <p>Đội ngũ tư vấn viên giàu kinh nghiệm sẵn sàng hỗ trợ qua điện thoại, Zalo, Messenger — hoàn toàn miễn phí.</p>
+      </div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon-box">🚚</div>
+      <div class="service-text">
+        <h3>Giao Xe Tận Nơi</h3>
+        <p>Miễn phí giao xe nội thành Bình Dương và TP.HCM. Ngoại thành có chính sách hỗ trợ chi phí vận chuyển hợp lý.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMMITMENT -->
+  <div class="commitment">
+    <h3>Cam Kết Của AutoShop</h3>
+    <p>Với hơn 10 năm kinh nghiệm trong ngành, AutoShop cam kết mang đến cho khách hàng những chiếc xe chất lượng nhất với giá cả cạnh tranh nhất. Sự hài lòng của bạn là thành công của chúng tôi!</p>
+  </div>
+
+  <!-- COMPARISON TABLE -->
+  <h2 class="section-title" style="color:#0d1b2a!important">So Sánh Gói Dịch Vụ</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Dịch Vụ</th>
+          <th>Gói Cơ Bản</th>
+          <th>Gói Tiêu Chuẩn</th>
+          <th>Gói VIP</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Kiểm định xe</td><td>20 điểm</td><td>35 điểm</td><td>50 điểm</td></tr>
+        <tr><td>Bảo hành</td><td>3 tháng</td><td>6 tháng</td><td>12 tháng</td></tr>
+        <tr><td>Bảo dưỡng miễn phí</td><td>1 lần</td><td>2 lần</td><td>4 lần</td></tr>
+        <tr><td>Hỗ trợ vay vốn</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+        <tr><td>Giao xe tận nơi</td><td class="dash">—</td><td>Nội thành</td><td>Toàn quốc</td></tr>
+        <tr><td>Đăng kiểm miễn phí</td><td class="dash">—</td><td>1 lần</td><td>2 lần</td></tr>
+        <tr><td>Tư vấn 24/7</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+        <tr><td>Hỗ trợ sang tên</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="text-align:center;margin-top:2rem;">
+    <a href="lien-he.html" class="btn btn-gold">Liên Hệ Để Được Tư Vấn Gói Phù Hợp</a>
+  </div>
+</div>
+
+<footer>
+  <p><strong>AutoShop</strong> — Xe Chất Lượng · Dịch Vụ Tận Tâm</p>
+  <p>© 2026 AutoShop. Bản quyền thuộc về chúng tôi</p>
+</footer>
+
+<div class="floating-contact">
+  <a href="tel:0344806179" class="contact-item contact-phone">📞<span class="contact-tooltip">Hotline: 0344 806 179</span></a>
+  <a href="tel:0337484248" class="contact-item contact-phone2">📞<span class="contact-tooltip">Tư Vấn: 0337 484 248</span></a>
+  <a href="https://zalo.me/0337484248" target="_blank" class="contact-item contact-zalo">💬<span class="contact-tooltip">Chat Zalo</span></a>
+  <a href="https://m.me/autoshopvn" target="_blank" class="contact-item contact-messenger">💬<span class="contact-tooltip">Messenger</span></a>
+  <a href="lien-he.html" class="contact-item contact-settings">⚙️<span class="contact-tooltip">Liên Hệ</span></a>
+  <a href="ban-xe.html" class="contact-item contact-car">🚗<span class="contact-tooltip">Xem Xe</span></a>
+</div>
+<script src="chatbot.js"></script>
+<script src="chatbox.js"></script>
+<script src="api.js"></script>
+<script src="auth.js"></script>
+</body>
+</html>
