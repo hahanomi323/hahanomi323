@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Đăng Bán Xe — AutoShop</title>
+  <title>Đăng Bán Xe — AutoMarket</title>
   <link rel="stylesheet" href="style.css">
   <style>
     /* ===== LAYOUT ===== */
@@ -16,7 +16,7 @@
       box-shadow: 0 20px 60px rgba(0,0,0,0.5);
     }
     .auth-gate .gate-icon { font-size: 4rem; margin-bottom: 1.2rem; }
-    .auth-gate h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: #0d1b2a; margin-bottom: 0.6rem; }
+    .auth-gate h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: #ffffff; margin-bottom: 0.6rem; }
     .auth-gate p { color: #7a7a9a; margin-bottom: 2rem; font-size: 0.95rem; }
     .gate-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
     .btn-gate {
@@ -45,7 +45,7 @@
       display: flex; align-items: center; justify-content: center;
       font-weight: 800; color: #faf8f4; font-size: 1.1rem; flex-shrink: 0;
     }
-    .user-bar-name { font-weight: 700; color: #0d1b2a; font-size: 0.95rem; }
+    .user-bar-name { font-weight: 700; color: #ffffff; font-size: 0.95rem; }
     .user-bar-email { font-size: 0.8rem; color: #7a7a9a; }
     .btn-logout {
       padding: 0.5rem 1.1rem; border: 1.5px solid rgba(230,57,70,0.3);
@@ -107,7 +107,7 @@
       background: linear-gradient(135deg, #e8301a, #c42410);
       display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
     }
-    .section-header h3 { font-size: 1.1rem; font-weight: 700; color: #0d1b2a; }
+    .section-header h3 { font-size: 1.1rem; font-weight: 700; color: #ffffff; }
     .section-header p { font-size: 0.82rem; color: #7a7a9a; margin-top: 0.15rem; }
 
     /* ===== FORM GRID ===== */
@@ -165,7 +165,7 @@
     .photo-upload-area:hover { border-color: #e8301a; background: rgba(212,175,55,0.07); }
     .photo-upload-area input[type=file] { display: none; }
     .upload-icon { font-size: 2.5rem; margin-bottom: 0.6rem; }
-    .photo-upload-area h4 { color: #0d1b2a; margin-bottom: 0.3rem; }
+    .photo-upload-area h4 { color: #ffffff; margin-bottom: 0.3rem; }
     .photo-upload-area p { font-size: 0.82rem; color: #7a7a9a; }
     .photo-preview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 0.8rem; margin-top: 1rem; }
     .photo-thumb-wrap { position: relative; }
@@ -240,7 +240,7 @@
     }
     .listing-thumb img { width: 100%; height: 100%; object-fit: cover; }
     .listing-info { flex: 1; min-width: 0; }
-    .listing-info h4 { font-size: 0.98rem; color: #0d1b2a; margin-bottom: 0.3rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .listing-info h4 { font-size: 0.98rem; color: #ffffff; margin-bottom: 0.3rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .listing-price { font-size: 1.1rem; font-weight: 700; color: #e8301a; }
     .listing-meta { font-size: 0.78rem; color: #7a7a9a; margin-top: 0.3rem; line-height: 1.6; }
     .listing-status { padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.72rem; font-weight: 700; white-space: nowrap; }
@@ -273,7 +273,7 @@
     }
     @keyframes popIn { from{transform:scale(0.85);opacity:0} to{transform:scale(1);opacity:1} }
     .modal-icon { font-size: 4rem; margin-bottom: 1rem; }
-    .modal-box h2 { font-family: 'Playfair Display', serif; font-size: 1.7rem; color: #0d1b2a; margin-bottom: 0.5rem; }
+    .modal-box h2 { font-family: 'Playfair Display', serif; font-size: 1.7rem; color: #ffffff; margin-bottom: 0.5rem; }
     .modal-box p { color: #7a7a9a; margin-bottom: 0.5rem; font-size: 0.92rem; }
     .modal-id { font-size: 1.15rem; font-weight: 700; color: #e8301a; margin: 0.8rem 0; }
     .modal-actions { display: flex; gap: 0.8rem; justify-content: center; margin-top: 1.8rem; flex-wrap: wrap; }
@@ -308,10 +308,10 @@
 <!-- HEADER -->
 <header>
   <nav>
-    <div class="logo"><span>🏎</span> AutoShop</div>
+    <div class="logo"><span>🚗</span> AutoMarket</div>
     <ul class="menu" id="mainMenu">
       <li><a href="index.html">Trang Chủ</a></li>
-      <li><a href="ban-xe.html">Bán Xe</a></li>
+      <li><a href="ban-xe.html">Mua Xe</a></li>
       <li><a href="dich-vu.html">Dịch Vụ</a></li>
       <li><a href="lien-he.html">Liên Hệ</a></li>
       <li><a href="dang-ban-xe.html" class="active">Đăng Bán Xe</a></li>
@@ -335,7 +335,7 @@
   <div class="auth-gate" id="authGate" style="display:none;">
     <div class="gate-icon">🔐</div>
     <h2>Vui lòng đăng nhập để tiếp tục</h2>
-    <p>Bạn cần có tài khoản AutoShop để đăng tin bán xe. Đăng ký hoàn toàn miễn phí!</p>
+    <p>Bạn cần có tài khoản AutoMarket để đăng tin bán xe. Đăng ký hoàn toàn miễn phí!</p>
     <div class="gate-actions">
       <a href="dang-nhap.html?redirect=dang-ban-xe.html" class="btn-gate primary">🔑 Đăng Nhập</a>
       <a href="dang-nhap.html?redirect=dang-ban-xe.html" class="btn-gate secondary">📝 Đăng Ký Ngay</a>
@@ -351,7 +351,7 @@
         <div class="user-bar-avatar" id="headerAvatar">👤</div>
         <div>
           <div class="user-bar-name" id="headerName">Người dùng</div>
-          <div class="user-bar-email" id="headerEmail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="8df8fee8ffcde8f5ece0fde1e8a3eee2e0">[email&#160;protected]</a></div>
+          <div class="user-bar-email" id="headerEmail">email@example.com</div>
         </div>
       </div>
       <button class="btn-logout" onclick="logout()">🚪 Đăng Xuất</button>
@@ -690,7 +690,7 @@
       <button class="btn-submit" id="submitBtn" onclick="submitListing()">
         🚀 Đăng Tin Bán Xe Ngay
       </button>
-      <p class="submit-note">Tin đăng sẽ được duyệt trong vòng 24 giờ. AutoShop cam kết bảo vệ thông tin người dùng.</p>
+      <p class="submit-note">Tin đăng sẽ được duyệt trong vòng 2–4 giờ. AutoMarket cam kết bảo vệ thông tin người dùng.</p>
     </div>
 
   </div><!-- end listing-form -->
@@ -701,19 +701,19 @@
   <div class="modal-box">
     <div class="modal-icon">🎉</div>
     <h2>Đăng tin thành công!</h2>
-    <p>Tin đăng bán xe của bạn đã được gửi và đang chờ duyệt.</p>
-    <div class="modal-id" id="listingId">Mã tin: #AS-000000</div>
-    <p style="font-size:0.82rem;">Chúng tôi sẽ liên hệ qua SĐT trong vòng 24 giờ.</p>
+    <p>Tin đăng bán xe của bạn đã được gửi thành công!</p>
+    <div class="modal-id" id="listingId">Mã tin: #AM-000000</div>
+    <p style="font-size:0.82rem;">Chúng tôi sẽ xem xét và duyệt tin trong vòng <strong>2–4h</strong>. Nếu chậm trễ, vui lòng liên hệ hotline: <strong style="color:#e53935;">0337484248</strong></p>
     <div class="modal-actions">
-      <a href="ban-xe.html" class="btn-modal secondary">Xem Xe Bán</a>
+      <a href="ban-xe.html" class="btn-modal secondary">Xem Xe Trên Sàn</a>
       <button class="btn-modal primary" onclick="closeModal()">Đăng Thêm Xe</button>
     </div>
   </div>
 </div>
 
 <footer>
-  <p><strong>AutoShop</strong> — Xe Chất Lượng · Dịch Vụ Tận Tâm</p>
-  <p>© 2026 AutoShop. Bản quyền thuộc về chúng tôi</p>
+  <p><strong>AutoMarket</strong> — Sàn Giao Dịch Xe Trung Gian Uy Tín</p>
+  <p>© 2026 AutoMarket. Bản quyền thuộc về chúng tôi</p>
 </footer>
 
 <div class="floating-contact">
@@ -723,7 +723,7 @@
   <a href="ban-xe.html" class="contact-item contact-car">🚗<span class="contact-tooltip">Xem Xe</span></a>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 // ── HELPERS localStorage ──
 function getSession(){
   try{
@@ -798,9 +798,9 @@ function toggleMethod(el){el.classList.toggle('selected');el.querySelector('inpu
 let selectedPlan='free';
 let paymentConfirmed=false;
 const planInfo={
-  free:  {label:'Gói Miễn Phí', desc:'Tin sẽ hiển thị 7 ngày.', price:0, code:'MIENPH'},
-  basic: {label:'Gói Cơ Bản (5k)', desc:'Tin nổi bật, hiển thị 30 ngày.', price:5000, code:'COBAN'},
-  vip:   {label:'Gói VIP (10k)', desc:'Tin VIP đầu trang, hiển thị 60 ngày.', price:10000, code:'GOIVIP'},
+  free:  {label:'Gói Miễn Phí',    desc:'Tin sẽ hiển thị 7 ngày.',              price:0,     code:'MIENPH'},
+  basic: {label:'Gói Cơ Bản (5k)', desc:'Tin nổi bật, hiển thị 30 ngày.',       price:5000,  code:'COBAN'},
+  vip:   {label:'Gói VIP (10k)',    desc:'Tin VIP đầu trang, hiển thị 60 ngày.', price:10000, code:'GOIVIP'},
 };
 function selectPlan(el,plan){
   document.querySelectorAll('.plan-card').forEach(c=>c.classList.remove('selected'));
@@ -808,47 +808,78 @@ function selectPlan(el,plan){
   const p=planInfo[plan];
   document.getElementById('selectedPlanInfo').innerHTML=`✅ Bạn đang chọn <strong style="color:#e8301a;">${p.label} — ${p.desc}</strong>`;
 }
-function getUserId(){const s=getSession();return s?(s.id||s.phone||'U').toString().replace(/\D/g,'').slice(-6)||'000001':'000001';}
-function showQRModal(plan,onSuccess){
+
+// FIX: getUserId ổn định, không bị mất ký tự khi id toàn chữ
+function getUserId(){
+  const s=getSession();
+  if(!s)return '000001';
+  const raw=(s.id||s.phone||'U').toString();
+  const digits=raw.replace(/\D/g,'');
+  if(digits.length>=4)return digits.slice(-6).padStart(6,'0');
+  // id toàn chữ: hash thành số 6 chữ số cố định
+  let hash=0;
+  for(let i=0;i<raw.length;i++)hash=(hash*31+raw.charCodeAt(i))&0xFFFFFF;
+  return hash.toString().padStart(6,'0').slice(-6);
+}
+
+const WORKER_URL='https://dangtin-webhook.quocanhlequocanh755.workers.dev';
+
+// orderCode được truyền vào từ submitListing() sau khi đã có listingId thật từ server
+// VD: orderCode = "COBAN-1777124994904-3"  (khớp đúng với nội dung chuyển khoản)
+function showQRModal(plan, orderCode, onSuccess){
   const p=planInfo[plan];
-  const userId=getUserId();
-  const orderCode=p.code+'-'+userId;
   const qrUrl=`https://img.vietqr.io/image/MB-12000501032009-compact2.png?amount=${p.price}&addInfo=${encodeURIComponent(orderCode)}&accountName=${encodeURIComponent('LE QUOC ANH')}`;
-  let modal=document.getElementById('qrPayModal');
-  if(!modal){
-    modal=document.createElement('div');
-    modal.id='qrPayModal';
-    modal.style.cssText='display:none;position:fixed;inset:0;background:rgba(13,27,42,0.7);backdrop-filter:blur(8px);z-index:99999;align-items:center;justify-content:center;padding:1rem;';
-    modal.innerHTML=`<div style="background:#fff;border-radius:24px;padding:2rem;max-width:400px;width:100%;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,0.5);">
-      <div style="font-size:1.3rem;font-weight:700;color:#0d1b2a;margin-bottom:0.2rem;" id="qrPlanName"></div>
-      <div style="font-size:2rem;font-weight:800;color:#e8301a;margin-bottom:0.8rem;" id="qrAmount"></div>
-      <img id="qrImage" src="" alt="QR" style="width:180px;height:180px;border-radius:12px;border:1px solid #eee;margin-bottom:0.8rem;">
-      <div style="font-size:0.82rem;color:#7a7a9a;margin-bottom:0.4rem;">MB Bank · TK: <strong>12000501032009</strong> · <strong>LE QUOC ANH</strong></div>
-      <div style="background:#fff8e1;border:1px solid #ffd54f;border-radius:8px;padding:0.6rem 1rem;font-size:0.83rem;color:#7a5c00;margin-bottom:0.8rem;">Nội dung CK: <strong id="qrOrderCode"></strong></div>
-      <div id="qrStatus" style="padding:0.7rem;border-radius:8px;font-size:0.85rem;background:#fff8e1;color:#7a5c00;border:1px solid #ffd54f;margin-bottom:1rem;">⏳ Đang chờ thanh toán...</div>
-      <button onclick="closeQRModal()" style="padding:0.6rem 1.5rem;border-radius:10px;border:1.5px solid rgba(13,27,42,0.2);background:transparent;color:#7a7a9a;cursor:pointer;font-size:0.85rem;">Hủy</button>
-    </div>`;
-    document.body.appendChild(modal);
-  }
-  document.getElementById('qrPlanName').textContent=p.label;
-  document.getElementById('qrAmount').textContent=p.price.toLocaleString('vi-VN')+'đ';
-  document.getElementById('qrImage').src=qrUrl;
-  document.getElementById('qrOrderCode').textContent=orderCode;
-  document.getElementById('qrStatus').innerHTML='⏳ Đang chờ thanh toán...';
-  document.getElementById('qrStatus').style='padding:0.7rem;border-radius:8px;font-size:0.85rem;background:#fff8e1;color:#7a5c00;border:1px solid #ffd54f;margin-bottom:1rem;';
-  modal.style.display='flex';
+
+  // xóa modal cũ trước để tránh timer cũ chồng lên
+  const oldModal=document.getElementById('qrPayModal');
+  if(oldModal){clearInterval(oldModal._pollTimer);oldModal.remove();}
+
+  const modal=document.createElement('div');
+  modal.id='qrPayModal';
+  modal.style.cssText='display:flex;position:fixed;inset:0;background:rgba(13,27,42,0.7);backdrop-filter:blur(8px);z-index:99999;align-items:center;justify-content:center;padding:1rem;';
+  modal.innerHTML=`<div style="background:#fff;border-radius:24px;padding:2rem;max-width:400px;width:100%;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,0.5);">
+    <div style="font-size:1.3rem;font-weight:700;color:#1a1a2e;margin-bottom:0.2rem;">${p.label}</div>
+    <div style="font-size:2rem;font-weight:800;color:#e8301a;margin-bottom:0.8rem;">${p.price.toLocaleString('vi-VN')}đ</div>
+    <img src="${qrUrl}" alt="QR" style="width:180px;height:180px;border-radius:12px;border:1px solid #eee;margin-bottom:0.8rem;">
+    <div style="font-size:0.82rem;color:#7a7a9a;margin-bottom:0.4rem;">MB Bank · TK: <strong>12000501032009</strong> · <strong>LE QUOC ANH</strong></div>
+    <div style="background:#fff8e1;border:1px solid #ffd54f;border-radius:8px;padding:0.6rem 1rem;font-size:0.83rem;color:#7a5c00;margin-bottom:0.8rem;">
+      Nội dung CK: <strong>${orderCode}</strong>
+    </div>
+    <div id="qrStatus" style="padding:0.7rem;border-radius:8px;font-size:0.85rem;background:#fff8e1;color:#7a5c00;border:1px solid #ffd54f;margin-bottom:1rem;">
+      ⏳ Đang chờ thanh toán...
+    </div>
+    <button onclick="closeQRModal()" style="padding:0.6rem 1.5rem;border-radius:10px;border:1.5px solid rgba(13,27,42,0.2);background:transparent;color:#7a7a9a;cursor:pointer;font-size:0.85rem;">Hủy</button>
+  </div>`;
+  document.body.appendChild(modal);
   modal._onSuccess=onSuccess;
+
+  // tự dừng sau 10 phút (150 lần × 4s)
+  let pollCount=0;
+  const MAX_POLLS=150;
   modal._pollTimer=setInterval(async()=>{
+    pollCount++;
+    if(pollCount>MAX_POLLS){
+      clearInterval(modal._pollTimer);
+      const st=document.getElementById('qrStatus');
+      if(st)st.innerHTML='⚠️ Hết thời gian chờ. Vui lòng thử lại.';
+      return;
+    }
     try{
-      const res=await fetch(`https://dangtin-webhook.quocanhlequocanh755.workers.dev/check?code=${orderCode}`);
-      if(res.ok){const data=await res.json();if(data.paid){clearInterval(modal._pollTimer);
-        document.getElementById('qrStatus').innerHTML='✅ Thanh toán thành công!';
-        document.getElementById('qrStatus').style='padding:0.7rem;border-radius:8px;font-size:0.85rem;background:#e8f5e9;color:#1b5e20;border:1px solid #a5d6a7;margin-bottom:1rem;';
-        setTimeout(()=>{closeQRModal();if(modal._onSuccess)modal._onSuccess();},1500);}}
+      // Check đúng orderCode từ server (không tự tính nữa)
+      const res=await fetch(`${WORKER_URL}/check?code=${encodeURIComponent(orderCode)}`);
+      if(res.ok){
+        const data=await res.json();
+        if(data.paid){
+          clearInterval(modal._pollTimer);
+          const st=document.getElementById('qrStatus');
+          if(st){st.innerHTML='✅ Thanh toán thành công!';st.style.cssText='padding:0.7rem;border-radius:8px;font-size:0.85rem;background:#e8f5e9;color:#1b5e20;border:1px solid #a5d6a7;margin-bottom:1rem;';}
+          setTimeout(()=>{closeQRModal();if(modal._onSuccess)modal._onSuccess();},1500);
+        }
+      }
     }catch(e){}
   },4000);
 }
-function closeQRModal(){const modal=document.getElementById('qrPayModal');if(modal){clearInterval(modal._pollTimer);modal.style.display='none';}}
+function closeQRModal(){const modal=document.getElementById('qrPayModal');if(modal){clearInterval(modal._pollTimer);modal.remove();}}
 
 function updatePricePreview(){
   const val=document.getElementById('carPrice').value;
@@ -908,15 +939,6 @@ async function submitListing(){
   if(uploadedPhotos.length===0&&!confirm('Bạn chưa thêm ảnh xe. Tin không có ảnh ít được quan tâm hơn. Tiếp tục?'))return;
   if(!valid){document.querySelector('.err-msg.show')?.scrollIntoView({behavior:'smooth',block:'center'});return;}
 
-  // Nếu chọn gói có phí và chưa thanh toán → hiện QR
-  if(planInfo[selectedPlan].price > 0 && !paymentConfirmed){
-    showQRModal(selectedPlan, ()=>{
-      paymentConfirmed=true;
-      submitListing(); // gọi lại sau khi thanh toán xong
-    });
-    return;
-  }
-
   const btn=document.getElementById('submitBtn');
   btn.textContent='⏳ Đang gửi...'; btn.disabled=true;
 
@@ -952,10 +974,28 @@ async function submitListing(){
 
     btn.textContent='🚀 Đăng Tin Bán Xe Ngay'; btn.disabled=false;
     const listingId = result?.data?.id || result?.id || 'AS-??????';
-    document.getElementById('listingId').textContent='Mã tin: #'+listingId;
-    document.getElementById('successModal').classList.add('show');
-    document.getElementById('step3').classList.add('done');
-    document.getElementById('step4').classList.add('active');
+
+    // ── Gói miễn phí → hiện success ngay ──
+    if(planInfo[selectedPlan].price === 0){
+      document.getElementById('listingId').textContent='Mã tin: #'+listingId;
+      document.getElementById('successModal').classList.add('show');
+      document.getElementById('step3').classList.add('done');
+      document.getElementById('step4').classList.add('active');
+      return;
+    }
+
+    // ── Gói có phí → tạo orderCode từ listingId thật → hiện QR ──
+    // listingId từ server dạng "CAR-1777125384859-3" → bỏ prefix "CAR-" đi
+    // để orderCode = "COBAN-1777125384859-3" (webhook regex mới match được)
+    const planCode = planInfo[selectedPlan].code;
+    const rawId = String(listingId).replace(/[^0-9]/g, "").slice(-10);
+    const orderCode = planCode + rawId; // VD: COBAN4502 - không có dấu gạch ngang
+    showQRModal(selectedPlan, orderCode, ()=>{
+      document.getElementById('listingId').textContent='Mã tin: #'+listingId;
+      document.getElementById('successModal').classList.add('show');
+      document.getElementById('step3').classList.add('done');
+      document.getElementById('step4').classList.add('active');
+    });
 
   } catch(err) {
     btn.textContent='🚀 Đăng Tin Bán Xe Ngay'; btn.disabled=false;
@@ -1019,4 +1059,4 @@ function deleteListing(id){
   const s=getSession();if(s)renderMyListings(s);
 }
 </script>
-<script src="api.js"></script>
+<script src="Api.js"></script>

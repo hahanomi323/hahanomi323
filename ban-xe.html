@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Xe Đang Bán — AutoShop</title>
+  <title>Mua Xe — AutoMarket</title>
   <link rel="stylesheet" href="style.css">
   <style>
     /* SEARCH / FILTER */
@@ -101,7 +101,7 @@
     .car-card:hover .car-img-wrap img { transform: scale(1.05); }
     .car-img-fallback { font-size: 5rem; opacity: 0.4; }
     .car-body { padding: 1.5rem; }
-    .car-name { font-size: 1.2rem; font-weight: 700; color: #0d1b2a; margin-bottom: 1rem; }
+    .car-name { font-size: 1.2rem; font-weight: 700; color: #ffffff; margin-bottom: 1rem; }
     .car-specs { list-style: none; margin-bottom: 1.2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem 0.8rem; }
     .car-specs li { font-size: 0.83rem; color: #7a7a9a; display: flex; align-items: center; gap: 0.35rem; }
     .car-price { font-size: 1.5rem; font-weight: 800; color: var(--gold); margin-bottom: 1.2rem; font-family: 'Playfair Display', serif; }
@@ -140,10 +140,10 @@
 
 <header>
   <nav>
-    <div class="logo"><span>🏎</span> AutoShop</div>
+    <div class="logo"><span>🚗</span> AutoShowroom</div>
     <ul class="menu" id="mainMenu">
       <li><a href="index.html">Trang Chủ</a></li>
-      <li><a href="ban-xe.html" class="active">Bán Xe</a></li>
+      <li><a href="ban-xe.html" class="active">Mua Xe</a></li>
       <li><a href="dich-vu.html">Dịch Vụ</a></li>
       <li><a href="lien-he.html">Liên Hệ</a></li>
       <li><a href="dang-ban-xe.html">Đăng Bán Xe</a></li>
@@ -156,15 +156,15 @@
 </header>
 
 <div class="page-hero">
-  <h1>Xe <span>Đang Bán</span></h1>
-  <p>Tìm chiếc xe hoàn hảo từ kho hàng chất lượng đã kiểm định</p>
+  <h1>Xe <span>Cần Mua</span></h1>
+  <p>Hàng nghìn tin đăng từ người bán cá nhân & doanh nghiệp — đã được kiểm duyệt</p>
 </div>
 
 <div class="container">
   <div class="breadcrumb">
     <a href="index.html">Trang Chủ</a>
     <span>›</span>
-    <span>Xe Đang Bán</span>
+    <span>Mua Xe</span>
   </div>
 
   <!-- FILTER PANEL -->
@@ -182,16 +182,29 @@
           <option value="honda">Honda</option>
           <option value="mazda">Mazda</option>
           <option value="hyundai">Hyundai</option>
+          <option value="kia">KIA</option>
+          <option value="vinfast">VinFast</option>
+          <option value="bmw">BMW</option>
+          <option value="mercedes">Mercedes-Benz</option>
+          <option value="ford">Ford</option>
+          <option value="mitsubishi">Mitsubishi</option>
+          <option value="nissan">Nissan</option>
+          <option value="suzuki">Suzuki</option>
         </select>
       </div>
       <div class="filter-group">
         <label>Năm Sản Xuất</label>
         <select id="year" onchange="filterCars()">
           <option value="">Tất cả năm</option>
+          <option value="2026">2026</option>
+          <option value="2025">2025</option>
+          <option value="2024">2024</option>
           <option value="2023">2023</option>
           <option value="2022">2022</option>
           <option value="2021">2021</option>
           <option value="2020">2020</option>
+          <option value="2019">2019</option>
+          <option value="2018">2018</option>
         </select>
       </div>
       <div class="filter-group">
@@ -199,7 +212,9 @@
         <select id="fuel" onchange="filterCars()">
           <option value="">Tất cả loại</option>
           <option value="xăng">Xăng</option>
-          <option value="dầu">Dầu</option>
+          <option value="dầu">Dầu / Diesel</option>
+          <option value="điện">Điện</option>
+          <option value="hybrid">Hybrid</option>
         </select>
       </div>
       <div class="filter-group">
@@ -207,6 +222,7 @@
         <select id="transmission" onchange="filterCars()">
           <option value="">Tất cả</option>
           <option value="tự động">Tự động</option>
+          <option value="bán tự động">Bán tự động (CVT)</option>
           <option value="số sàn">Số sàn</option>
         </select>
       </div>
@@ -250,8 +266,8 @@
 </div>
 
 <footer>
-  <p><strong>AutoShop</strong> — Xe Chất Lượng · Dịch Vụ Tận Tâm</p>
-  <p>© 2026 AutoShop. Bản quyền thuộc về chúng tôi</p>
+  <p><strong>AutoMarket</strong> — Sàn Giao Dịch Xe Trung Gian Uy Tín</p>
+  <p>© 2026 AutoMarket. Bản quyền thuộc về chúng tôi</p>
 </footer>
 
 <div class="floating-contact">
@@ -286,7 +302,7 @@ function filterCars(){
     const b=card.dataset.brand, y=card.dataset.year, f=card.dataset.fuel, t=card.dataset.transmission, p=parseInt(card.dataset.price);
     const ok=(!search||name.includes(search)||b.includes(search))&&
               (!brand||b===brand)&&(!year||y===year)&&
-              (!fuel||f===fuel)&&(!trans||t===trans)&&p<=maxPrice;
+              (!fuel||f.toLowerCase().includes(fuel.toLowerCase()))&&(!trans||t.toLowerCase().includes(trans.toLowerCase()))&&p<=maxPrice;
     card.style.display=ok?'':'none';
     if(ok)visible++;
   });
@@ -320,7 +336,7 @@ document.getElementById('searchInput').addEventListener('keypress',e=>{if(e.key=
 <script src="chatbot.js"></script>
 <script src="chatbox.js"></script>
 
-<script src="api.js"></script>
+<script src="Api.js"></script>
 <script>
 // ── TẢI XE TỪ API ──
 let allCars = [];
@@ -429,8 +445,8 @@ async function filterCars() {
     return (!search || name.includes(search) || (car.brand||'').toLowerCase().includes(search))
       && (!brand || (car.brand||'').toLowerCase() === brand)
       && (!year  || car.year === year)
-      && (!fuel  || car.fuel === fuel)
-      && (!trans || car.transmission === trans)
+      && (!fuel  || (car.fuel||'').toLowerCase().includes(fuel.toLowerCase()))
+      && (!trans || (car.transmission||'').toLowerCase().includes(trans.toLowerCase()))
       && (car.price || 0) <= maxP;
   });
   renderCars(filtered);

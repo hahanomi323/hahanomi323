@@ -40,14 +40,14 @@
 
     .auth-logo { text-align: center; margin-bottom: 2rem; }
     .auth-logo .icon { font-size: 3rem; display: block; margin-bottom: 0.5rem; }
-    .auth-logo h2 { font-family: 'Playfair Display', serif; font-size: 1.7rem; color: #0d1b2a; }
-    .auth-logo p { color: var(--text-muted); font-size: 0.9rem; margin-top: 0.3rem; }
+    .auth-logo h2 { font-family: 'Playfair Display', serif; font-size: 1.7rem; color: #ffffff; }
+    .auth-logo p { color: #94a3b8; font-size: 0.9rem; margin-top: 0.3rem; }
 
     .social-login { display: flex; gap: 0.8rem; margin-bottom: 1.5rem; }
     .btn-social {
       flex: 1; padding: 0.75rem; border: 1.5px solid var(--border);
       border-radius: var(--radius); background: var(--dark3); cursor: pointer;
-      font-size: 0.85rem; font-weight: 600; color: #1a1a2e;
+      font-size: 0.85rem; font-weight: 600; color: #e2e8f0;
       transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.5rem;
       font-family: 'Be Vietnam Pro', sans-serif;
     }
@@ -55,7 +55,7 @@
 
     .divider {
       text-align: center; position: relative; margin: 1.2rem 0;
-      color: var(--text-muted); font-size: 0.82rem;
+      color: #94a3b8; font-size: 0.82rem;
     }
     .divider::before, .divider::after {
       content: ''; position: absolute; top: 50%; width: 42%; height: 1px; background: var(--border);
@@ -64,14 +64,32 @@
 
     /* FORM */
     .auth-panel .form-group label {
-      font-size: 0.82rem; font-weight: 700; color: var(--text-muted);
+      font-size: 0.82rem; font-weight: 700; color: #e2e8f0;
       text-transform: uppercase; letter-spacing: 0.5px;
     }
     .input-wrapper { position: relative; }
     .input-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 0.95rem; pointer-events: none; z-index: 1; }
     .auth-panel .form-group input, .auth-panel .form-group select {
-      padding-left: 2.8rem; background: #faf8f4; border-color: rgba(13,27,42,0.12);
+      padding-left: 2.8rem;
+      background: var(--dark3) !important;
+      border-color: rgba(255,255,255,0.08) !important;
+      color: var(--text) !important;
+      -webkit-text-fill-color: var(--text) !important;
     }
+    .auth-panel .form-group input[type="password"],
+    .auth-panel .form-group input[type="text"],
+    .auth-panel .form-group input[type="email"],
+    .auth-panel .form-group input[type="tel"] {
+      background: var(--dark3) !important;
+      color: #f4f4f6 !important;
+      -webkit-text-fill-color: #f4f4f6 !important;
+    }
+    .auth-panel .form-group input::placeholder { color: rgba(138,138,154,0.6) !important; opacity: 1; }
+    .auth-panel .form-group input:-webkit-autofill {
+      -webkit-box-shadow: 0 0 0 100px var(--dark3) inset !important;
+      -webkit-text-fill-color: #f4f4f6 !important;
+    }
+    .auth-panel .form-group select { color: #f4f4f6 !important; background: var(--dark3) !important; }
     .toggle-pw {
       position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
       cursor: pointer; font-size: 0.95rem; color: var(--text-muted); user-select: none;
@@ -87,7 +105,7 @@
     }
     .checkbox-wrap { display: flex; align-items: center; gap: 0.5rem; }
     .checkbox-wrap input[type=checkbox] { width: 16px; height: 16px; accent-color: var(--gold); cursor: pointer; }
-    .checkbox-wrap label { font-size: 0.85rem; color: var(--text-muted); cursor: pointer; }
+    .checkbox-wrap label { font-size: 0.85rem; color: #cbd5e1; cursor: pointer; }
     .forgot-link { font-size: 0.85rem; color: var(--gold); font-weight: 600; }
     .forgot-link:hover { text-decoration: underline; }
 
@@ -120,7 +138,7 @@
     .alert.error { background: #fff0ee; border: 1px solid rgba(232,48,26,0.3); color: #c42410; display: block; }
     .alert.success { background: #f0fdf4; border: 1px solid rgba(22,163,74,0.35); color: #16a34a; display: block; }
 
-    .switch-tab { text-align: center; margin-top: 1.5rem; font-size: 0.88rem; color: var(--text-muted); }
+    .switch-tab { text-align: center; margin-top: 1.5rem; font-size: 0.88rem; color: #cbd5e1; }
     .switch-tab a { color: var(--gold); font-weight: 700; cursor: pointer; }
     .switch-tab a:hover { text-decoration: underline; }
 
@@ -135,7 +153,7 @@
       display: flex; align-items: center; justify-content: center;
       font-size: 2rem; margin: 0 auto 1.2rem;
     }
-    .user-panel h2 { color: #0d1b2a; font-size: 1.4rem; margin-bottom: 0.3rem; }
+    .user-panel h2 { color: #ffffff; font-size: 1.4rem; margin-bottom: 0.3rem; }
     .user-panel p { color: var(--text-muted); margin-bottom: 2rem; }
     .user-actions { display: flex; flex-direction: column; gap: 0.8rem; }
     .btn-action {
@@ -144,11 +162,144 @@
       text-align: center;
     }
     .btn-action.primary { background: linear-gradient(135deg, var(--gold), var(--gold-dark)); color: var(--dark); border: none; }
-    .btn-action.secondary { background: transparent; color: #1a1a2e; border: 1.5px solid var(--border); }
+    .btn-action.secondary { background: transparent; color: #e2e8f0; border: 1.5px solid var(--border); }
     .btn-action.danger { background: transparent; color: #e63946; border: 1.5px solid rgba(230,57,70,0.3); }
     .btn-action:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
 
     @media(max-width:480px){ .auth-panel { padding: 1.8rem 1.2rem; } .form-row-2 { grid-template-columns: 1fr; } .social-login { flex-direction: column; } }
+
+    /* ══ MODAL THÔNG TIN ══ */
+    .info-overlay {
+      display:none; position:fixed; inset:0; z-index:9999;
+      background:rgba(0,0,0,0.78); backdrop-filter:blur(5px);
+      align-items:center; justify-content:center; padding:1rem;
+    }
+    .info-overlay.open { display:flex; }
+    .info-modal {
+      background:#12121e; border:1px solid rgba(212,175,55,0.25);
+      border-radius:20px; width:100%; max-width:640px;
+      max-height:90vh; overflow-y:auto;
+      box-shadow:0 30px 80px rgba(0,0,0,0.8);
+      animation:slideUp .3s ease;
+    }
+    @keyframes slideUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:none} }
+
+    .im-head {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:1.3rem 1.7rem; border-bottom:1px solid rgba(255,255,255,0.07);
+      position:sticky; top:0; background:#12121e; z-index:2; border-radius:20px 20px 0 0;
+    }
+    .im-head h3 { color:var(--gold); font-size:1.1rem; font-weight:700; margin:0; }
+    .im-close {
+      background:rgba(255,255,255,0.07); border:none; color:#94a3b8;
+      width:30px; height:30px; border-radius:50%; cursor:pointer; font-size:.9rem;
+      display:flex; align-items:center; justify-content:center; transition:all .2s;
+    }
+    .im-close:hover { background:rgba(230,57,70,.2); color:#e63946; }
+
+    .im-tabs { display:flex; border-bottom:1px solid rgba(255,255,255,0.07); padding:0 1.7rem; }
+    .im-tab {
+      padding:.85rem 1.1rem; font-size:.87rem; font-weight:600; cursor:pointer;
+      background:none; border:none; color:#64748b; font-family:'Be Vietnam Pro',sans-serif;
+      border-bottom:2px solid transparent; transition:all .2s; white-space:nowrap;
+    }
+    .im-tab.active { color:var(--gold); border-bottom-color:var(--gold); }
+    .im-body { padding:1.5rem 1.7rem; }
+    .im-sec { display:none; }
+    .im-sec.active { display:block; }
+
+    /* ── Danh sách xe ── */
+    .car-list { display:flex; flex-direction:column; gap:.85rem; }
+    .car-item {
+      background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08);
+      border-radius:12px; padding:1rem 1.1rem;
+      display:flex; align-items:center; gap:.9rem; transition:border-color .2s;
+    }
+    .car-item:hover { border-color:rgba(212,175,55,.3); }
+    .car-img {
+      width:88px; height:66px; border-radius:8px; flex-shrink:0;
+      object-fit:cover; background:rgba(255,255,255,.05);
+    }
+    .car-img-placeholder {
+      width:88px; height:66px; border-radius:8px; flex-shrink:0;
+      background:rgba(255,255,255,.05); display:flex; align-items:center;
+      justify-content:center; font-size:1.7rem;
+    }
+    .car-info { flex:1; min-width:0; }
+    .car-info h4 {
+      color:#f1f5f9; font-size:.93rem; font-weight:700; margin:0 0 .35rem;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .car-meta { display:flex; gap:.5rem; flex-wrap:wrap; }
+    .cbadge { font-size:.7rem; padding:2px 9px; border-radius:20px; font-weight:700; }
+    .cb-price { background:rgba(212,175,55,.15); color:var(--gold); }
+    .cb-year  { background:rgba(255,255,255,.07); color:#94a3b8; }
+    .cb-active{ background:rgba(22,163,74,.15); color:#4ade80; }
+    .cb-pending{background:rgba(234,179,8,.15); color:#facc15; }
+    .cb-sold  { background:rgba(230,57,70,.15); color:#f87171; }
+    .car-btns { display:flex; gap:.45rem; flex-shrink:0; }
+    .cbtn {
+      padding:.4rem .85rem; border-radius:8px; font-size:.78rem; font-weight:700;
+      cursor:pointer; border:none; font-family:'Be Vietnam Pro',sans-serif; transition:all .2s;
+    }
+    .cbtn-del { background:rgba(230,57,70,.12); color:#f87171; border:1px solid rgba(230,57,70,.25); }
+    .cbtn-del:hover { background:rgba(230,57,70,.28); transform:translateY(-1px); }
+
+    .empty-cars { text-align:center; padding:3rem 1rem; color:#64748b; }
+    .empty-cars .ei { font-size:3rem; margin-bottom:.8rem; }
+    .empty-cars p { font-size:.9rem; }
+    .empty-cars a { color:var(--gold); font-weight:700; }
+
+    .cars-loading { text-align:center; padding:2.5rem; color:#64748b; font-size:.9rem; }
+
+    /* ── Form chỉnh sửa ── */
+    .ef-title {
+      font-size:.78rem; font-weight:700; color:var(--gold); text-transform:uppercase;
+      letter-spacing:.8px; margin:1.4rem 0 .9rem; padding-bottom:.45rem;
+      border-bottom:1px solid rgba(212,175,55,.15);
+    }
+    .ef-title:first-child { margin-top:0; }
+    .ef-group { margin-bottom:1rem; }
+    .ef-group label { display:block; font-size:.78rem; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:.5px; margin-bottom:.38rem; }
+    .ef-group input {
+      width:100%; padding:.72rem 1rem;
+      background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1);
+      border-radius:10px; color:#f1f5f9; font-size:.9rem;
+      font-family:'Be Vietnam Pro',sans-serif; transition:border-color .2s;
+    }
+    .ef-group input:focus { outline:none; border-color:var(--gold); background:rgba(212,175,55,.04); }
+    .btn-save-acc {
+      width:100%; padding:.85rem; border-radius:10px; font-size:.95rem; font-weight:700;
+      background:linear-gradient(135deg,var(--gold),var(--gold-dark)); color:var(--dark);
+      border:none; cursor:pointer; font-family:'Be Vietnam Pro',sans-serif;
+      transition:all .3s; margin-top:.3rem;
+    }
+    .btn-save-acc:hover { transform:translateY(-2px); box-shadow:var(--shadow-gold); }
+    .btn-save-acc:disabled { opacity:.6; cursor:not-allowed; transform:none; }
+    .save-result { text-align:center; font-size:.85rem; margin-top:.75rem; min-height:1.2em; }
+    .save-result.ok  { color:#4ade80; }
+    .save-result.err { color:#f87171; }
+
+    /* ── Confirm xóa ── */
+    .cfm-overlay {
+      display:none; position:fixed; inset:0; z-index:10000;
+      background:rgba(0,0,0,.65); align-items:center; justify-content:center;
+    }
+    .cfm-overlay.open { display:flex; }
+    .cfm-box {
+      background:#1c1c2e; border:1px solid rgba(230,57,70,.3); border-radius:16px;
+      padding:2rem 1.8rem; max-width:360px; width:90%; text-align:center;
+      box-shadow:0 20px 60px rgba(0,0,0,.7); animation:slideUp .22s ease;
+    }
+    .cfm-box .ci { font-size:2.5rem; margin-bottom:.9rem; }
+    .cfm-box h4 { color:#f1f5f9; font-size:1.05rem; margin-bottom:.4rem; }
+    .cfm-box p  { color:#94a3b8; font-size:.87rem; margin-bottom:1.5rem; }
+    .cfm-btns { display:flex; gap:.75rem; }
+    .cfm-btns button { flex:1; padding:.75rem; border-radius:10px; font-size:.9rem; font-weight:700; cursor:pointer; font-family:'Be Vietnam Pro',sans-serif; border:none; transition:all .2s; }
+    .cfm-cancel { background:rgba(255,255,255,.08); color:#cbd5e1; }
+    .cfm-cancel:hover { background:rgba(255,255,255,.15); }
+    .cfm-ok { background:linear-gradient(135deg,#e63946,#c42410); color:#fff; }
+    .cfm-ok:hover { transform:translateY(-1px); box-shadow:0 5px 15px rgba(230,57,70,.45); }
   </style>
 </head>
 <body>
@@ -179,6 +330,7 @@
       <div class="user-actions">
         <a href="dang-ban-xe.html" class="btn-action primary">🚗 Đăng Bán Xe</a>
         <a href="ban-xe.html" class="btn-action secondary">🔍 Xem Xe Đang Bán</a>
+        <button class="btn-action secondary" onclick="openInfoModal()" style="border-color:rgba(212,175,55,0.4);color:var(--gold);">📋 Thông Tin Tài Khoản</button>
         <button class="btn-action danger" onclick="logout()">🚪 Đăng Xuất</button>
       </div>
     </div>
@@ -320,6 +472,75 @@
   </div>
 </div>
 
+<!-- ══ MODAL THÔNG TIN TÀI KHOẢN ══ -->
+<div class="info-overlay" id="infoOverlay" onclick="closeInfoOutside(event)">
+  <div class="info-modal">
+    <div class="im-head">
+      <h3>📋 Thông Tin Tài Khoản</h3>
+      <button class="im-close" onclick="closeInfoModal()">✕</button>
+    </div>
+    <div class="im-tabs">
+      <button class="im-tab active" onclick="switchImTab('cars')">🚗 Xe Đã Đăng</button>
+      <button class="im-tab" onclick="switchImTab('edit')">✏️ Chỉnh Sửa Tài Khoản</button>
+    </div>
+    <div class="im-body">
+
+      <!-- Tab xe đã đăng -->
+      <div class="im-sec active" id="imCars">
+        <div id="carListWrap"><div class="cars-loading">⏳ Đang tải danh sách xe...</div></div>
+      </div>
+
+      <!-- Tab chỉnh sửa tài khoản -->
+      <div class="im-sec" id="imEdit">
+        <div class="ef-title">📋 Thông Tin Cá Nhân</div>
+        <div class="ef-group">
+          <label>Họ và Tên</label>
+          <input type="text" id="efName" placeholder="Họ và tên">
+        </div>
+        <div class="ef-group">
+          <label>Email</label>
+          <input type="email" id="efEmail" placeholder="Email">
+        </div>
+        <div class="ef-group">
+          <label>Số điện thoại</label>
+          <input type="tel" id="efPhone" placeholder="SĐT">
+        </div>
+
+        <div class="ef-title">🔐 Đổi Mật Khẩu <span style="font-size:.74rem;color:#475569;font-weight:400;text-transform:none;letter-spacing:0">(bỏ trống nếu không đổi)</span></div>
+        <div class="ef-group">
+          <label>Mật khẩu hiện tại</label>
+          <input type="password" id="efCurPw" placeholder="Nhập mật khẩu hiện tại">
+        </div>
+        <div class="ef-group">
+          <label>Mật khẩu mới</label>
+          <input type="password" id="efNewPw" placeholder="Tối thiểu 8 ký tự">
+        </div>
+        <div class="ef-group">
+          <label>Xác nhận mật khẩu mới</label>
+          <input type="password" id="efCfPw" placeholder="Nhập lại mật khẩu mới">
+        </div>
+
+        <button class="btn-save-acc" id="btnSaveAcc" onclick="saveAccount()">💾 Lưu Thay Đổi</button>
+        <div class="save-result" id="saveResult"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══ CONFIRM XÓA ══ -->
+<div class="cfm-overlay" id="cfmOverlay">
+  <div class="cfm-box">
+    <div class="ci">🗑️</div>
+    <h4>Xóa bài đăng?</h4>
+    <p id="cfmMsg">Hành động này không thể hoàn tác.</p>
+    <div class="cfm-btns">
+      <button class="cfm-cancel" onclick="closeCfm()">Hủy</button>
+      <button class="cfm-ok" id="cfmOkBtn" onclick="doDelete()">Xóa</button>
+    </div>
+  </div>
+</div>
+
 <footer style="position:relative;z-index:1;">
   <p>© 2026 <strong>AutoShop</strong>. Bản quyền thuộc về chúng tôi</p>
 </footer>
@@ -332,7 +553,7 @@
 </div>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
-<script src="api.js"></script>
+<script src="Api.js"></script>
 <script>
 // ── HIỂN THỊ TRẠNG THÁI ĐÃ ĐĂNG NHẬP ──
 document.addEventListener('DOMContentLoaded', function() {
@@ -474,4 +695,182 @@ document.getElementById('registerForm').addEventListener('submit', async functio
 
 function socialLogin(p) { alert('Tính năng đăng nhập ' + (p==='google'?'Google':'Facebook') + ' đang phát triển!'); }
 function showForgot() { alert('Vui lòng liên hệ admin@autoshop.vn để lấy lại mật khẩu.'); }
+
+// ══ MODAL THÔNG TIN ══
+let _carIdToDelete = null;
+
+function openInfoModal() {
+  document.getElementById('infoOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  loadMyCars();
+  fillEditForm();
+}
+function closeInfoModal() {
+  document.getElementById('infoOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeInfoOutside(e) {
+  if (e.target === document.getElementById('infoOverlay')) closeInfoModal();
+}
+function switchImTab(t) {
+  document.querySelectorAll('.im-tab').forEach((el,i) =>
+    el.classList.toggle('active', (t==='cars'&&i===0)||(t==='edit'&&i===1)));
+  document.getElementById('imCars').classList.toggle('active', t==='cars');
+  document.getElementById('imEdit').classList.toggle('active', t==='edit');
+}
+
+// ── Tải xe của tôi từ API ──
+async function loadMyCars() {
+  const wrap = document.getElementById('carListWrap');
+  wrap.innerHTML = '<div class="cars-loading">⏳ Đang tải danh sách xe...</div>';
+  try {
+    const cars = await Cars.getMyCars();   // GET /api/my/cars — dùng token từ localStorage
+    if (!cars || cars.length === 0) {
+      wrap.innerHTML = `
+        <div class="empty-cars">
+          <div class="ei">🚗</div>
+          <p>Bạn chưa có bài đăng xe nào.</p>
+          <p><a href="dang-ban-xe.html">Đăng bán xe ngay →</a></p>
+        </div>`;
+      return;
+    }
+    renderCars(cars, wrap);
+  } catch (err) {
+    wrap.innerHTML = `<div class="cars-loading" style="color:#f87171">❌ Không tải được dữ liệu: ${err.message}</div>`;
+  }
+}
+
+function statusBadge(s) {
+  if (s === 'active')  return '<span class="cbadge cb-active">● Đang bán</span>';
+  if (s === 'sold')    return '<span class="cbadge cb-sold">✓ Đã bán</span>';
+  if (s === 'pending') return '<span class="cbadge cb-pending">⏳ Chờ duyệt</span>';
+  return `<span class="cbadge cb-year">${s}</span>`;
+}
+
+function renderCars(cars, wrap) {
+  wrap.innerHTML = '<div class="car-list">' + cars.map(c => {
+    const photos = (() => { try { return JSON.parse(c.photos || '[]'); } catch { return []; } })();
+    const thumb  = photos.length
+      ? `<img class="car-img" src="${photos[0]}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+        + `<div class="car-img-placeholder" style="display:none">🚗</div>`
+      : `<div class="car-img-placeholder">🚗</div>`;
+    const price = c.price ? Number(c.price).toLocaleString('vi-VN') + ' ₫' : 'Liên hệ';
+    return `
+      <div class="car-item" id="ci-${c.id}">
+        ${thumb}
+        <div class="car-info">
+          <h4>${c.title || c.brand + ' ' + c.model || 'Xe không tên'}</h4>
+          <div class="car-meta">
+            <span class="cbadge cb-price">${price}</span>
+            ${c.year ? `<span class="cbadge cb-year">${c.year}</span>` : ''}
+            ${statusBadge(c.status)}
+          </div>
+        </div>
+        <div class="car-btns">
+          <button class="cbtn cbtn-del" onclick="askDelete('${c.id}','${(c.title||'xe này').replace(/'/g,"\\'")}')">🗑️ Xóa</button>
+        </div>
+      </div>`;
+  }).join('') + '</div>';
+}
+
+// ── Xóa xe ──
+function askDelete(id, title) {
+  _carIdToDelete = id;
+  document.getElementById('cfmMsg').textContent = `Xóa bài "${title}"? Hành động này không thể hoàn tác.`;
+  document.getElementById('cfmOverlay').classList.add('open');
+}
+function closeCfm() {
+  _carIdToDelete = null;
+  document.getElementById('cfmOverlay').classList.remove('open');
+}
+async function doDelete() {
+  if (!_carIdToDelete) return;
+  const btn = document.getElementById('cfmOkBtn');
+  btn.textContent = '⏳'; btn.disabled = true;
+  try {
+    await Cars.delete(_carIdToDelete);   // DELETE /api/cars/:id — có token xác thực
+    const el = document.getElementById('ci-' + _carIdToDelete);
+    if (el) {
+      el.style.transition = 'all .3s';
+      el.style.opacity = '0';
+      el.style.transform = 'translateX(-16px)';
+      setTimeout(() => {
+        el.remove();
+        // Nếu không còn xe nào
+        const list = document.querySelector('.car-list');
+        if (list && !list.children.length) loadMyCars();
+      }, 320);
+    }
+  } catch (err) {
+    alert('❌ Xóa thất bại: ' + err.message);
+  } finally {
+    btn.textContent = 'Xóa'; btn.disabled = false;
+    closeCfm();
+  }
+}
+
+// ── Chỉnh sửa tài khoản ──
+function fillEditForm() {
+  const u = Auth.getUser();
+  if (!u) return;
+  document.getElementById('efName').value  = u.name  || '';
+  document.getElementById('efEmail').value = u.email || '';
+  document.getElementById('efPhone').value = u.phone || '';
+  document.getElementById('efCurPw').value = '';
+  document.getElementById('efNewPw').value = '';
+  document.getElementById('efCfPw').value  = '';
+  document.getElementById('saveResult').textContent = '';
+  document.getElementById('saveResult').className = 'save-result';
+}
+
+async function saveAccount() {
+  const res   = document.getElementById('saveResult');
+  const btn   = document.getElementById('btnSaveAcc');
+  const name  = document.getElementById('efName').value.trim();
+  const email = document.getElementById('efEmail').value.trim();
+  const phone = document.getElementById('efPhone').value.trim();
+  const curPw = document.getElementById('efCurPw').value;
+  const newPw = document.getElementById('efNewPw').value;
+  const cfPw  = document.getElementById('efCfPw').value;
+
+  res.className = 'save-result'; res.textContent = '';
+
+  if (!name)  { res.className='save-result err'; res.textContent='❌ Vui lòng nhập họ tên.'; return; }
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+              { res.className='save-result err'; res.textContent='❌ Email không hợp lệ.'; return; }
+  if (newPw && !curPw) { res.className='save-result err'; res.textContent='❌ Nhập mật khẩu hiện tại để đổi mật khẩu.'; return; }
+  if (newPw && newPw.length < 8) { res.className='save-result err'; res.textContent='❌ Mật khẩu mới tối thiểu 8 ký tự.'; return; }
+  if (newPw && newPw !== cfPw)   { res.className='save-result err'; res.textContent='❌ Mật khẩu mới không khớp.'; return; }
+
+  btn.disabled = true; btn.textContent = '⏳ Đang lưu...';
+
+  try {
+    const payload = { name, email, phone };
+    if (newPw) { payload.currentPassword = curPw; payload.newPassword = newPw; }
+
+    // Gọi API cập nhật user — server.js chưa có route này, xem ghi chú bên dưới
+    await apiCall('/user/update', 'PUT', payload);
+
+    // Cập nhật localStorage
+    const u = Auth.getUser();
+    const updated = { ...u, name, email, phone };
+    localStorage.setItem('autoshop_user', JSON.stringify(updated));
+
+    // Cập nhật giao diện trang
+    document.getElementById('welcomeName').textContent  = 'Xin chào, ' + name + '!';
+    document.getElementById('welcomeEmail').textContent = email;
+    document.getElementById('userAvatar').textContent   = name.split(' ').pop().charAt(0).toUpperCase();
+
+    res.className = 'save-result ok';
+    res.textContent = '✅ Cập nhật thành công!';
+    document.getElementById('efCurPw').value = '';
+    document.getElementById('efNewPw').value = '';
+    document.getElementById('efCfPw').value  = '';
+  } catch (err) {
+    res.className = 'save-result err';
+    res.textContent = '❌ ' + err.message;
+  } finally {
+    btn.disabled = false; btn.textContent = '💾 Lưu Thay Đổi';
+  }
+}
 </script>

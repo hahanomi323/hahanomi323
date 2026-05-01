@@ -311,15 +311,26 @@ document.addEventListener('DOMContentLoaded', async () => {
 // ── Hàm lấy xe liên quan từ API ────────────────────────────────────────────
 async function fetchRelatedCars(currentCar) {
   try {
+    // Bước 1: Lấy xe cùng hãng
     const res = await fetch(`${API_BASE}/cars?status=active&brand=${encodeURIComponent(currentCar.brand||'')}`);
-    if(!res.ok) return [];
-    const data = await res.json();
-    // server.js trả về { success: true, data: [...] }
-    const list = data.data || [];
-    return list
+    const data = res.ok ? await res.json() : { data: [] };
+    const sameBrand = (data.data || [])
       .map(r => mapCarFromDB(r))
-      .filter(c => String(c.id) !== String(currentCar.id))
-      .slice(0, 4);
+      .filter(c => String(c.id) !== String(currentCar.id));
+
+    if (sameBrand.length >= 5) return sameBrand.slice(0, 5);
+
+    // Bước 2: Nếu chưa đủ 5, lấy thêm xe hãng khác để bù vào
+    const needed = 5 - sameBrand.length;
+    const res2 = await fetch(`${API_BASE}/cars?status=active`);
+    const data2 = res2.ok ? await res2.json() : { data: [] };
+    const sameBrandIds = new Set(sameBrand.map(c => String(c.id)));
+    const others = (data2.data || [])
+      .map(r => mapCarFromDB(r))
+      .filter(c => String(c.id) !== String(currentCar.id) && !sameBrandIds.has(String(c.id)))
+      .slice(0, needed);
+
+    return [...sameBrand, ...others];
   } catch(e) {
     return [];
   }

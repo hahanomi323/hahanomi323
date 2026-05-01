@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AutoShop — Xe Chất Lượng Bình Dương</title>
+  <title>AutoMarket — Sàn Giao Dịch Xe Ô Tô #1 Bình Dương</title>
   <link rel="stylesheet" href="style.css">
   <style>
     /* ===== HERO ===== */
@@ -62,18 +62,23 @@
     }
     .stats-grid {
       max-width: 1000px; margin: 0 auto;
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1px;
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
       background: rgba(255,255,255,0.08);
     }
     .stat-item {
       background: #0f0f0f; padding: 2.5rem 1.5rem; text-align: center;
       transition: background 0.3s;
+      min-width: 0;
+      overflow: hidden;
     }
     .stat-item:hover { background: #1a1a1a; }
     .stat-number {
       font-family: 'Playfair Display', serif;
       font-size: 3rem; font-weight: 800; color: var(--red);
       line-height: 1; margin-bottom: 0.5rem;
+      font-variant-numeric: tabular-nums;
+      min-width: 160px;
+      display: block;
     }
     .stat-label { font-size: 0.9rem; color: #999999; font-weight: 600; }
 
@@ -191,11 +196,11 @@
 <header>
   <nav>
     <div class="logo">
-      <span>🏎</span> AutoShop
+      <span>🚗</span> AutoShowroom
     </div>
     <ul class="menu" id="mainMenu">
       <li><a href="index.html" class="active">Trang Chủ</a></li>
-      <li><a href="ban-xe.html">Bán Xe</a></li>
+      <li><a href="ban-xe.html">Mua Xe</a></li>
       <li><a href="dich-vu.html">Dịch Vụ</a></li>
       <li><a href="lien-he.html">Liên Hệ</a></li>
       <li><a href="dang-ban-xe.html">Đăng Bán Xe</a></li>
@@ -216,12 +221,12 @@
   </div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
-    <div class="hero-tag">✦ Showroom Uy Tín Tại Bình Dương</div>
-    <h1>Tìm Chiếc Xe<br><span>Hoàn Hảo</span> Của Bạn</h1>
-    <p>Xe chất lượng kiểm định kỹ lưỡng · Giá cả minh bạch · Hỗ trợ vay vốn tận tâm</p>
+    <div class="hero-tag">✦ Sàn Giao Dịch Xe Trung Gian Uy Tín Tại Bình Dương</div>
+    <h1>Mua & Bán Xe<br><span>Nhanh Chóng</span> Uy Tín</h1>
+    <p>Kết nối người mua & người bán · Kiểm định độc lập · Giao dịch an toàn minh bạch</p>
     <div class="hero-actions">
-      <a href="ban-xe.html" class="btn btn-gold">🚗 Xem Xe Ngay</a>
-      <a href="lien-he.html" class="btn btn-outline">📞 Liên Hệ Tư Vấn</a>
+      <a href="ban-xe.html" class="btn btn-gold">🔍 Tìm Xe Ngay</a>
+      <a href="dang-ban-xe.html" class="btn btn-outline">📋 Đăng Bán Xe</a>
     </div>
   </div>
   <div class="hero-scroll">
@@ -235,15 +240,15 @@
   <div class="stats-grid">
     <div class="stat-item">
       <div class="stat-number" id="stat1">0</div>
-      <div class="stat-label">Xe Đã Bán</div>
+      <div class="stat-label">Tin Đăng Xe</div>
     </div>
     <div class="stat-item">
       <div class="stat-number" id="stat2">0</div>
-      <div class="stat-label">Khách Hàng Tin Dùng</div>
+      <div class="stat-label">Giao Dịch Thành Công</div>
     </div>
     <div class="stat-item">
       <div class="stat-number" id="stat3">0</div>
-      <div class="stat-label">Năm Kinh Nghiệm</div>
+      <div class="stat-label">Năm Hoạt Động</div>
     </div>
     <div class="stat-item">
       <div class="stat-number" id="stat4">0</div>
@@ -255,27 +260,27 @@
 <!-- FEATURES -->
 <section class="features">
   <div style="max-width:1200px;margin:0 auto;">
-    <h2 class="section-title center">Tại Sao Chọn AutoShop?</h2>
+    <h2 class="section-title center">Tại Sao Chọn AutoShowroom?</h2>
     <div class="features-grid">
       <div class="feature-card">
-        <div class="feature-icon">✅</div>
-        <h3 class="feature-title">Đảm Bảo Chất Lượng</h3>
-        <p class="feature-desc">Tất cả xe được kiểm tra kỹ lưỡng 50 điểm trước khi bàn giao. Giấy tờ đầy đủ, nguồn gốc rõ ràng.</p>
+        <div class="feature-icon">🤝</div>
+        <h3 class="feature-title">Sàn Trung Gian Uy Tín</h3>
+        <p class="feature-desc">Kết nối trực tiếp người mua và người bán cá nhân. Không qua trung gian, giá thực tế, giao dịch minh bạch.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">💰</div>
-        <h3 class="feature-title">Giá Cả Minh Bạch</h3>
-        <p class="feature-desc">Cam kết giá tốt nhất thị trường, không phát sinh chi phí ẩn. Định giá công khai, thương lượng công bằng.</p>
+        <div class="feature-icon">🔍</div>
+        <h3 class="feature-title">Kiểm Định Độc Lập</h3>
+        <p class="feature-desc">Đội ngũ kiểm định chuyên nghiệp 50 điểm. Báo cáo tình trạng xe trung thực, bảo vệ quyền lợi người mua.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">🔧</div>
-        <h3 class="feature-title">Bảo Hành Uy Tín</h3>
-        <p class="feature-desc">Bảo hành động cơ & hộp số 6–12 tháng. Hỗ trợ bảo dưỡng định kỳ miễn phí theo gói.</p>
+        <div class="feature-icon">🛡️</div>
+        <h3 class="feature-title">Giao Dịch An Toàn</h3>
+        <p class="feature-desc">Hỗ trợ đặt cọc qua AutoMarket, escrow bảo vệ cả hai bên. Cam kết hoàn tiền nếu xe không đúng mô tả.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">🏦</div>
-        <h3 class="feature-title">Hỗ Trợ Vay Vốn</h3>
-        <p class="feature-desc">Hợp tác nhiều ngân hàng uy tín, vay đến 80% giá trị xe, giải ngân nhanh trong 24–48 giờ.</p>
+        <div class="feature-icon">📋</div>
+        <h3 class="feature-title">Đăng Tin Miễn Phí</h3>
+        <p class="feature-desc">Người bán đăng tin hoàn toàn miễn phí. Tiếp cận hàng nghìn người mua tiềm năng mỗi ngày.</p>
       </div>
     </div>
   </div>
@@ -288,17 +293,17 @@
     <div class="testimonial-grid">
       <div class="testimonial-card">
         <div class="testimonial-rating">★★★★★</div>
-        <p class="testimonial-text">"Mình đã mua Toyota Vios tại AutoShop, xe chất lượng, giá cả hợp lý. Nhân viên tư vấn nhiệt tình, thủ tục nhanh gọn. Rất hài lòng!"</p>
+        <p class="testimonial-text">"Mình đăng bán Toyota Vios trên AutoMarket, chỉ 3 ngày là có người liên hệ. Giao dịch nhanh gọn, được hỗ trợ làm thủ tục sang tên. Tuyệt vời!"</p>
         <div class="testimonial-author">— Anh Minh, TP.HCM</div>
       </div>
       <div class="testimonial-card">
         <div class="testimonial-rating">★★★★★</div>
-        <p class="testimonial-text">"Showroom uy tín, xe đẹp, giấy tờ đầy đủ. Được hỗ trợ vay vốn ngân hàng rất tốt. Cảm ơn AutoShop đã giúp tôi có được chiếc xe mơ ước!"</p>
+        <p class="testimonial-text">"Mua xe cũ từ cá nhân qua AutoMarket rất yên tâm nhờ có dịch vụ kiểm định độc lập. Xe đúng như mô tả, giá thấp hơn ngoài thị trường. Sẽ giới thiệu bạn bè!"</p>
         <div class="testimonial-author">— Chị Lan, Bình Dương</div>
       </div>
       <div class="testimonial-card">
         <div class="testimonial-rating">★★★★★</div>
-        <p class="testimonial-text">"Lần đầu mua xe cũ nhưng rất yên tâm với AutoShop. Xe được kiểm tra kỹ càng, bảo hành tốt. Sẽ giới thiệu bạn bè đến đây!"</p>
+        <p class="testimonial-text">"Lần đầu mua xe cũ nhưng rất yên tâm với AutoMarket. Sàn hỗ trợ đặt cọc an toàn, nếu xe không đúng mô tả được hoàn tiền ngay. Cực kỳ uy tín!"</p>
         <div class="testimonial-author">— Anh Tuấn, Đồng Nai</div>
       </div>
     </div>
@@ -312,23 +317,23 @@
     <div class="accordion">
       <div class="accordion-item">
         <input type="checkbox" id="faq1">
-        <label class="accordion-header" for="faq1">Làm thế nào để kiểm tra chất lượng xe?</label>
-        <div class="accordion-content">Chúng tôi có dịch vụ kiểm định chuyên nghiệp với 50 điểm kiểm tra, bao gồm động cơ, hộp số, gầm xe, điện, nội thất. Bạn có thể yêu cầu báo cáo chi tiết trước khi quyết định mua.</div>
+        <label class="accordion-header" for="faq1">AutoMarket có phải là showroom bán xe không?</label>
+        <div class="accordion-content">Không. AutoMarket là sàn giao dịch trung gian — chúng tôi kết nối người mua và người bán cá nhân/doanh nghiệp. Chúng tôi không sở hữu xe, mà cung cấp nền tảng và dịch vụ hỗ trợ để giao dịch diễn ra an toàn, minh bạch.</div>
       </div>
       <div class="accordion-item">
         <input type="checkbox" id="faq2">
-        <label class="accordion-header" for="faq2">Có hỗ trợ vay ngân hàng không?</label>
-        <div class="accordion-content">Có, chúng tôi hợp tác với nhiều ngân hàng uy tín. Hỗ trợ vay lên đến 80% giá trị xe với lãi suất ưu đãi. Thủ tục đơn giản, giải ngân nhanh trong 24–48 giờ.</div>
+        <label class="accordion-header" for="faq2">Làm thế nào để đăng bán xe trên AutoMarket?</label>
+        <div class="accordion-content">Rất đơn giản: Đăng ký tài khoản → Điền thông tin xe → Upload ảnh → Đăng tin. Hoàn toàn miễn phí cho tin cơ bản. Tin đăng sẽ được duyệt trong 2–4 giờ và hiển thị ngay trên sàn.</div>
       </div>
       <div class="accordion-item">
         <input type="checkbox" id="faq3">
-        <label class="accordion-header" for="faq3">Chế độ bảo hành như thế nào?</label>
-        <div class="accordion-content">Xe được bảo hành từ 6–12 tháng tùy theo dòng xe và năm sản xuất, bao gồm động cơ, hộp số và các bộ phận quan trọng. Hỗ trợ bảo dưỡng định kỳ miễn phí.</div>
+        <label class="accordion-header" for="faq3">Giao dịch qua AutoMarket có an toàn không?</label>
+        <div class="accordion-content">AutoMarket hỗ trợ đặt cọc qua tài khoản escrow trung gian, giữ tiền cọc cho đến khi cả hai bên hoàn tất giao dịch. Nếu xe không đúng mô tả, người mua được hoàn tiền cọc 100%.</div>
       </div>
       <div class="accordion-item">
         <input type="checkbox" id="faq4">
-        <label class="accordion-header" for="faq4">Có nhận thu mua xe cũ không?</label>
-        <div class="accordion-content">Có, chúng tôi nhận thu mua xe cũ với giá cao nhất thị trường. Đánh giá miễn phí, thanh toán nhanh. Hỗ trợ thu cũ đổi mới với nhiều ưu đãi hấp dẫn.</div>
+        <label class="accordion-header" for="faq4">AutoMarket có dịch vụ kiểm định xe không?</label>
+        <div class="accordion-content">Có, chúng tôi có đội ngũ kiểm định độc lập với 50 điểm kiểm tra chuyên nghiệp. Người mua có thể yêu cầu kiểm định trước khi quyết định. Báo cáo chi tiết, trung thực, bảo vệ quyền lợi người mua.</div>
       </div>
     </div>
   </div>
@@ -336,11 +341,11 @@
 
 <!-- CTA -->
 <section class="cta-section">
-  <h2>Sẵn Sàng Tìm<br><span>Chiếc Xe Của Bạn?</span></h2>
-  <p>Liên hệ ngay để được tư vấn miễn phí và hỗ trợ tận tâm 24/7</p>
+  <h2>Sẵn Sàng Mua<br><span>Hoặc Bán Xe?</span></h2>
+  <p>Tham gia AutoMarket — sàn giao dịch xe uy tín, minh bạch và an toàn nhất khu vực</p>
   <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:3rem;position:relative;">
-    <a href="ban-xe.html" class="btn btn-gold">Xem Tất Cả Xe</a>
-    <a href="lien-he.html" class="btn btn-outline">Liên Hệ Ngay</a>
+    <a href="ban-xe.html" class="btn btn-gold">🔍 Tìm Xe Mua</a>
+    <a href="dang-ban-xe.html" class="btn btn-outline">📋 Đăng Bán Xe Ngay</a>
   </div>
   <div class="cta-info">
     <div class="cta-info-item"><span>📞</span><span>Hotline: <strong style="color:var(--red)">0909 123 456</strong></span></div>
@@ -352,8 +357,8 @@
 
 <!-- FOOTER -->
 <footer>
-  <p><strong>AutoShop</strong> — Xe Chất Lượng · Dịch Vụ Tận Tâm</p>
-  <p>© 2026 AutoShop. Bản quyền thuộc về chúng tôi · Thủ Dầu Một, Bình Dương</p>
+  <p><strong>AutoMarket</strong> — Sàn Giao Dịch Xe Trung Gian Uy Tín</p>
+  <p>© 2026 AutoMarket. Bản quyền thuộc về chúng tôi · Thủ Dầu Một, Bình Dương</p>
 </footer>
 
 <!-- FLOATING CONTACT -->
@@ -367,7 +372,7 @@
 </div>
 
 <script src="chatbot.js"></script>
-<script src="api.js"></script>
+<script src="Api.js"></script>
 <script>
 // ── HAMBURGER MENU ──
 function toggleMenu() {
@@ -383,16 +388,17 @@ const counters = [
 ];
 
 function animateCounter(el, target, suffix, duration) {
-  let start = 0;
-  const step = Math.ceil(target / (duration / 16));
-  const timer = setInterval(() => {
-    start += step;
-    if (start >= target) {
-      start = target;
-      clearInterval(timer);
-    }
-    el.textContent = start.toLocaleString('vi-VN') + suffix;
-  }, 16);
+  const startTime = performance.now();
+  function update(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    // Easing ease-out: chậm dần ở cuối, không giật
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const current = Math.round(eased * target);
+    el.textContent = current.toLocaleString('vi-VN') + suffix;
+    if (progress < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
 }
 
 // Dùng IntersectionObserver để chạy counter khi section vào viewport

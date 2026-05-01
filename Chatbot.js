@@ -1,36 +1,96 @@
 /* =====================================================
-   CHATBOT.JS — AI Chat Widget dùng chung mọi trang
+   CHATBOT.JS — Đọc dữ liệu xe thật từ API (SQL Server)
+   Dùng chung mọi trang, tự động cập nhật khi DB thay đổi
    ===================================================== */
 (function () {
 
-  const CW_API_KEY = 'AIzaSyAm5thAnxXpfTvHF8g6yGZsEMGl_i8lY7I';
-  const CW_SYSTEM = `Bạn là trợ lý bán xe của AutoShop tại Thủ Dầu Một, Bình Dương.
+  const CW_API_KEY  = 'QtdNDBRFhBcg6gkq0VHMTo9d6LbRGFy0J7PAvymE';   // ← dán key Cohere vào đây
+  const API_BASE    = 'http://localhost:3000/api'; // ← giữ nguyên
 
-=== XE ĐANG BÁN ===
-1. Honda City 2022 — Màu đỏ, tự động, 22,000km → 480 triệu
-2. Toyota Vios 2023 — Màu trắng, tự động, 15,000km → 520 triệu
-3. Mazda CX-5 2023 — Màu đỏ, tự động, 15,000km → 820 triệu
-4. Hyundai Accent 2022 — Màu bạc, số sàn, 18,500km → 420 triệu
+  // Cache dữ liệu xe (10 phút tự refresh)
+  let _carCache     = null;
+  let _cacheTime    = 0;
+  const CACHE_MS    = 10 * 60 * 1000;
+
+  // ── LẤY XE TỪ API (SQL Server) ──────────────────
+  async function fetchCars() {
+    const now = Date.now();
+    if (_carCache && now - _cacheTime < CACHE_MS) return _carCache;
+
+    try {
+      const res  = await fetch(`${API_BASE}/cars?limit=100`, {
+        headers: { 'Content-Type': 'application/json' }
+      });
+      if (!res.ok) throw new Error('API lỗi ' + res.status);
+      const json = await res.json();
+      _carCache  = json.data || [];
+      _cacheTime = now;
+      return _carCache;
+    } catch (e) {
+      console.warn('[Chatbot] Không lấy được xe từ API:', e.message);
+      return _carCache || [];   // trả cache cũ nếu có
+    }
+  }
+
+  // ── CHUYỂN DATA XE → VĂN BẢN CHO AI ────────────
+  function carsToText(cars) {
+    if (!cars || cars.length === 0) return 'Hiện chưa có xe nào đang bán.';
+    return cars.slice(0, 40).map((c, i) => {
+      const gia   = c.price ? `${c.price.toLocaleString('vi-VN')} triệu VNĐ` : 'Liên hệ';
+      const km    = c.km    ? `${c.km.toLocaleString('vi-VN')} km` : 'N/A';
+      const parts = [
+        `${i + 1}. ${c.title || [c.brand, c.model, c.year].filter(Boolean).join(' ')}`,
+        c.brand        ? `   Hãng: ${c.brand}`              : null,
+        c.model        ? `   Dòng: ${c.model}`              : null,
+        c.year         ? `   Năm: ${c.year}`                : null,
+        c.color        ? `   Màu: ${c.color}`               : null,
+        `   Số km: ${km}`,
+        c.fuel         ? `   Nhiên liệu: ${c.fuel}`         : null,
+        c.transmission ? `   Hộp số: ${c.transmission}`     : null,
+        c.car_condition? `   Tình trạng: ${c.car_condition}`: null,
+        c.province     ? `   Nơi bán: ${c.province}`        : null,
+        `   Giá: ${gia}`,
+        c.price_negotiable ? '   (Có thể thương lượng)'     : null,
+        c.seller_phone ? `   Liên hệ: ${c.seller_phone}`    : null,
+      ].filter(Boolean);
+      return parts.join('\n');
+    }).join('\n\n');
+  }
+
+  // ── BUILD SYSTEM PROMPT ──────────────────────────
+  async function buildPrompt() {
+    const cars    = await fetchCars();
+    const carText = carsToText(cars);
+    const total   = cars.length;
+
+    return `Bạn là trợ lý tư vấn của AutoMarket — sàn giao dịch xe trung gian tại Thủ Dầu Một, Bình Dương.
+
+=== THÔNG TIN LIÊN HỆ ===
+Hotline: 0344 806 179 | Tư vấn: 0337 484 248
+Zalo: 0337 484 248 | Giờ làm việc: T2–T7 8:00–18:00, CN 8:00–17:00
+Địa chỉ: Thủ Dầu Một, Bình Dương
 
 === DỊCH VỤ ===
-✓ Trả góp ngân hàng (trả trước 20-30%)
-✓ Bảo hành động cơ & hộp số 3-6 tháng
-✓ Hỗ trợ sang tên tận nơi
-✓ Lái thử (hẹn trước)
-✓ Thu cũ đổi mới
+- Đăng tin bán xe (miễn phí / gói VIP)
+- Kiểm định xe độc lập 50 điểm
+- Đặt cọc qua Escrow (hoàn tiền 100% nếu xe không đúng mô tả)
+- Hỗ trợ sang tên trọn gói
+- Vay vốn mua xe (đến 80% giá trị, lãi suất ưu đãi)
+- Định giá xe chuyên nghiệp
 
-=== LIÊN HỆ ===
-📍 Thủ Dầu Một, Bình Dương
-📞 0337 484 248 | 0344 806 179
-⏰ 8h-18h (T2-CN)
+=== ${total} XE ĐANG BÁN TRÊN SÀN (DỮ LIỆU THẬT TỪ HỆ THỐNG) ===
+${carText}
 
 === CÁCH TRẢ LỜI ===
-- Ngắn gọn 2-3 câu, thân thiện
-- Xưng "mình/em", gọi "anh/chị"
-- Luôn đưa thông tin cụ thể (giá, màu, km)
-- Kết thúc bằng một câu hỏi để tiếp tục hội thoại`;
+- Dựa HOÀN TOÀN vào danh sách xe thật ở trên, không bịa thêm xe nào
+- Ngắn gọn 2-4 câu, thân thiện
+- Xưng "mình/em", gọi khách là "anh/chị"
+- Nếu khách hỏi xe không có trong danh sách → thật thà nói chưa có và gợi ý xe tương tự nếu có
+- Nếu hỏi về giá, km, màu → trả lời đúng theo dữ liệu
+- Kết thúc bằng câu hỏi hoặc gợi ý hành động tiếp theo`;
+  }
 
-  // ── HTML của widget ──
+  // ── HTML WIDGET ──────────────────────────────────
   const WIDGET_HTML = `
 <link rel="stylesheet" href="chatbot.css">
 
@@ -46,7 +106,7 @@
     <div class="cw-avatar">🏎</div>
     <div class="cw-header-info">
       <div class="cw-name">Trợ lý tư vấn <span>AI</span></div>
-      <div class="cw-status">● Đang hoạt động</div>
+      <div class="cw-status" id="cw-status">● Đang tải dữ liệu xe...</div>
     </div>
     <button class="cw-close" id="cw-close-btn">✕</button>
   </div>
@@ -64,7 +124,7 @@
     <div class="cw-msg cw-ai">
       <div class="cw-msg-avatar">🏎</div>
       <div>
-        <div class="cw-bubble">Xin chào anh/chị! 👋 Mình là trợ lý tư vấn xe của AutoShop.<br><br>Anh/chị đang tìm xe gì? Mình sẵn sàng tư vấn ngay ạ 🚗</div>
+        <div class="cw-bubble">Xin chào anh/chị! 👋 Mình là trợ lý tư vấn xe của AutoMarket.<br><br>Đang tải danh sách xe mới nhất từ hệ thống... Anh/chị hỏi đi nhé! 🚗</div>
         <div class="cw-time">Vừa xong</div>
       </div>
     </div>
@@ -77,20 +137,21 @@
         <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
       </button>
     </div>
-    <div class="cw-footer">Hỗ trợ bởi Gemini AI · Miễn phí 24/7</div>
+    <div class="cw-footer">Dữ liệu xe thật từ hệ thống · Tự động cập nhật</div>
   </div>
 </div>
 `;
 
-  // Inject HTML vào body
+  // Inject vào body
   const wrapper = document.createElement('div');
+  wrapper.className = 'chatbot-wrapper';
   wrapper.innerHTML = WIDGET_HTML;
   document.body.appendChild(wrapper);
 
-  // ── STATE ──
+  // ── STATE ────────────────────────────────────────
   let cwHistory = [], cwLoading = false, cwIsOpen = false;
 
-  // ── REFS ──
+  // ── REFS ─────────────────────────────────────────
   const fab     = document.getElementById('cw-fab');
   const box     = document.getElementById('cw-box');
   const fabIcon = document.getElementById('cw-fab-icon');
@@ -99,8 +160,16 @@
   const input   = document.getElementById('cwInput');
   const sendBtn = document.getElementById('cwSendBtn');
   const msgs    = document.getElementById('cwMessages');
+  const status  = document.getElementById('cw-status');
 
-  // ── TOGGLE ──
+  // Pre-load dữ liệu xe ngay khi trang load
+  fetchCars().then(cars => {
+    if (status) status.textContent = cars.length > 0
+      ? `● Đang hoạt động · ${cars.length} xe`
+      : '● Đang hoạt động';
+  });
+
+  // ── TOGGLE ───────────────────────────────────────
   function cwToggle() {
     cwIsOpen = !cwIsOpen;
     box.classList.toggle('cw-open', cwIsOpen);
@@ -113,7 +182,6 @@
   fab.addEventListener('click', cwToggle);
   document.getElementById('cw-close-btn').addEventListener('click', cwToggle);
 
-  // Chips
   document.querySelectorAll('.cw-chip').forEach(chip => {
     chip.addEventListener('click', () => {
       input.value = chip.textContent.trim();
@@ -121,7 +189,7 @@
     });
   });
 
-  // ── SEND ──
+  // ── SEND ─────────────────────────────────────────
   async function cwSend() {
     const text = input.value.trim();
     if (!text || cwLoading) return;
@@ -134,63 +202,69 @@
     cwSetLoading(true);
 
     try {
-      const res = await fetch(
-        `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${CW_API_KEY}`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            systemInstruction: { parts: [{ text: CW_SYSTEM }] },
-            contents: cwHistory,
-            generationConfig: { temperature: 0.7, maxOutputTokens: 250 }
-          })
-        }
-      );
+      // Lấy dữ liệu xe mới nhất từ SQL Server, rồi hỏi Cohere
+      const systemPrompt = await buildPrompt();
+
+      // Chuyển history sang format Cohere (bỏ tin nhắn cuối vì đã truyền qua message)
+      const chatHistory = cwHistory.slice(0, -1).map(m => ({
+        role: m.role === 'user' ? 'USER' : 'CHATBOT',
+        message: m.parts[0].text
+      }));
+
+      const res = await fetch('https://api.cohere.com/v1/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${CW_API_KEY}`
+        },
+        body: JSON.stringify({
+          model: 'command-a-03-2025',
+          message: text,
+          chat_history: chatHistory,
+          preamble: systemPrompt,
+          temperature: 0.5,
+          max_tokens: 350
+        })
+      });
+
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error?.message || 'API Error');
-      const reply = data.candidates[0].content.parts[0].text;
+      if (!res.ok) throw new Error(data.message || 'Cohere API lỗi');
+
+      const reply = data.text;
       cwHistory.push({ role: 'model', parts: [{ text: reply }] });
       cwRemoveTyping();
       cwAddMsg('ai', reply);
+
     } catch (err) {
+      console.error('[Chatbot]', err.message);
       cwRemoveTyping();
       cwHistory.pop();
-      // Fallback thông minh
-      const q = text.toLowerCase();
-      let reply = 'Dạ mình là trợ lý của AutoShop. Anh/chị muốn hỏi về xe nào, giá cả hay dịch vụ ạ? 😊';
-      if (q.includes('city'))                        reply = 'Dạ Honda City 2022 màu đỏ, số tự động, chạy 22,000km, giá 480 triệu ạ. Xe còn rất đẹp! Anh/chị muốn qua xem không?';
-      else if (q.includes('vios'))                   reply = 'Dạ Toyota Vios 2023 màu trắng, tự động, 15,000km, giá 520 triệu ạ. Còn rất mới! Cần tư vấn trả góp không ạ?';
-      else if (q.includes('cx') || q.includes('mazda')) reply = 'Dạ Mazda CX-5 2023 màu đỏ, tự động, 15,000km, giá 820 triệu ạ. Xe rất sang! Anh/chị muốn xem thử không?';
-      else if (q.includes('accent') || q.includes('hyundai')) reply = 'Dạ Hyundai Accent 2022 màu bạc, số sàn, 18,500km, giá 420 triệu ạ. Giá rất tốt! Liên hệ 0337484248 nhé!';
-      else if (q.includes('trả góp') || q.includes('vay'))    reply = 'Có ạ! Shop hỗ trợ vay ngân hàng, trả trước 20-30%, còn lại trả góp linh hoạt. Anh/chị quan tâm xe nào ạ?';
-      else if (q.includes('bảo hành'))               reply = 'Có ạ! Shop bảo hành động cơ và hộp số 3-6 tháng. Xe đã kiểm tra kỹ! Anh/chị muốn biết thêm không?';
-      else if (q.includes('lái thử'))                reply = 'Được ạ! Anh/chị có thể lái thử tại shop, hẹn trước qua 0337484248 để mình chuẩn bị xe nhé!';
-      else if (q.includes('sang tên') || q.includes('thủ tục')) reply = 'Dạ shop hỗ trợ sang tên tận nơi ạ. Anh/chị không cần lo! Đang quan tâm xe nào ạ?';
-      else if (q.includes('giờ') || q.includes('mở cửa'))     reply = 'Dạ shop mở cửa từ 8h-18h, Thứ 2 đến Chủ Nhật tại Thủ Dầu Một, Bình Dương ạ. Anh/chị ghé thăm nhé!';
-      else if (q.includes('địa chỉ') || q.includes('ở đâu')) reply = 'Dạ shop ở Thủ Dầu Một, Bình Dương ạ. Anh/chị gọi 0337484248 để được chỉ đường cụ thể nhé!';
-      cwAddMsg('ai', reply);
+      cwAddMsg('ai', 'Dạ mình đang gặp sự cố kết nối. Anh/chị vui lòng gọi **0337 484 248** để được tư vấn ngay nhé! 😊');
     } finally {
       cwSetLoading(false);
     }
   }
 
   sendBtn.addEventListener('click', cwSend);
-
   input.addEventListener('keydown', e => {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); cwSend(); }
   });
-
   input.addEventListener('input', cwResizeInput);
 
-  // ── HELPERS ──
+  // ── HELPERS ──────────────────────────────────────
   function cwAddMsg(role, text) {
     const div = document.createElement('div');
     div.className = `cw-msg cw-${role}`;
     const t = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+    const html = role === 'ai'
+      ? cwEscape(text)
+          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+          .replace(/\n/g, '<br>')
+      : cwEscape(text).replace(/\n/g, '<br>');
     div.innerHTML = `
       <div class="cw-msg-avatar">${role === 'ai' ? '🏎' : '👤'}</div>
       <div>
-        <div class="cw-bubble">${cwEscape(text).replace(/\n/g, '<br>')}</div>
+        <div class="cw-bubble">${html}</div>
         <div class="cw-time">${t}</div>
       </div>`;
     msgs.appendChild(div);
@@ -199,7 +273,8 @@
 
   function cwShowTyping() {
     const div = document.createElement('div');
-    div.className = 'cw-msg cw-ai'; div.id = 'cwTyping';
+    div.className = 'cw-msg cw-ai';
+    div.id = 'cwTyping';
     div.innerHTML = `
       <div class="cw-msg-avatar">🏎</div>
       <div class="cw-typing">
@@ -227,10 +302,11 @@
   }
 
   function cwEscape(t) {
-    return t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    return String(t)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
-  // Ẩn tooltip sau 6s
   setTimeout(() => { if (tooltip) tooltip.style.opacity = '0'; }, 6000);
 
 })();

@@ -1,22 +1,40 @@
 {
   "name": "web-thuyet-trinh",
   "version": "1.0.0",
-  "description": "",
-  "main": "Api.js",
+  "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "electron .",
+    "dist": "electron-builder"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/hahanomi323/hahanomi323.git"
+  "build": {
+    "appId": "com.autoshop.app",
+    "productName": "AutoShop",
+    "win": {
+      "target": "nsis",
+      "icon": "assetsicon.ico"
+    },
+    "nsis": {
+      "oneClick": true,
+      "installerIcon": "assetsicon.ico",
+      "shortcutName": "AutoShop"
+    },
+    "files": [
+      "**/*",
+      "!node_modules/.cache",
+      ".env"
+    ]
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/hahanomi323/hahanomi323/issues"
+  "devDependencies": {
+    "electron": "^41.2.0",
+    "electron-builder": "^26.8.1",
+    "electron-packager": "^17.1.2"
   },
-  "homepage": "https://github.com/hahanomi323/hahanomi323#readme"
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mssql": "^12.2.1"
+  }
 }

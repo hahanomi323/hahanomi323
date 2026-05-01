@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Liên Hệ — AutoShop</title>
+  <title>Liên Hệ — AutoMarket</title>
   <link rel="stylesheet" href="style.css">
   <style>
     .contact-layout {
@@ -30,7 +30,7 @@
     .contact-form-wrap {
       background: var(--dark2); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 2.5rem;
     }
-    .contact-form-wrap h3 { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: #0d1b2a; margin-bottom: 0.5rem; }
+    .contact-form-wrap h3 { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: #ffffff; margin-bottom: 0.5rem; }
     .contact-form-wrap p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2rem; }
     .submit-btn {
       width: 100%; padding: 1rem;
@@ -71,10 +71,10 @@
 
 <header>
   <nav>
-    <div class="logo"><span>🏎</span> AutoShop</div>
+    <div class="logo"><span>🚗</span> AutoShowroom</div>
     <ul class="menu" id="mainMenu">
       <li><a href="index.html">Trang Chủ</a></li>
-      <li><a href="ban-xe.html">Bán Xe</a></li>
+      <li><a href="ban-xe.html">Mua Xe</a></li>
       <li><a href="dich-vu.html">Dịch Vụ</a></li>
       <li><a href="lien-he.html" class="active">Liên Hệ</a></li>
       <li><a href="dang-ban-xe.html">Đăng Bán Xe</a></li>
@@ -87,8 +87,8 @@
 </header>
 
 <div class="page-hero">
-  <h1>Liên Hệ <span>Với Chúng Tôi</span></h1>
-  <p>Đội ngũ tư vấn sẵn sàng hỗ trợ bạn mọi lúc — hoàn toàn miễn phí</p>
+  <h1>Liên Hệ <span>AutoShowroom</span></h1>
+  <p>Hỗ trợ người mua, người bán và mọi thắc mắc về giao dịch — hoàn toàn miễn phí</p>
 </div>
 
 <div class="container">
@@ -99,7 +99,7 @@
   <div class="contact-layout">
     <!-- INFO PANEL -->
     <div class="contact-info-panel">
-      <h2 class="section-title" style="color:#0d1b2a!important">Thông Tin Liên Hệ</h2>
+      <h2 class="section-title" style="color:#ffffff!important">Thông Tin Liên Hệ</h2>
 
       <div class="info-card">
         <div class="info-icon">📞</div>
@@ -113,7 +113,7 @@
         <div class="info-icon">💬</div>
         <div class="info-text">
           <h4>Zalo / Messenger</h4>
-          <p><a href="https://zalo.me/0337484248">Zalo: 0337 484 248</a><br><a href="https://m.me/lequocanh">Messenger: AutoShop</a></p>
+          <p><a href="https://zalo.me/0337484248">Zalo: 0337 484 248</a><br><a href="https://m.me/lequocanh">Messenger: AutoMarket</a></p>
         </div>
       </div>
 
@@ -164,21 +164,7 @@
           <input type="email" id="email" placeholder="email@example.com">
         </div>
 
-        <div class="form-group">
-          <label>Xe Quan Tâm</label>
-          <input type="text" id="car-interest" placeholder="Toyota Vios, Honda City..." list="car-suggestions">
-          <datalist id="car-suggestions">
-            <option value="Toyota Vios 2023">
-            <option value="Honda City 2022">
-            <option value="Mazda CX-5 2023">
-            <option value="Hyundai Accent 2022">
-          </datalist>
-        </div>
 
-        <div class="form-group">
-          <label>Ngân Sách Dự Kiến</label>
-          <input type="text" id="budget" placeholder="Ví dụ: 500 triệu VNĐ">
-        </div>
 
         <div class="form-group">
           <label>Thời Gian Liên Hệ Thuận Tiện</label>
@@ -204,14 +190,14 @@
   <!-- MAP -->
   <div class="map-placeholder">
     <div class="icon">🗺️</div>
-    <p>Vị trí showroom AutoShop — Thủ Dầu Một, Bình Dương</p>
+    <p>Văn phòng AutoShowroom — Thủ Dầu Một, Bình Dương</p>
     <a href="https://maps.google.com/?q=Thu+Dau+Mot+Binh+Duong" target="_blank" class="btn btn-outline" style="font-size:0.85rem;padding:0.6rem 1.5rem;">Mở Google Maps →</a>
   </div>
 </div>
 
 <footer>
-  <p><strong>AutoShop</strong> — Xe Chất Lượng · Dịch Vụ Tận Tâm</p>
-  <p>© 2026 AutoShop. Bản quyền thuộc về chúng tôi</p>
+  <p><strong>AutoShowroom</strong> — Sàn Giao Dịch Xe Trung Gian Uy Tín</p>
+  <p>© 2026 AutoShowroom. Bản quyền thuộc về chúng tôi</p>
 </footer>
 
 <div class="floating-contact">
@@ -229,7 +215,9 @@
   <div class="toast-text">Thông tin đã được gửi thành công!</div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+<script src="chatbot.js"></script>
+<script src="chatbox.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
 emailjs.init({ publicKey: "LlHF1IANcjpNxf7ex" });
 
@@ -239,15 +227,22 @@ document.getElementById("contactForm").addEventListener("submit", function(e) {
   btn.textContent = "⏳ Đang gửi...";
   btn.disabled = true;
 
+  const timeMap = {
+    morning:   "Buổi sáng (8h–12h)",
+    afternoon: "Buổi chiều (13h–17h)",
+    evening:   "Buổi tối (18h–20h)",
+    anytime:   "Bất kỳ lúc nào",
+    "":        "Không chọn"
+  };
+  const rawTime = document.getElementById("contact-time").value;
+
   const data = {
-    name: document.getElementById("name").value,
-    phone: document.getElementById("phone").value,
-    email: document.getElementById("email").value,
-    car_interest: document.getElementById("car-interest").value,
-    budget: document.getElementById("budget").value,
-    contact_time: document.getElementById("contact-time").value,
-    message: document.getElementById("message").value,
-    time: new Date().toLocaleString()
+    name:         document.getElementById("name").value,
+    phone:        document.getElementById("phone").value,
+    email:        document.getElementById("email").value,
+    contact_time: timeMap[rawTime] || rawTime,
+    message:      document.getElementById("message").value,
+    time:         new Date().toLocaleString("vi-VN")
   };
 
   emailjs.send("hahanomi323", "template_3jc1q9f", data)
@@ -257,38 +252,11 @@ document.getElementById("contactForm").addEventListener("submit", function(e) {
       btn.textContent = "📨 Gửi Thông Tin";
       btn.disabled = false;
       showToast();
-    }, (er<script src="chatbot.js"></script>
-<script src="chatbox.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script src="api.js"></script>
-<script>
-document.getElementById("contactForm").addEventListener("submit", async function(e) {
-  e.preventDefault();
-  const btn = document.getElementById("submitBtn");
-  btn.textContent = "⏳ Đang gửi...";
-  btn.disabled = true;
-
-  const data = {
-    name:         document.getElementById("name").value,
-    phone:        document.getElementById("phone").value,
-    email:        document.getElementById("email").value,
-    car_interest: document.getElementById("car-interest").value,
-    budget:       document.getElementById("budget").value,
-    contact_time: document.getElementById("contact-time").value,
-    message:      document.getElementById("message").value
-  };
-
-  try {
-    // Gửi vào database MySQL qua API
-    await Messages.send(data);
-    document.getElementById("contactForm").reset();
-    showToast();
-  } catch (err) {
-    alert("❌ Lỗi: " + err.message);
-  } finally {
-    btn.textContent = "📨 Gửi Thông Tin";
-    btn.disabled = false;
-  }
+    }, (err) => {
+      alert("❌ Gửi thất bại: " + err.text);
+      btn.textContent = "📨 Gửi Thông Tin";
+      btn.disabled = false;
+    });
 });
 
 function showToast() {
@@ -301,3 +269,8 @@ function showToast() {
   }
 }
 </script>
+
+<script src="Api.js"></script>
+<script src="auth.js"></script>
+</body>
+</html>
